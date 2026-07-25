@@ -1,61 +1,66 @@
-import mongoose  from "mongoose";
+import mongoose from "mongoose";
 
+const companyProfileSchema = new mongoose.Schema(
+  {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: [true, "User reference is required"],
+      unique: true,
+    },
+    companyName: {
+      type: String,
+      required: [true, "Company name is required"],
+      trim: true,
+      maxlength: [100, "Company name cannot exceed 100 characters"],
+    },
+    website: {
+      type: String,
+      trim: true,
+      match: [
+        /^(https?:\/\/)?(www\.)?[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\/?$/,
+        "Please enter a valid website URL",
+      ],
+    },
+    logo: {
+      type: String,
+      default:
+        "https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg", // Cloudinary Company Logo
+    },
+    industryType: {
+      type: String,
+      trim: true,
+    },
+    companySize: {
+      type: String,
+      trim: true,
+    },
+    registrationNo: {
+      type: String,
+      required: [true, "Registration No (CIN/GSTIN) is required"],
+      trim: true,
+      uppercase: true,
+    },
+    documentUrl: {
+      type: String,
+      required: [true, "Verification document URL is required"],
+      trim: true,
+    },
+    verificationStatus: {
+      type: String,
+      enum: {
+        values: ["PENDING", "APPROVED", "REJECTED"],
+        message: "{VALUE} is not a valid status",
+      },
+      default: "PENDING",
+    },
+    rejectedReason: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+  },
+  { timestamps: true },
+);
 
-const companyProfileSchema = new mongoose.Schema({
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true,
-    unique: true
-  },
-  companyName: {
-    type: String,
-    required: [true, 'Company name is required'],
-    trim: true
-  },
-  website: {
-    type: String,
-    required: [true, 'Website URL is required'],
-    trim: true,
-    lowercase: true
-  },
-  logo: {
-    type: String,
-    trim: true,
-    default: 'default-logo.png'
-  },
-  industryType: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  companySize: {
-    type: String,
-    enum: ['1-10', '11-50', '51-200', '201-500', '500+'],
-    default: '1-10'
-  },
-  registrationNumber: { // CIN / GSTIN
-    type: String,
-    required: [true, 'Registration / GSTIN ID is required'],
-    trim: true,
-    uppercase: true,
-    unique: true
-  },
-  documentUrl: {
-    type: String,
-    required: [true, 'Verification document is required'],
-    trim: true
-  },
-  verificationStatus: {
-    type: String,
-    enum: ['pending', 'approved', 'rejected'],
-    default: 'pending'
-  },
-  rejectionReason: {
-    type: String,
-    trim: true,
-    default: null
-  }
-}, { timestamps: true });
-
-export default mongoose.model('CompanyProfile', companyProfileSchema);
+export default mongoose.model("CompanyProfile", companyProfileSchema);

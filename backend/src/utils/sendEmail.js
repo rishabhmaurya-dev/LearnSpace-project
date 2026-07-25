@@ -1,5 +1,6 @@
 import nodemailer from 'nodemailer';
-
+import dotenv from "dotenv";
+dotenv.config();
 export const sendResetLinkEmail = async (toEmail, resetUrl) => {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
