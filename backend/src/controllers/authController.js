@@ -1,20 +1,11 @@
-import User from "../models/User.js";
+import { User } from "../models/User.model.js";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
-import { sendResetLinkEmail } from "../utils/sendEmail.js";
 import jwt from "jsonwebtoken";
-import generateTokens from "../utils/generateTokens.js";
+import { sendResetLinkEmail } from "../utils/sendEmail.js";
+import generateTokens, { COOKIE_OPTIONS } from "../utils/generateTokens.js";
 
-// Cookie options helper for consistency
-const COOKIE_OPTIONS = {
-  httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
-  sameSite: "strict",
-};
-
-// -----------------------------------------------------------------------------
 // 1. REGISTER USER
-// -----------------------------------------------------------------------------
 export const register = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
@@ -70,9 +61,7 @@ export const register = async (req, res) => {
   }
 };
 
-// -----------------------------------------------------------------------------
 // 2. LOGIN USER
-// -----------------------------------------------------------------------------
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -109,9 +98,7 @@ export const login = async (req, res) => {
   }
 };
 
-// -----------------------------------------------------------------------------
 // 3. REFRESH TOKEN
-// -----------------------------------------------------------------------------
 export const refresh = async (req, res) => {
   try {
     const oldRefreshToken = req.cookies.refreshToken;
@@ -150,9 +137,7 @@ export const refresh = async (req, res) => {
   }
 };
 
-// -----------------------------------------------------------------------------
 // 4. FORGOT PASSWORD
-// -----------------------------------------------------------------------------
 export const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
@@ -200,9 +185,7 @@ export const forgotPassword = async (req, res) => {
   }
 };
 
-// -----------------------------------------------------------------------------
 // 5. RESET PASSWORD
-// -----------------------------------------------------------------------------
 export const resetPasswordWithToken = async (req, res) => {
   try {
     const { token } = req.params;
@@ -227,7 +210,7 @@ export const resetPasswordWithToken = async (req, res) => {
 
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(newPassword, salt);
-    user.tokenVersion += 1; // FIX: Reset par purane sessions kill honge
+    user.tokenVersion += 1;
     user.resetPasswordToken = undefined;
     user.resetPasswordExpires = undefined;
     await user.save();
@@ -245,9 +228,7 @@ export const resetPasswordWithToken = async (req, res) => {
   }
 };
 
-// -----------------------------------------------------------------------------
 // 6. LOGOUT
-// -----------------------------------------------------------------------------
 export const logout = async (req, res) => {
   res.clearCookie("refreshToken", COOKIE_OPTIONS);
   return res
@@ -255,9 +236,7 @@ export const logout = async (req, res) => {
     .json({ success: true, message: "Logged out successfully" });
 };
 
-// -----------------------------------------------------------------------------
 // 7. LOGOUT ALL DEVICES
-// -----------------------------------------------------------------------------
 export const logoutAllDevices = async (req, res) => {
   try {
     await User.findByIdAndUpdate(req.user._id, { $inc: { tokenVersion: 1 } });

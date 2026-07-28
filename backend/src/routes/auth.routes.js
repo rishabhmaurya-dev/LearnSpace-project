@@ -1,14 +1,14 @@
-import express from 'express';
-import { 
-  register, 
-  login, 
-  refresh, 
-  logout, 
-  logoutAllDevices, 
-  resetPasswordWithToken, 
-  forgotPassword 
-} from '../controllers/authController.js';
-import { protect } from '../middlewares/authMiddleware.js';
+import express from "express";
+import {
+  register,
+  login,
+  refresh,
+  logout,
+  logoutAllDevices,
+  resetPasswordWithToken,
+  forgotPassword,
+} from "../controllers/authController.js";
+import { protect } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
 

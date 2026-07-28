@@ -1,16 +1,20 @@
 import mongoose from "mongoose";
 
-const userProgressSchema = new mongoose.Schema(
+const courseProgressSchema = new mongoose.Schema(
   {
-    user: {
+    studentId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
-    course: {
+    courseId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Course",
       required: true,
+    },
+    lastAccessedLessonId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Lesson",
     },
     completedLessons: [
       {
@@ -18,22 +22,17 @@ const userProgressSchema = new mongoose.Schema(
         ref: "Lesson",
       },
     ],
-    currentLessonNumber: {
-      type: Number,
-      default: 1,
-      min: 1,
-    },
     progressPercentage: {
       type: Number,
       default: 0,
       min: 0,
       max: 100,
     },
-    capstoneSubmitted: {
-      type: Boolean,
-      default: false,
+    quizScore: {
+      type: Number,
+      default: 0,
     },
-    quizCleared: {
+    isQuizPassed: {
       type: Boolean,
       default: false,
     },
@@ -41,14 +40,13 @@ const userProgressSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    certificateUrl: {
-      type: String,
-      trim: true,
-    },
   },
   { timestamps: true },
 );
 
-userProgressSchema.index({ user: 1, course: 1 }, { unique: true });
+courseProgressSchema.index({ studentId: 1, courseId: 1 }, { unique: true });
 
-export default mongoose.model("UserProgress", userProgressSchema);
+export const CourseProgress = mongoose.model(
+  "CourseProgress",
+  courseProgressSchema,
+);

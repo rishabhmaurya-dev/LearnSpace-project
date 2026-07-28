@@ -4,7 +4,6 @@ import path from "path";
 dotenv.config({ path: path.join(process.cwd(), ".env") });
 
 import mongoose from "mongoose";
-import { seedAdminsFromJSON } from "../seedAdmin.js";
 const connectDB = async () => {
   try {
     if (!process.env.MONGO_URI) {
@@ -15,8 +14,6 @@ const connectDB = async () => {
 
     console.log("✅ DB connected successfully");
 
-    await seedAdminsFromJSON();
-    console.log("🌱 Seeding complete");
   } catch (error) {
     console.error("❌ Database connection error:", error.message);
     process.exit(1);

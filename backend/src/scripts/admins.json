@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Rishabh Maurya",
+    "email": "rishabh@gmail.com",
+    "password": "RISHABH1234!",
+    "role": "ADMIN",
+    "isActive": true,
+    "tokenVersion": 0
+  },
+  {
+    "name": "Anish Yadav",
+    "email": "anish@gmail.com",
+    "password": "ANISH1234!",
+    "role": "ADMIN",
+    "isActive": true,
+    "tokenVersion": 0
+  },
+  {
+    "name": "Raj Chaurasiya",
+    "email": "raj@gmail.com",
+    "password": "RAJ1234!",
+    "role": "ADMIN",
+    "isActive": true,
+    "tokenVersion": 0
+  }
+]

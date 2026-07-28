@@ -1,5 +1,5 @@
 import express from "express";
-import { protect, authorize } from "../middlewares/authMiddleware.js";
+import { protect, authorize } from "../middlewares/auth.middleware.js";
 import {
   getPendingCompanies,
   verifyCompany,

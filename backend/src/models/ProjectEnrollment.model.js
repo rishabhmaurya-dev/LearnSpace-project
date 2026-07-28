@@ -2,60 +2,65 @@ import mongoose from "mongoose";
 
 const projectEnrollmentSchema = new mongoose.Schema(
   {
-    student: {
+    projectId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "CompanyProject",
+      required: true,
+    },
+    studentId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
-    project: {
+    companyId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "CompanyProject",
+      ref: "User",
       required: true,
     },
     enrolledAt: {
       type: Date,
       default: Date.now,
     },
-    deadlineDate: {
+    // Auto-calculated: enrolledAt + deadlineInDays
+    submissionDeadline: {
       type: Date,
       required: true,
     },
     githubRepoUrl: {
       type: String,
       trim: true,
+      default: "",
     },
     liveDemoUrl: {
       type: String,
       trim: true,
+      default: "",
     },
     submittedAt: {
       type: Date,
     },
     status: {
       type: String,
-      enum: {
-        values: ["ENROLLED", "UNDER_REVIEW", "APPROVED", "REJECTED", "EXPIRED"],
-        message: "{VALUE} is not a valid enrollment status",
-      },
-      default: "ENROLLED",
+      enum: ["IN_PROGRESS", "SUBMITTED", "APPROVED", "REJECTED", "EXPIRED"],
+      default: "IN_PROGRESS",
     },
-    rating: {
+    companyRating: {
       type: Number,
-      min: [1, "Rating must be at least 1"],
-      max: [5, "Rating cannot exceed 5"],
+      min: 1,
+      max: 5,
     },
     companyFeedback: {
       type: String,
       trim: true,
-    },
-    companyCertificateUrl: {
-      type: String,
-      trim: true,
+      default: "",
     },
   },
   { timestamps: true },
 );
 
-projectEnrollmentSchema.index({ student: 1, project: 1 }, { unique: true });
+projectEnrollmentSchema.index({ projectId: 1, studentId: 1 }, { unique: true });
 
-export default mongoose.model("ProjectEnrollment", projectEnrollmentSchema);
+export const ProjectEnrollment = mongoose.model(
+  "ProjectEnrollment",
+  projectEnrollmentSchema,
+);

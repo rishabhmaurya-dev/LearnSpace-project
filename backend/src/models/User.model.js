@@ -6,24 +6,14 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, "Name is required"],
       trim: true,
-      minlength: [2, "Name must be at least 2 characters"],
-      maxlength: [50, "Name cannot exceed 50 characters"],
     },
-    profilePhoto: {
-      type: String,
-      default:
-        "https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg", // Cloudinary Fallback Avatar
-    }, 
     email: {
       type: String,
       required: [true, "Email is required"],
       unique: true,
       lowercase: true,
       trim: true,
-      match: [
-        /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
-        "Please enter a valid email address",
-      ],
+      match: [/^\S+@\S+\.\S+$/, "Please use a valid email address"],
     },
     password: {
       type: String,
@@ -31,28 +21,39 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: {
-        values: ["STUDENT", "COMPANY", "ADMIN"],
-        message: "{VALUE} is not a valid role",
-      },
+      enum: ["ADMIN", "STUDENT", "COMPANY"],
       default: "STUDENT",
+      required: true,
     },
     isActive: {
       type: Boolean,
       default: true,
     },
+    // Multi-device invalidation / Security token version check
     tokenVersion: {
       type: Number,
       default: 0,
+      min: 0,
     },
     resetPasswordToken: {
       type: String,
+      default: undefined,
     },
     resetPasswordExpires: {
       type: Date,
+      default: undefined,
     },
   },
   { timestamps: true },
 );
 
-export default mongoose.model("User", userSchema);
+// Sensitive fields delete karne ke liye
+userSchema.methods.toJSON = function () {
+  const userObject = this.toObject();
+  delete userObject.password;
+  delete userObject.resetPasswordToken;
+  delete userObject.resetPasswordExpires;
+  return userObject;
+};
+
+export const User = mongoose.model("User", userSchema);

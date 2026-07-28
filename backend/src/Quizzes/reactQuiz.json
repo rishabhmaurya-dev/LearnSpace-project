@@ -1,0 +1,26 @@
+{
+  "courseId": "66a01111abcd5678ef901111",
+  "title": "React.js Fundamental Quiz",
+  "badgeName": "React.js Master",
+  "timeLimitInMinutes": 10,
+  "passingPercentage": 70,
+  "questions": [
+    {
+      "questionText": "React me State update karne ke liye konsa hook use hota hai?",
+      "options": ["useEffect", "useState", "useRef", "useContext"],
+      "correctOptionIndex": 1,
+      "explanation": "useState hook functional components me local state manage karta hai."
+    },
+    {
+      "questionText": "JSX ka full form kya hai?",
+      "options": [
+        "JavaScript XML",
+        "Java Syntax Extension",
+        "JSON XML",
+        "JavaScript Extra"
+      ],
+      "correctOptionIndex": 0,
+      "explanation": "JSX ka matlab JavaScript XML hai."
+    }
+  ]
+}
