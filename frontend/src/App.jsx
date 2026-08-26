@@ -1,34 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { checkAuthSession } from "./redux/slices/authSlice";
-import AppRoutes from "./routes/AppRoutes";
-import Loader from "./components/Loader";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { RouterProvider } from "react-router-dom";
+
+import { router } from "./app/router";
+import { refreshUser } from "./features/auth/authThunks";
 
 function App() {
   const dispatch = useDispatch();
-  const { isInitializing } = useSelector((state) => state.auth);
-  const [showLoader, setShowLoader] = useState(true);
 
   useEffect(() => {
-    // 1. Session check trigger karein
-    dispatch(checkAuthSession());
-
-    // 2. Minimum 400ms tak loader rakhein taaki UI sudden jump na kare
-    const timer = setTimeout(() => {
-      setShowLoader(false);
-    }, 1500);
-
-    return () => clearTimeout(timer);
+    dispatch(refreshUser());
   }, [dispatch]);
 
-  // Agar session check chal raha ho YA minimum timer baki ho
-  if (isInitializing || showLoader) {
-    return (
-      <Loader/>
-    );
-  }
-
-  return <AppRoutes />;
+  return <RouterProvider router={router} />;
 }
 
 export default App;
