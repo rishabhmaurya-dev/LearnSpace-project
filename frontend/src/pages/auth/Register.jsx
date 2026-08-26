@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+
 import { Link, useNavigate } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
 
-import { registerUser,loginUser } from "../../features/auth/authThunks";
+import { registerUser, loginUser } from "../../features/auth/authThunks";
 
 import {
   clearAuthError,
@@ -15,12 +17,13 @@ import styles from "./Register.module.css";
 
 const Register = () => {
   const dispatch = useDispatch();
-
   const navigate = useNavigate();
 
   const { loading, error, success, message } = useSelector(
     (state) => state.auth,
   );
+
+  const [showPassword, setShowPassword] = useState(false);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -28,6 +31,11 @@ const Register = () => {
     password: "",
     role: "STUDENT",
   });
+
+  useEffect(() => {
+    dispatch(clearAuthError());
+    dispatch(clearAuthSuccess());
+  }, [dispatch]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -68,83 +76,130 @@ const Register = () => {
       }
     }
   };
-  useEffect(() => {
-    dispatch(clearAuthError());
-    dispatch(clearAuthSuccess());
-  }, [dispatch]);
+
   return (
     <div className={styles.page}>
-      <div className={styles.card}>
-        <div className={styles.header}>
-          <h1>Create Account</h1>
+      <div className={styles.content}>
+        {/* BRAND */}
+        <div className={styles.brand}>
+          <div className={styles.brandIcon}>L</div>
 
-          <p>Join our platform</p>
+          <div>
+            <span className={styles.brandName}>Learn</span>
+            <span className={styles.brandAccent}>Space</span>
+          </div>
         </div>
 
-        {error && <div className={styles.error}>{error}</div>}
+        {/* REGISTER CARD */}
+        <div className={styles.card}>
+          <div className={styles.header}>
+            <h1>Create Account</h1>
 
-        {success && <div className={styles.success}>{message}</div>}
-
-        <form onSubmit={handleSubmit} className={styles.form}>
-          <div className={styles.field}>
-            <label>Full Name</label>
-
-            <input
-              type="text"
-              name="name"
-              placeholder="Enter your name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-            />
+            <p>Start learning, building and growing today.</p>
           </div>
 
-          <div className={styles.field}>
-            <label>Email</label>
+          {error && (
+            <div className={styles.error}>
+              <span>{error}</span>
+            </div>
+          )}
 
-            <input
-              type="email"
-              name="email"
-              placeholder="Enter your email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
+          {success && (
+            <div className={styles.success}>
+              <span>{message}</span>
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className={styles.form}>
+            {/* NAME */}
+            <div className={styles.field}>
+              <label htmlFor="name">Full Name</label>
+
+              <div className={styles.inputWrapper}>
+                <input
+                  id="name"
+                  type="text"
+                  name="name"
+                  placeholder="Enter your name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </div>
+
+            {/* EMAIL */}
+            <div className={styles.field}>
+              <label htmlFor="email">Email Address</label>
+
+              <div className={styles.inputWrapper}>
+                <input
+                  id="email"
+                  type="email"
+                  name="email"
+                  placeholder="Enter your email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </div>
+
+            {/* PASSWORD */}
+            <div className={styles.field}>
+              <label htmlFor="password">Password</label>
+
+              <div className={styles.inputWrapper}>
+                <input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  placeholder="Create a password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  minLength={6}
+                  required
+                />
+                <button
+                  type="button"
+                  className={styles.passwordToggle}
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
+              </div>
+            </div>
+            <button type="submit" disabled={loading} className={styles.button}>
+              {loading ? (
+                <>
+                  <span className={styles.spinner} />
+                  Creating Account...
+                </>
+              ) : (
+                <>
+                  Create Account
+                  <span>→</span>
+                </>
+              )}
+            </button>
+          </form>
+
+          <div className={styles.divider}>
+            <span />
+            <small>Already a member?</small>
+            <span />
           </div>
 
-          <div className={styles.field}>
-            <label>Password</label>
+          <div className={styles.footer}>
+            <span>Already have an account?</span>
 
-            <input
-              type="password"
-              name="password"
-              placeholder="Create password"
-              value={formData.password}
-              onChange={handleChange}
-              minLength={6}
-              required
-            />
+            <Link to="/login">Login</Link>
           </div>
-
-          <div className={styles.field}>
-            <label>Register As</label>
-
-            <select name="role" value={formData.role} onChange={handleChange}>
-              <option value="STUDENT">Student</option>
-
-              <option value="COMPANY">Company</option>
-            </select>
-          </div>
-
-          <button type="submit" disabled={loading} className={styles.button}>
-            {loading ? "Creating Account..." : "Create Account"}
-          </button>
-        </form>
-
-        <div className={styles.footer}>
-          Already have an account?
-          <Link to="/login">Login</Link>
         </div>
+
+        <p className={styles.bottomText}>
+          Learn skills. Build projects. Shape your future.
+        </p>
       </div>
     </div>
   );

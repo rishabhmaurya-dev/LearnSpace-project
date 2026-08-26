@@ -46,6 +46,7 @@ export const refreshUser = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const data = await refreshApi();
+      console.log("✅ REFRESH RESPONSE:", data);
 
       return data;
     } catch (error) {

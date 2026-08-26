@@ -1,0 +1,1239 @@
+/* =========================================================
+   COURSE CATALOG PAGE
+   Uses global design tokens from :root
+========================================================= */
+
+/* =========================================================
+   PAGE CONTAINER
+========================================================= */
+
+.catalogWrapper {
+  position: relative;
+
+  width: 100%;
+  max-width: var(--content-max-width);
+
+  min-height: 100vh;
+
+  margin: 0 auto;
+
+  padding: var(--page-padding);
+
+  box-sizing: border-box;
+
+  overflow: hidden;
+
+  color: var(--text-primary);
+
+  font-family: var(--font-family);
+}
+
+
+/* =========================================================
+   BACKGROUND AMBIENCE
+========================================================= */
+
+.glowTopLeft,
+.glowBottomRight {
+  position: absolute;
+
+  pointer-events: none;
+
+  border-radius: 50%;
+
+  filter: none;
+
+  z-index: 0;
+}
+
+.glowTopLeft {
+  top: -140px;
+  left: -140px;
+
+  width: 360px;
+  height: 360px;
+
+  background: radial-gradient(
+    circle,
+    var(--primary-soft) 0%,
+    transparent 70%
+  );
+}
+
+.glowBottomRight {
+  right: -150px;
+  top: 280px;
+
+  width: 380px;
+  height: 380px;
+
+  background: radial-gradient(
+    circle,
+    var(--secondary-soft) 0%,
+    transparent 70%
+  );
+}
+
+
+/* =========================================================
+   HERO SECTION
+========================================================= */
+
+.heroSection {
+  position: relative;
+
+  z-index: 1;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+
+  margin-bottom: 28px;
+
+  text-align: center;
+}
+
+.heroContent {
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+
+  max-width: 700px;
+}
+
+
+/* =========================================================
+   HERO BADGE
+========================================================= */
+
+.heroBadge {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-height: 28px;
+
+  padding: 5px 12px;
+
+  margin-bottom: 10px;
+
+  color: var(--primary);
+
+  background: var(--primary-soft);
+
+  border: 1px solid var(--border-hover);
+
+  border-radius: var(--radius-full);
+
+  font-size: var(--font-size-xs);
+
+  font-weight: var(--font-weight-semibold);
+}
+
+
+/* =========================================================
+   HERO TITLE
+========================================================= */
+
+.heroTitle {
+  margin: 0 0 8px;
+
+  color: var(--text-primary);
+
+  font-size: clamp(26px, 3vw, 36px);
+
+  font-weight: var(--font-weight-bold);
+
+  line-height: 1.2;
+
+  letter-spacing: -0.03em;
+}
+
+.gradientText {
+  background: var(--brand-gradient);
+
+  -webkit-background-clip: text;
+  background-clip: text;
+
+  -webkit-text-fill-color: transparent;
+}
+
+
+/* =========================================================
+   HERO SUBTITLE
+========================================================= */
+
+.heroSubtitle {
+  max-width: 620px;
+
+  margin: 0;
+
+  color: var(--text-secondary);
+
+  font-size: var(--font-size-md);
+
+  line-height: 1.65;
+}
+
+
+/* =========================================================
+   FILTER CONTROLS
+========================================================= */
+
+.filterControls {
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+
+  width: 100%;
+  max-width: 720px;
+
+  gap: 12px;
+
+  margin-top: 22px;
+}
+
+
+/* =========================================================
+   SEARCH BAR
+========================================================= */
+
+.searchBar {
+  position: relative;
+
+  width: 100%;
+}
+
+.searchIcon {
+  position: absolute;
+
+  top: 50%;
+  left: 15px;
+
+  transform: translateY(-50%);
+
+  display: flex;
+  align-items: center;
+
+  color: var(--text-muted);
+
+  font-size: 14px;
+
+  pointer-events: none;
+}
+
+.searchInput {
+  width: 100%;
+  height: var(--input-height);
+
+  padding:
+    0
+    44px
+    0
+    42px;
+
+  box-sizing: border-box;
+
+  color: var(--text-primary);
+
+  background: var(--input-bg);
+
+  border: 1px solid var(--input-border);
+
+  border-radius: var(--radius-md);
+
+  box-shadow: var(--shadow-convex-xs);
+
+  font-family: var(--font-family);
+
+  font-size: var(--font-size-sm);
+
+  outline: none;
+
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.searchInput::placeholder {
+  color: var(--input-placeholder);
+}
+
+.searchInput:focus {
+  border-color: var(--primary);
+
+  box-shadow: var(--focus-ring);
+}
+
+
+/* =========================================================
+   CLEAR SEARCH BUTTON
+========================================================= */
+
+.clearSearchBtn {
+  position: absolute;
+
+  top: 50%;
+  right: 10px;
+
+  transform: translateY(-50%);
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 26px;
+  height: 26px;
+
+  padding: 0;
+
+  color: var(--text-secondary);
+
+  background: var(--bg-tertiary);
+
+  border: none;
+
+  border-radius: 50%;
+
+  font-size: 12px;
+
+  cursor: pointer;
+
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.clearSearchBtn:hover {
+  color: var(--danger);
+
+  background: var(--danger-soft);
+}
+
+
+/* =========================================================
+   CATEGORY PILLS
+========================================================= */
+
+.categoryPills {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  justify-content: center;
+
+  gap: 8px;
+
+  width: 100%;
+}
+
+.pillBtn {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-height: 32px;
+
+  padding: 5px 13px;
+
+  color: var(--text-secondary);
+
+  background: var(--bg-card);
+
+  border: 1px solid var(--border);
+
+  border-radius: var(--radius-full);
+
+  font-family: var(--font-family);
+
+  font-size: var(--font-size-xs);
+
+  font-weight: var(--font-weight-semibold);
+
+  cursor: pointer;
+
+  transition:
+    color var(--transition-fast),
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.pillBtn:hover {
+  color: var(--primary);
+
+  background: var(--primary-soft);
+
+  border-color: var(--border-hover);
+}
+
+.pillBtn:active {
+  transform: var(--active-scale);
+}
+
+.pillActive {
+  color: var(--primary-contrast) !important;
+
+  background: var(--brand-gradient) !important;
+
+  border-color: transparent !important;
+
+  box-shadow: var(--shadow-primary);
+}
+
+
+/* =========================================================
+   CATALOG CONTAINER
+========================================================= */
+
+.catalogContainer {
+  position: relative;
+
+  z-index: 1;
+
+  width: 100%;
+}
+
+
+/* =========================================================
+   COURSE GRID
+
+   Desktop par cards compact rahenge.
+   4 column only wide screens par.
+========================================================= */
+
+.courseGrid {
+  display: grid;
+
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+
+  gap: 16px;
+
+  width: 100%;
+}
+
+
+/* Small Tablet */
+
+@media (min-width: 600px) {
+  .courseGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 18px;
+  }
+}
+
+
+/* Desktop */
+
+@media (min-width: 900px) {
+  .courseGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    gap: 18px;
+  }
+}
+
+
+/* Large Desktop */
+
+@media (min-width: 1280px) {
+  .courseGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+
+    gap: 16px;
+  }
+}
+
+
+/* =========================================================
+   COURSE CARD
+========================================================= */
+
+.courseCard {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  min-width: 0;
+
+  overflow: hidden;
+
+  background: var(--bg-card);
+
+  border: 1px solid var(--border);
+
+  border-radius: var(--radius-md);
+
+  box-shadow: var(--card-shadow);
+
+  transition:
+    transform var(--transition-normal),
+    border-color var(--transition-normal),
+    box-shadow var(--transition-normal);
+}
+
+.courseCard:hover {
+  border-color: var(--border-hover);
+
+  box-shadow: var(--card-shadow-hover);
+}
+
+
+/* =========================================================
+   IMAGE CONTAINER
+========================================================= */
+
+.imageContainer {
+  position: relative;
+
+  width: 100%;
+
+  aspect-ratio: 16 / 8.5;
+
+  overflow: hidden;
+
+  background: var(--bg-tertiary);
+}
+
+.courseImage {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  transition:
+    transform var(--transition-smooth);
+}
+
+.courseCard:hover .courseImage {
+  transform: scale(1.04);
+}
+
+
+/* =========================================================
+   FALLBACK THUMB
+========================================================= */
+
+.fallbackThumb {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 100%;
+
+  background:
+    radial-gradient(
+      circle at 30% 20%,
+      var(--primary-soft),
+      transparent 45%
+    ),
+    var(--brand-gradient-soft),
+    var(--bg-tertiary);
+}
+
+.fallbackThumb span {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 64px;
+  height: 64px;
+
+  overflow: hidden;
+
+  font-size: 30px;
+}
+
+
+/* =========================================================
+   IMAGE OVERLAY
+========================================================= */
+
+.imageOverlay {
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    linear-gradient(
+      180deg,
+      transparent 55%,
+      rgba(0, 0, 0, 0.12)
+    );
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   CATEGORY BADGE
+========================================================= */
+
+.categoryBadge {
+  position: absolute;
+
+  top: 9px;
+  left: 9px;
+
+  max-width: calc(100% - 100px);
+
+  padding: 4px 9px;
+
+  overflow: hidden;
+
+  color: var(--text-primary);
+
+  background: rgba(20, 20, 25, 0.85);
+
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  border-radius: var(--radius-full);
+
+  font-size: 10px;
+
+  font-weight: var(--font-weight-semibold);
+
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
+}
+
+
+/* =========================================================
+   LEVEL BADGE
+========================================================= */
+
+.levelBadge {
+  position: absolute;
+
+  top: 9px;
+  right: 9px;
+
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-height: 24px;
+
+  padding: 3px 9px;
+
+  border-radius: var(--radius-full);
+
+  font-size: 9px;
+
+  font-weight: var(--font-weight-bold);
+
+  letter-spacing: 0.04em;
+
+  text-transform: uppercase;
+}
+
+.beginner {
+  color: var(--success);
+
+  background: var(--success-soft);
+
+  border: 1px solid var(--success-border);
+}
+
+.intermediate {
+  color: var(--warning);
+
+  background: var(--warning-soft);
+
+  border: 1px solid var(--warning-border);
+}
+
+.advanced {
+  color: var(--danger);
+
+  background: var(--danger-soft);
+
+  border: 1px solid var(--danger-border);
+}
+
+
+/* =========================================================
+   CARD BODY
+========================================================= */
+
+.cardBody {
+  display: flex;
+  flex-direction: column;
+
+  flex: 1;
+
+  min-width: 0;
+
+  padding: 14px;
+}
+
+
+/* =========================================================
+   FEATURE TAGS
+========================================================= */
+
+.featureHighlights {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 5px;
+
+  margin-bottom: 9px;
+}
+
+.featureTag {
+  display: inline-flex;
+
+  align-items: center;
+
+  min-height: 22px;
+
+  padding: 3px 7px;
+
+  color: var(--text-secondary);
+
+  background: var(--bg-tertiary);
+
+  border: 1px solid var(--border-subtle);
+
+  border-radius: var(--radius-xs);
+
+  font-size: 9px;
+
+  font-weight: var(--font-weight-semibold);
+
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   COURSE TITLE
+========================================================= */
+
+.courseTitle {
+  display: -webkit-box;
+
+  margin: 0 0 6px;
+
+  overflow: hidden;
+
+  color: var(--text-primary);
+
+  font-size: 16px;
+
+  font-weight: var(--font-weight-bold);
+
+  line-height: 1.35;
+
+  letter-spacing: -0.01em;
+
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+
+/* =========================================================
+   COURSE DESCRIPTION
+
+   Only 2 lines so card lamba nahi hoga.
+========================================================= */
+
+.courseDescription {
+  display: -webkit-box;
+
+  margin: 0;
+
+  min-height: 38px;
+  max-height: 38px;
+
+  overflow: hidden;
+
+  color: var(--text-secondary);
+
+  font-size: 11px;
+
+  line-height: 1.7;
+
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+
+/* =========================================================
+   META ROW
+========================================================= */
+
+.metaRow {
+  display: grid;
+
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+
+  gap: 5px;
+
+  margin-top: 11px;
+
+  padding-top: 10px;
+
+  border-top: 1px solid var(--divider);
+}
+
+.metaItem {
+  display: flex;
+
+  align-items: center;
+
+  min-width: 0;
+
+  gap: 4px;
+
+  color: var(--text-muted);
+
+  font-size: 9px;
+
+  font-weight: var(--font-weight-semibold);
+
+  white-space: nowrap;
+
+  overflow: hidden;
+}
+
+.metaItem span:last-child {
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+.metaSymbol {
+  flex-shrink: 0;
+
+  color: var(--primary);
+
+  font-size: 11px;
+}
+
+
+/* =========================================================
+   CARD FOOTER
+========================================================= */
+
+.cardFooter {
+  margin-top: auto;
+
+  padding-top: 12px;
+}
+
+
+/* =========================================================
+   ACTION BUTTON
+========================================================= */
+
+.actionBtn {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  min-height: 38px;
+
+  gap: 7px;
+
+  padding: 8px 12px;
+
+  box-sizing: border-box;
+
+  border: 1px solid transparent;
+
+  border-radius: var(--radius-sm);
+
+  font-family: var(--font-family);
+
+  font-size: 12px;
+
+  font-weight: var(--font-weight-semibold);
+
+  line-height: 1;
+
+  text-decoration: none;
+
+  cursor: pointer;
+
+  transition:
+    transform var(--transition-fast),
+    background var(--transition-normal),
+    border-color var(--transition-normal),
+    box-shadow var(--transition-normal);
+}
+
+.actionBtn:hover {
+  transform: var(--hover-lift-sm);
+}
+
+.actionBtn:active {
+  transform: var(--active-scale);
+}
+
+.actionBtn:disabled {
+  opacity: var(--opacity-disabled);
+
+  cursor: not-allowed;
+
+  transform: none;
+}
+
+
+/* =========================================================
+   ENROLL BUTTON
+========================================================= */
+
+.enrollBtn {
+  color: var(--primary-contrast);
+
+  background: var(--brand-gradient);
+
+  box-shadow: var(--shadow-primary);
+}
+
+.enrollBtn:hover:not(:disabled) {
+  background: var(--brand-gradient-hover);
+
+  box-shadow: var(--shadow-primary-hover);
+}
+
+
+/* =========================================================
+   CONTINUE BUTTON
+========================================================= */
+
+.continueBtn {
+  color: var(--success);
+
+  background: var(--success-soft);
+
+  border-color: var(--success-border);
+}
+
+.continueBtn:hover {
+  color: var(--primary-contrast);
+
+  background: var(--success);
+
+  border-color: var(--success);
+}
+
+
+/* =========================================================
+   BUTTON ARROW
+========================================================= */
+
+.btnArrow {
+  display: inline-flex;
+
+  font-size: 15px;
+
+  transition: transform var(--transition-fast);
+}
+
+.actionBtn:hover .btnArrow {
+  transform: translateX(3px);
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.btnLoading {
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+}
+
+.spinner {
+  width: 14px;
+  height: 14px;
+
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: var(--primary-contrast);
+
+  border-radius: 50%;
+
+  animation: spin 0.65s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+
+  width: min(100%, 480px);
+
+  margin: 35px auto;
+
+  padding: 34px 24px;
+
+  text-align: center;
+
+  background: var(--bg-card);
+
+  border: 1px dashed var(--border-strong);
+
+  border-radius: var(--radius-lg);
+
+  box-shadow: var(--card-shadow);
+}
+
+.emptyIcon {
+  margin-bottom: 8px;
+
+  font-size: 32px;
+}
+
+.emptyState h3 {
+  margin: 0 0 6px;
+
+  color: var(--text-primary);
+
+  font-size: var(--font-size-xl);
+}
+
+.emptyState p {
+  margin: 0;
+
+  color: var(--text-secondary);
+
+  font-size: var(--font-size-sm);
+
+  line-height: 1.6;
+}
+
+
+/* =========================================================
+   RESET BUTTON
+========================================================= */
+
+.resetBtn {
+  min-height: 36px;
+
+  margin-top: 16px;
+
+  padding: 7px 14px;
+
+  color: var(--primary-contrast);
+
+  background: var(--primary);
+
+  border: none;
+
+  border-radius: var(--radius-sm);
+
+  font-family: var(--font-family);
+
+  font-size: var(--font-size-xs);
+
+  font-weight: var(--font-weight-semibold);
+
+  cursor: pointer;
+
+  transition:
+    background var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.resetBtn:hover {
+  background: var(--primary-hover);
+
+  transform: var(--hover-lift-sm);
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 899px) {
+
+  .catalogWrapper {
+    padding: 22px;
+  }
+
+  .heroSection {
+    margin-bottom: 24px;
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 599px) {
+
+  .catalogWrapper {
+    padding: 18px 13px 32px;
+  }
+
+  .heroTitle {
+    font-size: 27px;
+  }
+
+  .heroSubtitle {
+    font-size: var(--font-size-sm);
+  }
+
+  .filterControls {
+    margin-top: 18px;
+  }
+
+  .categoryPills {
+    justify-content: flex-start;
+
+    flex-wrap: nowrap;
+
+    overflow-x: auto;
+
+    padding-bottom: 3px;
+
+    scrollbar-width: none;
+  }
+
+  .categoryPills::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pillBtn {
+    flex-shrink: 0;
+  }
+
+  .courseGrid {
+    gap: 14px;
+  }
+
+  .cardBody {
+    padding: 14px;
+  }
+
+  .courseTitle {
+    font-size: 16px;
+  }
+
+  .featureHighlights {
+    margin-bottom: 8px;
+  }
+
+  .metaItem {
+    font-size: 9px;
+  }
+
+  .actionBtn {
+    min-height: 42px;
+  }
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+========================================================= */
+
+@media (max-width: 380px) {
+
+  .catalogWrapper {
+    padding: 14px 10px 28px;
+  }
+
+  .heroTitle {
+    font-size: 24px;
+  }
+
+  .categoryBadge {
+    max-width: calc(100% - 95px);
+  }
+
+  .featureTag {
+    font-size: 8px;
+  }
+
+  .metaRow {
+    gap: 3px;
+  }
+
+  .metaItem {
+    font-size: 8px;
+  }
+}
+
+
+/* =========================================================
+   TOUCH DEVICES
+========================================================= */
+
+@media (hover: none) {
+
+  .courseCard:hover {
+    transform: none;
+
+    border-color: var(--border);
+
+    box-shadow: var(--card-shadow);
+  }
+
+  .courseCard:hover .courseImage {
+    transform: none;
+  }
+
+  .actionBtn:hover,
+  .resetBtn:hover {
+    transform: none;
+  }
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .courseCard,
+  .courseImage,
+  .actionBtn,
+  .btnArrow,
+  .resetBtn {
+    transition: none !important;
+  }
+
+  .spinner {
+    animation: none !important;
+  }
+}

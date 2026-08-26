@@ -134,6 +134,8 @@ const authSlice = createSlice({
       })
 
       .addCase(refreshUser.fulfilled, (state, action) => {
+        console.log("🔥 REDUX REFRESH FULFILLED:", action.payload);
+
         state.rehydrating = false;
 
         state.user = action.payload.user;
@@ -143,6 +145,13 @@ const authSlice = createSlice({
         state.isAuthenticated = true;
 
         state.error = null;
+
+        console.log("🔥 AUTH STATE:", {
+          isAuthenticated: state.isAuthenticated,
+          rehydrating: state.rehydrating,
+          hasToken: !!state.accessToken,
+          user: state.user,
+        });
       })
 
       .addCase(refreshUser.rejected, (state) => {

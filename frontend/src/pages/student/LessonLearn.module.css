@@ -1,0 +1,1245 @@
+/* =========================================================
+   LESSON LEARN PAGE
+   Professional Light Theme
+========================================================= */
+
+.lessonPage {
+  width: 100%;
+  min-height: calc(100vh - var(--header-height));
+
+  padding: 32px 28px 70px;
+
+  box-sizing: border-box;
+
+  color: var(--text-primary);
+
+  background:
+    radial-gradient(
+      circle at 5% 0%,
+      var(--primary-soft),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 95% 10%,
+      var(--secondary-soft),
+      transparent 28%
+    ),
+    var(--bg-primary);
+}
+
+
+/* =========================================================
+   COMMON CONTAINER
+========================================================= */
+
+.lessonPage > * {
+  width: 100%;
+  max-width: var(--content-max-width);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+/* =========================================================
+   BACK BUTTON
+========================================================= */
+
+.backButton {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-height: var(--button-height);
+
+  margin-bottom: 22px;
+
+  padding: 0 18px;
+
+  border: 1px solid var(--border);
+
+  border-radius: var(--radius-md);
+
+  background: var(--bg-card);
+
+  color: var(--text-secondary);
+
+  font-size: var(--font-size-sm);
+
+  font-weight: var(--font-weight-semibold);
+
+  text-decoration: none;
+
+  box-shadow: var(--shadow-convex-xs);
+
+  transition:
+    transform var(--transition-normal),
+    background var(--transition-normal),
+    border-color var(--transition-normal),
+    color var(--transition-normal),
+    box-shadow var(--transition-normal);
+}
+
+.backButton:hover {
+  transform: var(--hover-lift-sm);
+
+  background: var(--primary-soft);
+
+  border-color: var(--border-hover);
+
+  color: var(--primary);
+
+  box-shadow: var(--shadow-convex-sm);
+}
+
+
+/* =========================================================
+   LESSON HEADER
+========================================================= */
+
+.lessonHeader {
+  margin-bottom: 24px;
+
+  padding: 32px;
+
+  border: 1px solid var(--border);
+
+  border-radius: var(--radius-xl);
+
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      var(--primary-soft),
+      transparent 35%
+    ),
+    var(--bg-card);
+
+  box-shadow: var(--shadow-convex-md);
+
+  position: relative;
+
+  overflow: hidden;
+}
+
+
+/* Decorative background */
+
+.lessonHeader::before {
+  content: "";
+
+  position: absolute;
+
+  width: 280px;
+  height: 280px;
+
+  top: -180px;
+  right: -80px;
+
+  border-radius: 50%;
+
+  background: var(--primary-soft);
+
+  filter: none;
+
+  pointer-events: none;
+}
+
+
+.lessonHeader::after {
+  content: "";
+
+  position: absolute;
+
+  width: 220px;
+  height: 220px;
+
+  bottom: -170px;
+  left: 10%;
+
+  border-radius: 50%;
+
+  background: var(--secondary-soft);
+
+  filter: none;
+
+  pointer-events: none;
+}
+
+
+.lessonHeader > * {
+  position: relative;
+  z-index: 1;
+}
+
+
+/* Lesson label */
+
+.lessonHeader span {
+  display: inline-flex;
+
+  align-items: center;
+
+  margin-bottom: 12px;
+
+  padding: 6px 12px;
+
+  border: 1px solid var(--border-hover);
+
+  border-radius: var(--radius-full);
+
+  background: var(--primary-soft);
+
+  color: var(--primary);
+
+  font-size: 11px;
+
+  font-weight: var(--font-weight-bold);
+
+  letter-spacing: 1.2px;
+
+  text-transform: uppercase;
+}
+
+
+.lessonHeader h1 {
+  margin: 0;
+
+  max-width: 900px;
+
+  color: var(--text-primary);
+
+  font-size: clamp(30px, 4vw, 42px);
+
+  line-height: 1.15;
+
+  font-weight: 800;
+
+  letter-spacing: -1px;
+}
+
+
+/* =========================================================
+    LESSON PROGRESS TRACK (HEADER)
+========================================================= */
+
+.lessonProgressTrack {
+  position: relative;
+  z-index: 1;
+
+  width: min(100%, 440px);
+
+  height: 8px;
+
+  margin-top: 22px;
+
+  overflow: hidden;
+
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+
+  background: var(--bg-surface-sunken);
+
+  box-shadow: none;
+}
+
+.lessonProgressFill {
+  height: 100%;
+
+  border-radius: inherit;
+
+  background: var(--brand-gradient);
+
+  box-shadow: var(--shadow-primary);
+
+  transition: width var(--transition-slow);
+}
+
+/* =========================================================
+    HEADER META CHIPS
+========================================================= */
+
+.headerMeta {
+  position: relative;
+  z-index: 1;
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  align-items: center;
+
+  gap: 8px;
+
+  margin-top: 18px;
+}
+
+.metaChip {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 5px;
+
+  max-width: 100%;
+
+  min-height: 27px;
+
+  padding: 4px 12px;
+
+  color: var(--text-secondary);
+
+  background: var(--bg-card);
+
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+
+  font-size: var(--font-size-xs);
+
+  font-weight: var(--font-weight-semibold);
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+.metaDone {
+  color: var(--success);
+
+  background: var(--success-soft);
+
+  border-color: var(--success-border);
+
+  font-weight: var(--font-weight-bold);
+}
+
+.metaProgress {
+  color: var(--warning);
+
+  background: var(--warning-soft);
+
+  border-color: var(--warning-border);
+}
+
+.metaPassed {
+  color: var(--success);
+
+  background: var(--success-soft);
+
+  border-color: var(--success-border);
+
+  font-weight: var(--font-weight-bold);
+}
+
+
+/* =========================================================
+   CONTENT CARD
+========================================================= */
+
+.contentCard {
+  margin-bottom: 24px;
+
+  padding: 30px;
+
+  border: 1px solid var(--border);
+
+  border-radius: var(--radius-xl);
+
+  background: var(--bg-card);
+
+  box-shadow: var(--card-shadow);
+
+  transition:
+    box-shadow var(--transition-normal),
+    border-color var(--transition-normal);
+}
+
+.contentCard:hover {
+  border-color: var(--border-hover);
+
+  box-shadow: var(--card-shadow-hover);
+}
+
+
+.contentCard h2 {
+  margin: 0 0 22px;
+
+  color: var(--text-primary);
+
+  font-size: var(--font-size-2xl);
+
+  font-weight: var(--font-weight-bold);
+
+  letter-spacing: -0.4px;
+}
+
+
+.contentCard h3 {
+  margin: 24px 0 10px;
+
+  color: var(--primary);
+
+  font-size: var(--font-size-lg);
+
+  font-weight: var(--font-weight-bold);
+}
+
+
+.contentCard h3:first-child {
+  margin-top: 0;
+}
+
+
+.contentCard p {
+  margin: 0 0 18px;
+
+  color: var(--text-secondary);
+
+  font-size: var(--font-size-md);
+
+  line-height: 1.8;
+
+  white-space: pre-line;
+}
+
+
+.contentCard p:last-child {
+  margin-bottom: 0;
+}
+
+
+/* =========================================================
+    POINT LIST (SPLIT SENTENCES AS BULLETS)
+========================================================= */
+
+.pointList {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 10px;
+
+  margin: 0 0 18px;
+
+  padding: 16px 18px;
+
+  list-style: none;
+
+  background: var(--bg-surface-sunken, var(--bg-secondary));
+
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+}
+
+.pointList:last-child {
+  margin-bottom: 0;
+}
+
+.pointList li {
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 10px;
+
+  color: var(--text-secondary);
+
+  font-size: var(--font-size-md);
+
+  line-height: 1.75;
+}
+
+.pointList li > span:last-child {
+  min-width: 0;
+}
+
+.pointBullet {
+  flex-shrink: 0;
+
+  margin-top: 2px;
+
+  width: 20px;
+  height: 20px;
+
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  color: var(--primary);
+
+  background: var(--primary-soft);
+
+  border-radius: var(--radius-full);
+
+  font-size: 11px;
+}
+
+
+/* =========================================================
+   VIDEO
+========================================================= */
+
+.videoWrapper {
+  width: 100%;
+
+  aspect-ratio: 16 / 9;
+
+  overflow: hidden;
+
+  border: 1px solid var(--border);
+
+  border-radius: var(--radius-lg);
+
+  background: var(--grey-900);
+
+  box-shadow: var(--shadow-convex-lg);
+}
+
+
+.videoWrapper iframe {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  border: 0;
+}
+
+
+/* =========================================================
+   CODE BLOCK
+========================================================= */
+
+.contentCard pre {
+  width: 100%;
+
+  margin: 0 0 20px;
+
+  padding: 20px;
+
+  box-sizing: border-box;
+
+  overflow-x: auto;
+
+  border: 1px solid var(--grey-700);
+
+  border-radius: var(--radius-lg);
+
+  background: var(--grey-900);
+
+  box-shadow: var(--shadow-convex-sm);
+}
+
+
+.contentCard pre code {
+  display: block;
+
+  color: var(--grey-100);
+
+  font-family:
+    "Fira Code",
+    "Cascadia Code",
+    Consolas,
+    monospace;
+
+  font-size: 13px;
+
+  line-height: 1.75;
+
+  white-space: pre;
+}
+
+
+/* =========================================================
+   NOTES / RESOURCE LINK
+========================================================= */
+
+.contentCard a {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-height: var(--button-height);
+
+  padding: 0 18px;
+
+  border: 1px solid var(--border-hover);
+
+  border-radius: var(--radius-md);
+
+  background: var(--primary-soft);
+
+  color: var(--primary);
+
+  font-size: var(--font-size-sm);
+
+  font-weight: var(--font-weight-bold);
+
+  text-decoration: none;
+
+  transition:
+    transform var(--transition-normal),
+    background var(--transition-normal),
+    border-color var(--transition-normal),
+    box-shadow var(--transition-normal);
+}
+
+
+.contentCard a:hover {
+  transform: var(--hover-lift-sm);
+
+  background: var(--primary-soft-hover);
+
+  border-color: var(--primary);
+
+  box-shadow: var(--shadow-convex-sm);
+}
+
+
+/* =========================================================
+   QUIZ CARD
+========================================================= */
+
+.quizCard {
+  margin-top: 28px;
+
+  padding: 30px;
+
+  border: 1px solid var(--border);
+
+  border-radius: var(--radius-xl);
+
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      var(--secondary-soft),
+      transparent 32%
+    ),
+    var(--bg-card);
+
+  box-shadow: var(--shadow-convex-md);
+
+  position: relative;
+
+  overflow: hidden;
+}
+
+
+.quizCard::before {
+  content: "";
+
+  position: absolute;
+
+  width: 250px;
+  height: 250px;
+
+  bottom: -180px;
+  left: -80px;
+
+  border-radius: 50%;
+
+  background: var(--primary-soft);
+
+  filter: none;
+
+  pointer-events: none;
+}
+
+
+.quizCard > * {
+  position: relative;
+  z-index: 1;
+}
+
+
+.quizCard > h2 {
+  margin: 0 0 26px;
+
+  color: var(--text-primary);
+
+  font-size: 24px;
+
+  font-weight: var(--font-weight-bold);
+
+  letter-spacing: -0.4px;
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.quizCard button {
+  min-height: var(--button-height);
+
+  padding: 0 20px;
+
+  border: 0;
+
+  border-radius: var(--radius-md);
+
+  background: var(--brand-gradient);
+
+  color: var(--primary-contrast);
+
+  font-family: inherit;
+
+  font-size: var(--font-size-sm);
+
+  font-weight: var(--font-weight-bold);
+
+  cursor: pointer;
+
+  box-shadow: var(--shadow-primary);
+
+  transition:
+    transform var(--transition-normal),
+    box-shadow var(--transition-normal),
+    opacity var(--transition-normal);
+}
+
+
+.quizCard button:hover:not(:disabled) {
+  transform: var(--hover-lift-sm);
+
+  background: var(--brand-gradient-hover);
+
+  box-shadow: var(--shadow-primary-hover);
+}
+
+
+.quizCard button:disabled {
+  opacity: var(--opacity-disabled);
+
+  cursor: not-allowed;
+
+  transform: none;
+
+  box-shadow: none;
+}
+
+
+/* =========================================================
+   COMPLETED QUIZ
+========================================================= */
+
+.completedQuiz {
+  padding: 24px;
+
+  border: 1px solid var(--success-border);
+
+  border-radius: var(--radius-lg);
+
+  background: var(--success-soft);
+}
+
+
+.completedQuiz h3 {
+  margin: 0 0 8px;
+
+  color: var(--success);
+
+  font-size: var(--font-size-xl);
+
+  font-weight: var(--font-weight-bold);
+}
+
+
+.completedQuiz p {
+  margin: 0;
+
+  color: var(--text-secondary);
+
+  font-size: var(--font-size-md);
+
+  font-weight: var(--font-weight-medium);
+}
+
+
+/* =========================================================
+   QUIZ QUESTIONS
+========================================================= */
+
+.quizCard > div > div {
+  margin-bottom: 26px;
+
+  padding-bottom: 26px;
+
+  border-bottom: 1px solid var(--divider);
+}
+
+
+.quizCard > div > div:last-child {
+  margin-bottom: 0;
+}
+
+
+.quizCard h3 {
+  margin: 0 0 18px;
+
+  color: var(--text-primary);
+
+  font-size: var(--font-size-lg);
+
+  line-height: 1.6;
+
+  font-weight: var(--font-weight-semibold);
+}
+
+
+/* =========================================================
+   QUIZ OPTIONS
+========================================================= */
+
+.quizCard label {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  min-height: 54px;
+
+  margin-bottom: 10px;
+
+  padding: 12px 16px;
+
+  box-sizing: border-box;
+
+  border: 1px solid var(--border);
+
+  border-radius: var(--radius-md);
+
+  background: var(--bg-card);
+
+  color: var(--text-secondary);
+
+  font-size: var(--font-size-sm);
+
+  line-height: 1.5;
+
+  cursor: pointer;
+
+  transition:
+    transform var(--transition-fast),
+    border-color var(--transition-fast),
+    background var(--transition-fast),
+    color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+
+.quizCard label:hover {
+  transform: translateX(3px);
+
+  border-color: var(--border-hover);
+
+  background: var(--primary-soft);
+
+  color: var(--text-primary);
+}
+
+
+.quizCard label:has(input:checked) {
+  border-color: var(--primary);
+
+  background: var(--primary-soft);
+
+  color: var(--text-primary);
+
+  box-shadow: var(--focus-ring);
+}
+
+
+.quizCard input[type="radio"] {
+  width: 18px;
+  height: 18px;
+
+  flex-shrink: 0;
+
+  accent-color: var(--primary);
+
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   QUIZ RESULT
+========================================================= */
+
+.quizCard > div > h3 {
+  padding: 18px 20px;
+
+  margin-bottom: 20px;
+
+  border: 1px solid var(--success-border);
+
+  border-radius: var(--radius-lg);
+
+  background: var(--success-soft);
+
+  color: var(--success);
+}
+
+
+.quizCard > div > h3:has(+ button) {
+  border-color: var(--danger-border);
+
+  background: var(--danger-soft);
+
+  color: var(--danger);
+}
+
+
+/* =========================================================
+   NEXT LESSON BUTTON
+========================================================= */
+
+.nextLessonBtn {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-height: var(--button-height);
+
+  margin-top: 26px;
+
+  padding: 0 22px;
+
+  border: 0;
+
+  border-radius: var(--radius-md);
+
+  background: var(--success);
+
+  color: var(--text-inverse);
+
+  font-size: var(--font-size-sm);
+
+  font-weight: var(--font-weight-bold);
+
+  text-decoration: none;
+
+  cursor: pointer;
+
+  box-shadow: none;
+
+  transition:
+    transform var(--transition-normal),
+    background var(--transition-normal),
+    box-shadow var(--transition-normal);
+}
+
+
+.nextLessonBtn:hover {
+  transform: var(--hover-lift-sm);
+
+  background: var(--success-hover);
+
+  box-shadow: none;
+}
+
+
+/* =========================================================
+   LOCKED PAGE
+========================================================= */
+
+.lockedPage {
+  min-height: 70vh;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 40px;
+
+  text-align: center;
+
+  color: var(--text-primary);
+
+  background: var(--bg-primary-radial);
+}
+
+
+.lockedPage h2 {
+  margin: 0 0 12px;
+
+  font-size: 26px;
+
+  font-weight: var(--font-weight-bold);
+}
+
+
+.lockedPage p {
+  max-width: 520px;
+
+  margin: 0 0 24px;
+
+  color: var(--text-secondary);
+
+  font-size: var(--font-size-md);
+
+  line-height: 1.7;
+}
+
+
+.lockedPage a {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-height: var(--button-height);
+
+  padding: 0 20px;
+
+  border-radius: var(--radius-md);
+
+  background: var(--brand-gradient);
+
+  color: var(--primary-contrast);
+
+  font-size: var(--font-size-sm);
+
+  font-weight: var(--font-weight-bold);
+
+  text-decoration: none;
+
+  box-shadow: var(--shadow-primary);
+
+  transition:
+    transform var(--transition-normal),
+    box-shadow var(--transition-normal);
+}
+
+
+.lockedPage a:hover {
+  transform: var(--hover-lift-sm);
+
+  box-shadow: var(--shadow-primary-hover);
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.loading {
+  min-height: 70vh;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  color: var(--text-secondary);
+
+  font-size: var(--font-size-md);
+
+  background: var(--bg-primary-radial);
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+  .lessonPage {
+    padding: 24px 18px 55px;
+  }
+
+  .lessonHeader,
+  .contentCard,
+  .quizCard {
+    padding: 24px;
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 640px) {
+  .lessonPage {
+    padding: 16px 12px 40px;
+  }
+
+  .backButton {
+    width: 100%;
+
+    margin-bottom: 16px;
+  }
+
+  .lessonHeader {
+    padding: 22px;
+
+    border-radius: var(--radius-lg);
+  }
+
+  .lessonHeader h1 {
+    font-size: 27px;
+  }
+
+  .headerMeta {
+    gap: 6px;
+
+    margin-top: 15px;
+  }
+
+  .metaChip {
+    font-size: 11px;
+
+    padding: 3px 10px;
+
+    white-space: normal;
+  }
+
+  .pointList {
+    gap: 8px;
+
+    margin-bottom: 14px;
+
+    padding: 13px 14px;
+  }
+
+  .pointList li {
+    font-size: var(--font-size-sm);
+
+    line-height: 1.7;
+
+    gap: 8px;
+  }
+
+  .contentCard {
+    padding: 20px;
+
+    border-radius: var(--radius-lg);
+  }
+
+  .contentCard h2 {
+    font-size: 20px;
+  }
+
+  .contentCard h3 {
+    font-size: var(--font-size-md);
+  }
+
+  .contentCard p {
+    font-size: var(--font-size-sm);
+
+    line-height: 1.75;
+  }
+
+  .contentCard pre {
+    padding: 16px;
+
+    border-radius: var(--radius-md);
+  }
+
+  .contentCard pre code {
+    font-size: 11px;
+  }
+
+  .quizCard {
+    padding: 20px;
+
+    border-radius: var(--radius-lg);
+  }
+
+  .quizCard > h2 {
+    font-size: 21px;
+  }
+
+  .quizCard label {
+    min-height: 52px;
+
+    padding: 11px 13px;
+  }
+
+  .nextLessonBtn {
+    width: 100%;
+  }
+
+  .lockedPage {
+    padding: 24px;
+  }
+
+  .lockedPage h2 {
+    font-size: 22px;
+  }
+}
+
+
+/* =========================================================
+   VERY SMALL DEVICES
+========================================================= */
+
+@media (max-width: 400px) {
+  .lessonHeader h1 {
+    font-size: 24px;
+  }
+
+  .contentCard,
+  .quizCard {
+    padding: 16px;
+  }
+
+  .contentCard h2,
+  .quizCard > h2 {
+    font-size: 18px;
+  }
+
+  .pointList li {
+    font-size: var(--font-size-xs);
+  }
+
+  .quizCard label {
+    gap: 9px;
+
+    font-size: 12px;
+  }
+}
+
+
+/* =========================================================
+   ACCESSIBILITY
+========================================================= */
+
+.backButton:focus-visible,
+.contentCard a:focus-visible,
+.quizCard button:focus-visible,
+.quizCard label:has(input:focus-visible),
+.nextLessonBtn:focus-visible,
+.lockedPage a:focus-visible {
+  outline: 2px solid var(--primary);
+
+  outline-offset: 3px;
+
+  box-shadow: var(--focus-ring);
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .lessonPage *,
+  .lessonPage *::before,
+  .lessonPage *::after {
+    animation-duration: 0.01ms !important;
+
+    animation-iteration-count: 1 !important;
+
+    transition-duration: 0.01ms !important;
+  }
+}

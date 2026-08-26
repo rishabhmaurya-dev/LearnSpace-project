@@ -1,18 +1,24 @@
-import { Navigate, Outlet, useLocation } from "react-router-dom";
-
+import { Navigate, Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const ProtectedRoute = () => {
-  const { isAuthenticated, rehydrating } = useSelector((state) => state.auth);
+  const { isAuthenticated, rehydrating, accessToken, user } = useSelector(
+    (state) => state.auth,
+  );
 
-  const location = useLocation();
+  console.log("🛡️ PROTECTED ROUTE:", {
+    isAuthenticated,
+    rehydrating,
+    hasToken: !!accessToken,
+    user,
+  });
 
   if (rehydrating) {
-    return <div className="page-loader">Checking authentication...</div>;
+    return;
   }
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" replace state={{ from: location }} />;
+    return <Navigate to="/" replace />;
   }
 
   return <Outlet />;

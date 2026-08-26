@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-
 import { Link, useLocation, useNavigate } from "react-router-dom";
-
 import { useDispatch, useSelector } from "react-redux";
 
-import { clearAuthError,clearAuthSuccess } from "../../features/auth/authSlice";
+import {
+  clearAuthError,
+  clearAuthSuccess,
+} from "../../features/auth/authSlice";
 
 import { loginUser } from "../../features/auth/authThunks";
 
@@ -22,7 +23,6 @@ const Login = () => {
     password: "",
   });
 
-  // Page open hote hi previous auth error clear
   useEffect(() => {
     dispatch(clearAuthError());
     dispatch(clearAuthSuccess());
@@ -57,72 +57,108 @@ const Login = () => {
       }
 
       if (role === "ADMIN") {
-        navigate("/admin/dashboard", {
-          replace: true,
-        });
+        navigate("/admin/dashboard", { replace: true });
       } else if (role === "COMPANY") {
-        navigate("/company/dashboard", {
-          replace: true,
-        });
+        navigate("/company/dashboard", { replace: true });
       } else {
-        navigate("/student/dashboard", {
-          replace: true,
-        });
+        navigate("/student/dashboard", { replace: true });
       }
     }
   };
 
   return (
     <div className={styles.page}>
-      <div className={styles.card}>
-        <div className={styles.header}>
-          <h1>Welcome Back</h1>
+      <div className={styles.content}>
+        <div className={styles.brand}>
+          <div className={styles.brandIcon}>L</div>
 
-          <p>Login to your account</p>
+          <div>
+            <span className={styles.brandName}>Learn</span>
+            <span className={styles.brandAccent}>Space</span>
+          </div>
         </div>
 
-        {error && <div className={styles.error}>{error}</div>}
+        <div className={styles.card}>
+          <div className={styles.header}>
+            <h1>Welcome Back</h1>
 
-        <form onSubmit={handleSubmit} className={styles.form}>
-          <div className={styles.field}>
-            <label>Email</label>
-
-            <input
-              type="email"
-              name="email"
-              placeholder="Enter your email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
+            <p>Continue your learning journey</p>
           </div>
 
-          <div className={styles.field}>
-            <label>Password</label>
+          {error && (
+            <div className={styles.error}>
+              {error}
+            </div>
+          )}
 
-            <input
-              type="password"
-              name="password"
-              placeholder="Enter your password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
+          <form onSubmit={handleSubmit} className={styles.form}>
+            <div className={styles.field}>
+              <label htmlFor="email">Email Address</label>
+
+              <div className={styles.inputWrapper}>
+                <input
+                  id="email"
+                  type="email"
+                  name="email"
+                  placeholder="Enter your email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </div>
+
+            <div className={styles.field}>
+              <label htmlFor="password">Password</label>
+
+              <div className={styles.inputWrapper}>
+                <input
+                  id="password"
+                  type="password"
+                  name="password"
+                  placeholder="Enter your password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </div>
+
+            <div className={styles.forgot}>
+              <Link to="/forgot-password">Forgot Password?</Link>
+            </div>
+
+            <button type="submit" disabled={loading} className={styles.button}>
+              {loading ? (
+                <>
+                  <span className={styles.spinner} />
+                  Logging in...
+                </>
+              ) : (
+                <>
+                  Login
+                  <span>→</span>
+                </>
+              )}
+            </button>
+          </form>
+
+          <div className={styles.divider}>
+            <span />
+            <small>New to LearnSpace?</small>
+            <span />
           </div>
 
-          <div className={styles.forgot}>
-            <Link to="/forgot-password">Forgot Password?</Link>
+          <div className={styles.footer}>
+            <span>Don't have an account?</span>
+
+            <Link to="/register">Create Account</Link>
           </div>
-
-          <button type="submit" disabled={loading} className={styles.button}>
-            {loading ? "Logging in..." : "Login"}
-          </button>
-        </form>
-
-        <div className={styles.footer}>
-          Don't have an account?
-          <Link to="/register">Create Account</Link>
         </div>
+
+        <p className={styles.bottomText}>
+          Learn skills. Build projects. Grow your career.
+        </p>
       </div>
     </div>
   );

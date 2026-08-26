@@ -43,8 +43,6 @@ const ForgotPassword = () => {
   return (
     <div className={styles.page}>
       <div className={styles.card}>
-        <div className={styles.icon}>🔐</div>
-
         <div className={styles.header}>
           <h1>Forgot Password?</h1>
 
@@ -67,7 +65,7 @@ const ForgotPassword = () => {
               type="email"
               value={email}
               onChange={handleChange}
-              placeholder="Enter your email"
+              placeholder="Enter your registered email address"
               required
             />
           </div>

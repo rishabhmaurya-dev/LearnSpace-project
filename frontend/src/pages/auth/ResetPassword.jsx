@@ -97,8 +97,6 @@ const ResetPassword = () => {
   return (
     <div className={styles.page}>
       <div className={styles.card}>
-        <div className={styles.icon}>🔑</div>
-
         <div className={styles.header}>
           <h1>Reset Password</h1>
 

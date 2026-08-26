@@ -1,11 +1,142 @@
-@media (max-width: 768px) {
+/* =========================================
+   RESPONSIVE DESIGN SYSTEM
+   BOLD TYPOGRAPHY
+========================================= */
+
+
+/* =========================================
+   TABLET
+   <= 1024px
+========================================= */
+
+@media (max-width: 1024px) {
   :root {
-    --sidebar-width: 0px;
+    --sidebar-width: 240px;
+    --page-padding: 48px;
+  }
+
+  h1 {
+    font-size: clamp(3.5rem, 8vw, 6rem);
+  }
+
+  h2 {
+    font-size: clamp(2.5rem, 5vw, 4rem);
   }
 }
 
-@media (max-width: 480px) {
+
+/* =========================================
+   MOBILE
+   <= 768px
+========================================= */
+
+@media (max-width: 768px) {
+  :root {
+    --sidebar-width: 0px;
+    --header-height: 60px;
+    --page-padding: 24px;
+  }
+
   body {
-    font-size: 14px;
+    font-size: 16px;
+  }
+
+  h1 {
+    font-size: clamp(3rem, 14vw, 4.5rem);
+    line-height: 0.95;
+    letter-spacing: -0.05em;
+  }
+
+  h2 {
+    font-size: clamp(2.25rem, 10vw, 3.5rem);
+    line-height: 1;
+  }
+
+  h3 {
+    font-size: clamp(1.75rem, 7vw, 2.5rem);
+  }
+
+  p {
+    max-width: 100%;
+  }
+
+  /* Decorative typography ko control karo */
+  .decorative-text,
+  .decorative-number {
+    max-width: 100%;
+    overflow: hidden;
+  }
+}
+
+
+/* =========================================
+   SMALL MOBILE
+   <= 480px
+========================================= */
+
+@media (max-width: 480px) {
+  :root {
+    --page-padding: 20px;
+  }
+
+  h1 {
+    font-size: clamp(2.75rem, 15vw, 3.5rem);
+  }
+
+  h2 {
+    font-size: clamp(2rem, 11vw, 2.75rem);
+  }
+
+  h3 {
+    font-size: 1.75rem;
+  }
+}
+
+
+/* =========================================
+   VERY SMALL DEVICES
+========================================= */
+
+@media (max-width: 360px) {
+  :root {
+    --page-padding: 16px;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+  }
+}
+
+
+/* =========================================
+   LARGE DESKTOP
+========================================= */
+
+@media (min-width: 1280px) {
+  :root {
+    --page-padding: 64px;
+  }
+}
+
+
+/* =========================================
+   TOUCH DEVICES
+========================================= */
+
+@media (hover: none) {
+  button,
+  a {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+
+/* =========================================
+   REDUCED MOTION
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
 }

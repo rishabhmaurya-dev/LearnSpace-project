@@ -1,0 +1,995 @@
+/* ==========================================================================
+   COURSE CREATION WIZARD — ULTRA-3D HYBRID SKEUOMORPHIC SYSTEM
+   Boxed Layout (48px L/R Margins) • Strictly Controlled Variables
+   Tactile Inset Wells • Specular Beveled Outsets • GPU Smooth Motion
+   ========================================================================== */
+
+/* =========================================================
+   1. MAIN STEP CONTAINER (CENTERED & BOUNDED FORM)
+   ========================================================= */
+.stepForm {
+  width: 100%;
+  max-width: 860px; /* Form ko full-width stretch hone se rokega */
+  margin: 0 auto; /* Center align karega */
+  padding: 24px 48px 64px 48px; /* Left-Right 48px ka solid gap */
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Mobile Screens ke liye padding adjust */
+@media (max-width: 768px) {
+  .stepForm {
+    padding: 20px 24px 60px 24px;
+  }
+}
+
+/* Base Raised 3D Card */
+.card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  box-shadow: var(--shadow-convex-md);
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-convex-lg);
+}
+
+.stepTitle {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-extrabold);
+  color: var(--text-primary);
+  margin: 0;
+  letter-spacing: -0.02em;
+  text-shadow: var(--text-engraved);
+  line-height: 1.2;
+}
+
+.stepSubtitle {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.stepSubtitle code {
+  font-family: inherit;
+  font-size: var(--font-size-xs);
+  color: var(--primary);
+  background-color: var(--bg-surface-sunken);
+  padding: 2px 8px;
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-inset-xs);
+}
+
+/* =========================================================
+   2. FORM GRIDS & 3D INPUT CONTROLS
+   ========================================================= */
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .formGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.fullWidth {
+  grid-column: 1 / -1;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.formGroup label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.formGroup label span {
+  color: var(--danger);
+  font-weight: var(--font-weight-extrabold);
+}
+
+.input,
+.textarea {
+  width: 100%;
+  padding: 12px var(--input-padding-x);
+  background-color: var(--bg-surface-sunken); /* Inset deep well */
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  box-shadow: var(--shadow-inset-sm);
+  outline: none;
+  box-sizing: border-box;
+  transition: all var(--transition-fast);
+}
+
+.input {
+  height: var(--input-height);
+}
+
+.textarea {
+  min-height: 110px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--input-placeholder);
+}
+
+.input:focus,
+.textarea:focus {
+  border-color: var(--border-focus);
+  box-shadow: var(--shadow-inset-sm), var(--focus-ring);
+  background-color: var(--bg-card); /* Pops out slightly on focus */
+}
+
+.inputError {
+  border-color: var(--danger-border) !important;
+  box-shadow: 0 0 0 3px var(--danger-soft) !important;
+}
+
+.fieldError {
+  font-size: 11px;
+  font-weight: var(--font-weight-bold);
+  color: var(--danger);
+  margin-top: 2px;
+}
+
+.hint {
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* =========================================================
+   3. SKEUOMORPHIC 3D BUTTONS & NAVIGATION
+   ========================================================= */
+.primaryBtn,
+.secondaryBtn,
+.successBtn,
+.dangerBtn,
+.ghostBtn,
+.deleteBtn,
+.fileBtn {
+  height: var(--button-height);
+  padding: 0 20px;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-sizing: border-box;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+}
+
+.primaryBtn {
+  background: var(--brand-gradient);
+  color: var(--text-inverse);
+  border: 1px solid var(--primary-dark);
+  box-shadow: var(--shadow-primary);
+  text-shadow: var(--text-embossed);
+}
+
+.primaryBtn:hover:not(:disabled) {
+  background: var(--brand-gradient-hover);
+  transform: var(--hover-lift-sm);
+  box-shadow: var(--shadow-primary-hover);
+}
+
+.secondaryBtn {
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-strong);
+  box-shadow: var(--shadow-convex-sm);
+}
+
+.secondaryBtn:hover:not(:disabled) {
+  background-color: var(--bg-card-hover);
+  border-color: var(--border-hover);
+  color: var(--primary);
+  transform: var(--hover-lift-sm);
+}
+
+.successBtn {
+  background-color: var(--success);
+  color: var(--text-inverse);
+  border: 1px solid var(--success-border);
+  box-shadow: var(--shadow-convex-xs);
+  text-shadow: var(--text-embossed);
+}
+
+.successBtn:hover:not(:disabled) {
+  background-color: var(--success-hover);
+  transform: var(--hover-lift-sm);
+}
+
+.dangerBtn {
+  background-color: var(--danger);
+  color: var(--text-inverse);
+  border: 1px solid var(--danger-border);
+  box-shadow: var(--shadow-convex-xs);
+}
+
+.dangerBtn:hover:not(:disabled) {
+  background-color: var(--danger-hover);
+  transform: var(--hover-lift-sm);
+}
+
+.ghostBtn {
+  background-color: var(--bg-surface-sunken);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-inset-xs);
+}
+
+.ghostBtn:hover:not(:disabled) {
+  color: var(--primary);
+  background-color: var(--bg-card-hover);
+  border-color: var(--border-hover);
+}
+
+.deleteBtn {
+  height: 32px;
+  padding: 0 12px;
+  font-size: var(--font-size-xs);
+  background-color: var(--danger-soft);
+  color: var(--danger);
+  border: 1px solid var(--danger-border);
+  border-radius: var(--radius-xs);
+}
+
+.deleteBtn:hover {
+  background-color: var(--danger);
+  color: var(--text-inverse);
+}
+
+.fileBtn {
+  height: 34px;
+  padding: 0 14px;
+  font-size: var(--font-size-xs);
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-strong);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-convex-xs);
+  border-radius: var(--radius-xs);
+}
+
+.fileBtn:hover {
+  color: var(--primary);
+  border-color: var(--border-hover);
+}
+
+.primaryBtn:active,
+.secondaryBtn:active,
+.successBtn:active,
+.dangerBtn:active,
+.ghostBtn:active,
+.fileBtn:active {
+  transform: var(--active-press);
+  box-shadow: var(--shadow-inset-xs);
+}
+
+.primaryBtn:disabled,
+.secondaryBtn:disabled,
+.successBtn:disabled {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Wizard Navigation Row */
+.wizardNav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  margin-top: 10px;
+  padding-top: 20px;
+  border-top: 1px dashed var(--divider);
+}
+
+.wizardNavRight {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+}
+
+/* =========================================================
+   4. IMAGE UPLOAD & PREVIEW SECTIONS
+   ========================================================= */
+.imageUploadRow {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .imageUploadRow {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.imagePreviewBox {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  box-shadow: var(--shadow-convex-xs);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.imagePreviewBox label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-extrabold);
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}
+
+.imagePreview {
+  width: 100%;
+  height: 160px;
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-surface-sunken);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-inset-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  color: var(--text-disabled);
+  overflow: hidden;
+}
+
+.imagePreview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.fileDrop {
+  background-color: var(--bg-surface-sunken);
+  border: 1.5px dashed var(--border-strong);
+  border-radius: var(--radius-sm);
+  padding: 18px;
+  text-align: center;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  box-shadow: var(--shadow-inset-xs);
+  transition: all var(--transition-fast);
+}
+
+.fileDrop:hover {
+  border-color: var(--border-hover);
+  background-color: var(--bg-card);
+  box-shadow: var(--shadow-convex-xs);
+  transform: var(--hover-lift-sm);
+}
+
+.fileDropIcon {
+  font-size: 24px;
+}
+
+.fileDrop strong {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+}
+
+.fileDrop span {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.fileDrop input[type="file"],
+.mcqUploadRow input[type="file"] {
+  display: none;
+}
+
+.fileName {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 14px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xs);
+  font-size: var(--font-size-xs);
+  color: var(--text-primary);
+  font-weight: var(--font-weight-semibold);
+  box-shadow: var(--shadow-convex-xs);
+}
+
+.fileName button {
+  background: var(--bg-surface-sunken);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  color: var(--danger);
+  font-size: 12px;
+  cursor: pointer;
+  padding: 2px 6px;
+}
+
+/* =========================================================
+   5. UPLOAD SECTIONS & LESSON ACCORDION TILES
+   ========================================================= */
+.uploadSection {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-convex-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.uploadSection h4 {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-extrabold);
+  color: var(--text-primary);
+  margin: 0;
+  text-shadow: var(--text-engraved);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.uploadSectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--divider);
+  padding-bottom: 14px;
+}
+
+.sectionCount {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--primary);
+  background-color: var(--bg-surface-sunken);
+  border: 1px solid var(--border-subtle);
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-inset-xs);
+}
+
+.uploadArea {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+/* CSV Guide Hints */
+.csvHint {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 18px;
+  background-color: var(--bg-surface-sunken);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-inset-xs);
+}
+
+.csvHint span {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.csvHint p {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0 0 12px 0;
+}
+
+.csvHint code {
+  font-family: inherit;
+  font-size: var(--font-size-xs);
+  color: var(--primary);
+  background: var(--bg-card);
+  padding: 2px 6px;
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--border-subtle);
+}
+
+.csvHint ul {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  margin: 0 0 16px 0;
+}
+
+/* Lesson Items */
+.lessonList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.lessonItem {
+  background-color: var(--bg-surface-sunken);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  box-shadow: var(--shadow-inset-xs);
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  align-items: center;
+  gap: 16px;
+  transition: all var(--transition-fast);
+}
+
+.lessonItem:hover {
+  background-color: var(--bg-card);
+  border-color: var(--border-hover);
+  box-shadow: var(--shadow-convex-xs);
+}
+
+.lessonNum {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-extrabold);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-convex-xs);
+  flex-shrink: 0;
+}
+
+.lessonInfo {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.lessonInfo strong {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lessonInfo small {
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mcqBadge {
+  font-size: 11px;
+  font-weight: var(--font-weight-bold);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+}
+
+.mcqOk {
+  background-color: var(--success-soft);
+  color: var(--success);
+  border: 1px solid var(--success-border);
+}
+
+.mcqMissing {
+  background-color: var(--warning-soft);
+  color: var(--warning);
+  border: 1px solid var(--warning-border);
+}
+
+.mcqUploadRow {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-top: 14px;
+  border-top: 1px dashed var(--divider);
+  margin-top: 6px;
+}
+
+.mcqInfo {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 200px;
+}
+
+.mcqInfo strong {
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+}
+
+.mcqInfo small {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.mcqCsvName {
+  font-size: 11px;
+  color: var(--primary);
+  font-weight: var(--font-weight-bold);
+}
+
+/* =========================================================
+   6. METRIC WELLS & FINAL QUIZ PREVIEW
+   ========================================================= */
+.metaGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.metaCard {
+  background-color: var(--bg-surface-sunken);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-shadow: var(--shadow-inset-xs);
+}
+
+.metaCard strong {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-extrabold);
+  color: var(--text-primary);
+  line-height: 1.1;
+  text-shadow: var(--text-engraved);
+}
+
+.metaCard span {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.quizList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 280px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.quizList::-webkit-scrollbar {
+  width: 6px;
+}
+
+.quizList::-webkit-scrollbar-thumb {
+  background: var(--slate-400);
+  border-radius: var(--radius-full);
+}
+
+.quizItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  background-color: var(--bg-surface-sunken);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-inset-xs);
+  font-size: var(--font-size-xs);
+}
+
+.quizItem span {
+  color: var(--primary);
+  font-weight: var(--font-weight-extrabold);
+  flex-shrink: 0;
+}
+
+.quizItem div {
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+/* =========================================================
+   7. REVIEW & CHECKLIST PANELS
+   ========================================================= */
+.reviewGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+@media (min-width: 768px) {
+  .reviewGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.reviewSection {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-convex-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.reviewSection h4 {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-extrabold);
+  color: var(--text-primary);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--divider);
+  padding-bottom: 10px;
+}
+
+.reviewThumb {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.reviewThumb img,
+.thumbnail {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  background-color: var(--bg-surface-sunken);
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-convex-xs);
+  flex-shrink: 0;
+}
+
+.reviewThumb strong {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+}
+
+.reviewRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: var(--font-size-xs);
+  padding: 6px 0;
+  border-bottom: 1px dashed var(--divider);
+}
+
+.reviewRow:last-child {
+  border-bottom: none;
+}
+
+.reviewRow span {
+  color: var(--text-muted);
+}
+
+.reviewRow strong {
+  color: var(--text-primary);
+  font-weight: var(--font-weight-semibold);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.reviewDesc {
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0;
+  background-color: var(--bg-surface-sunken);
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+}
+
+.reviewLessonRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 0;
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+  border-bottom: 1px dashed var(--divider);
+}
+
+/* Requirements & Checklist Tiles */
+.checklist,
+.requirementsCard {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.checkItem,
+.requirementRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 18px;
+  background-color: var(--bg-surface-sunken);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-inset-xs);
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+.iconContainer {
+  flex-shrink: 0;
+}
+
+.reqIcon,
+.checkIcon {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-extrabold);
+  flex-shrink: 0;
+}
+
+.reqOk,
+.checkOk {
+  background-color: var(--success);
+  color: var(--text-inverse);
+  box-shadow: none;
+}
+
+.reqMissing,
+.checkMissing {
+  background-color: var(--warning);
+  color: var(--text-inverse);
+  box-shadow: none;
+}
+
+/* =========================================================
+   8. SUCCESS SCREEN & MISC UTILITIES
+   ========================================================= */
+.successScreen {
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 40px;
+}
+
+.successIcon {
+  font-size: 56px;
+  margin-bottom: 12px;
+}
+
+.successScreen h2 {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-extrabold);
+  color: var(--text-primary);
+  margin: 0 0 10px 0;
+  text-shadow: var(--text-engraved);
+}
+
+.successScreen p {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.successActions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.stateBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  text-align: center;
+  background-color: var(--bg-surface-sunken);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-inset-sm);
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+}
+
+.alertError {
+  background-color: var(--danger-soft);
+  color: var(--danger);
+  border: 1px solid var(--danger-border);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  padding: 16px 20px;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--text-disabled);
+  border-top-color: currentColor;
+  border-radius: var(--radius-full);
+  animation: spin 0.7s linear infinite;
+  display: inline-block;
+}
+
+.muted {
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

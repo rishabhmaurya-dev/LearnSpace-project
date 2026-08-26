@@ -1,0 +1,1621 @@
+/* =========================================================
+   CAPSTONE REVIEW
+   Premium Dark Responsive UI
+========================================================= */
+
+.container {
+  width: 100%;
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: 24px;
+  color: var(--text-primary);
+  font-family: var(--font-family);
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   PAGE HEADER
+========================================================= */
+
+.pageHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.pageHeader h1 {
+  margin: 0;
+  font-size: 28px;
+  line-height: 1.2;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.pageHeader p {
+  margin: 7px 0 0;
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+/* =========================================================
+   STATISTICS
+========================================================= */
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.statCard {
+  position: relative;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px;
+  border-radius: 0px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  box-shadow: none;
+  overflow: hidden;
+  transition:
+    transform var(--transition-normal),
+    border-color var(--transition-normal),
+    box-shadow var(--transition-normal),
+    background var(--transition-normal);
+  animation: cardEnter 0.5s ease both;
+}
+
+.statCard::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at top right,
+    rgba(56, 189, 248, 0.08),
+    transparent 55%
+  );
+}
+
+.statCard:hover {
+  transform: var(--hover-lift-sm);
+  border-color: var(--border-hover);
+  box-shadow: none;
+  background: var(--bg-tertiary);
+}
+
+.statIcon {
+  position: relative;
+  flex: 0 0 48px;
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border-radius: 0px;
+  font-size: 22px;
+  background: var(--primary-soft);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+}
+
+.statCard strong {
+  display: block;
+  font-size: 24px;
+  line-height: 1;
+  color: var(--text-primary);
+}
+
+.statCard p {
+  margin: 6px 0 0;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+/* Stat tones */
+
+.statwarning {
+  border-color: rgba(245, 158, 11, 0.22);
+}
+
+.statwarning .statIcon {
+  background: var(--warning-soft);
+  border-color: rgba(245, 158, 11, 0.25);
+}
+
+.statsuccess {
+  border-color: rgba(34, 197, 94, 0.22);
+}
+
+.statsuccess .statIcon {
+  background: var(--success-soft);
+  border-color: rgba(34, 197, 94, 0.25);
+}
+
+.statdanger {
+  border-color: rgba(239, 68, 68, 0.22);
+}
+
+.statdanger .statIcon {
+  background: var(--danger-soft);
+  border-color: rgba(239, 68, 68, 0.25);
+}
+
+/* =========================================================
+   FILTERS
+========================================================= */
+
+.filters {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 26px;
+}
+
+.searchBox {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 15px;
+  opacity: 0.65;
+  pointer-events: none;
+}
+
+.searchBox input,
+.select {
+  width: 100%;
+  height: 46px;
+  box-sizing: border-box;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  outline: none;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 14px;
+  transition:
+    border-color var(--transition-normal),
+    box-shadow var(--transition-normal),
+    background var(--transition-normal);
+}
+
+.searchBox input {
+  padding: 0 15px 0 42px;
+}
+
+.searchBox input::placeholder {
+  color: var(--text-muted);
+}
+
+.searchBox input:hover,
+.select:hover {
+  border-color: var(--border-hover);
+}
+
+.searchBox input:focus,
+.select:focus {
+  border-color: var(--border-focus);
+  box-shadow: none;
+  background: var(--bg-tertiary);
+}
+
+.select {
+  flex: 0 0 180px;
+  padding: 0 38px 0 14px;
+  cursor: pointer;
+}
+
+.select option {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+/* =========================================================
+   SUBMISSION LIST
+========================================================= */
+
+/*
+  IMPORTANT:
+  Cards intentionally don't stretch to the complete width.
+
+  Desktop:
+  min 320px / max 390px
+
+  This keeps the result visually like real cards instead
+  of creating huge full-width rows.
+*/
+
+.submissionList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 390px));
+  justify-content: start;
+  align-items: start;
+  gap: 18px;
+  width: 100%;
+}
+
+/* =========================================================
+   SUBMISSION CARD
+========================================================= */
+
+.submissionCard {
+  position: relative;
+  width: 100%;
+  max-width: 390px;
+  min-width: 0;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+
+  padding: 18px;
+  border-radius: var(--radius-lg);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.025),
+      rgba(255, 255, 255, 0.008)
+    ),
+    var(--bg-secondary);
+
+  border: 1px solid var(--border);
+  box-shadow: none;
+
+  overflow: hidden;
+
+  animation: submissionEnter 0.5s ease both;
+
+  transition:
+    transform var(--transition-normal),
+    border-color var(--transition-normal),
+    box-shadow var(--transition-normal),
+    background var(--transition-normal);
+}
+
+.submissionCard::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 18px;
+  right: 18px;
+  height: 1px;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(56, 189, 248, 0.45),
+    rgba(139, 92, 246, 0.35),
+    transparent
+  );
+
+  opacity: 0.65;
+}
+
+.submissionCard:hover {
+  transform: translateY(-5px);
+  border-color: var(--border-hover);
+  box-shadow: none;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(56, 189, 248, 0.035),
+      rgba(99, 102, 241, 0.015)
+    ),
+    var(--bg-secondary);
+}
+
+/* =========================================================
+   SUBMISSION HEADER
+========================================================= */
+
+.submissionHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.studentInfo {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.avatar {
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 50%;
+
+  background: var(--brand-gradient);
+  color: white;
+
+  font-size: 15px;
+  font-weight: 750;
+
+  box-shadow: none;
+}
+
+.studentInfo > div:last-child {
+  min-width: 0;
+}
+
+.studentInfo strong {
+  display: block;
+  max-width: 190px;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.studentInfo small {
+  display: block;
+  max-width: 190px;
+
+  margin-top: 3px;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+/* =========================================================
+   STATUS BADGE
+========================================================= */
+
+.statusBadge {
+  flex: 0 0 auto;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 27px;
+  padding: 0 9px;
+
+  border-radius: var(--radius-full);
+
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+
+  border: 1px solid transparent;
+}
+
+.statusApproved {
+  color: #86efac;
+  background: var(--success-soft);
+  border-color: rgba(34, 197, 94, 0.28);
+}
+
+.statusPending {
+  color: #fcd34d;
+  background: var(--warning-soft);
+  border-color: rgba(245, 158, 11, 0.28);
+}
+
+.statusRejected {
+  color: #fca5a5;
+  background: var(--danger-soft);
+  border-color: rgba(239, 68, 68, 0.28);
+}
+
+/* =========================================================
+   COURSE INFO
+========================================================= */
+
+.courseInfo {
+  padding: 15px 0 12px;
+}
+
+.courseInfo strong {
+  display: block;
+
+  color: var(--text-primary);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.4;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.courseInfo small {
+  display: block;
+  margin-top: 5px;
+
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+/* =========================================================
+   LINKS
+========================================================= */
+
+.linksRow {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+
+  padding: 12px 0;
+
+  border-top: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.linksRow a {
+  display: inline-flex;
+  align-items: center;
+
+  min-height: 30px;
+  padding: 0 10px;
+
+  border-radius: var(--radius-sm);
+
+  background: rgba(56, 189, 248, 0.06);
+  border: 1px solid rgba(56, 189, 248, 0.13);
+
+  color: var(--primary);
+
+  font-size: 11px;
+  font-weight: 600;
+  text-decoration: none;
+
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.linksRow a:hover {
+  background: var(--primary-soft);
+  border-color: var(--border-hover);
+  transform: translateY(-1px);
+}
+
+/* =========================================================
+   FEEDBACK
+========================================================= */
+
+.feedbackText {
+  margin: 13px 0 0;
+  padding: 10px 11px;
+
+  border-radius: var(--radius-sm);
+
+  background: rgba(245, 158, 11, 0.06);
+  border: 1px solid rgba(245, 158, 11, 0.13);
+
+  color: var(--text-secondary);
+
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.feedbackText strong {
+  color: #fbbf24;
+}
+
+/* =========================================================
+   META
+========================================================= */
+
+.submissionMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+
+  margin-top: 13px;
+
+  color: var(--text-muted);
+  font-size: 10px;
+}
+
+.submissionMeta span {
+  position: relative;
+}
+
+/* =========================================================
+   ACTION BUTTONS
+========================================================= */
+
+.reviewActions {
+  display: flex;
+  gap: 9px;
+  margin-top: 16px;
+}
+
+.approveBtn,
+.rejectBtn,
+.certBtn {
+  min-height: 38px;
+  border: none;
+  border-radius: var(--radius-sm);
+
+  padding: 0 14px;
+
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast),
+    background var(--transition-fast),
+    opacity var(--transition-fast);
+}
+
+.reviewActions .approveBtn,
+.reviewActions .rejectBtn {
+  flex: 1;
+}
+
+.approveBtn {
+  color: white;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+
+  box-shadow: none;
+}
+
+.approveBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: none;
+}
+
+.rejectBtn {
+  color: white;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+
+  box-shadow: none;
+}
+
+.rejectBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: none;
+}
+
+.certBtn {
+  width: 100%;
+  color: white;
+
+  background: var(--brand-gradient);
+  box-shadow: none;
+}
+
+.certBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: none;
+}
+
+.approveBtn:disabled,
+.rejectBtn:disabled,
+.certBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.certIssuedBadge {
+  width: 100%;
+  min-height: 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+
+  border-radius: var(--radius-sm);
+
+  color: #86efac;
+  background: var(--success-soft);
+  border: 1px solid rgba(34, 197, 94, 0.25);
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* =========================================================
+   PAGINATION
+========================================================= */
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+
+  margin-top: 26px;
+}
+
+.pagination button {
+  min-height: 38px;
+  padding: 0 14px;
+
+  border-radius: var(--radius-sm);
+
+  border: 1px solid var(--border);
+
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 650;
+
+  cursor: pointer;
+
+  transition:
+    border-color var(--transition-fast),
+    background var(--transition-fast),
+    color var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.pagination button:hover:not(:disabled) {
+  border-color: var(--border-hover);
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  transform: translateY(-1px);
+}
+
+.pagination button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.pagination span {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+/* =========================================================
+   STATE BOX
+========================================================= */
+
+.stateBox {
+  width: 100%;
+  min-height: 150px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+
+  border-radius: var(--radius-lg);
+
+  border: 1px solid var(--border);
+  background: var(--bg-secondary);
+
+  color: var(--text-muted);
+  font-size: 14px;
+
+  box-shadow: none;
+
+  animation: cardEnter 0.4s ease both;
+}
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  box-sizing: border-box;
+
+  background: rgba(2, 6, 23, 0.78);
+
+  animation: fadeIn 0.2s ease both;
+}
+
+.modal {
+  width: min(620px, 100%);
+  max-height: calc(100vh - 40px);
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+
+  border-radius: var(--radius-xl);
+
+  background: var(--bg-secondary);
+
+  border: 1px solid var(--border-strong);
+
+  box-shadow: none;
+
+  animation: modalEnter 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  padding: 18px 20px;
+
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.modalHeader h3 {
+  margin: 0;
+
+  color: var(--text-primary);
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.modalClose {
+  width: 32px;
+  height: 32px;
+
+  display: grid;
+  place-items: center;
+
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+
+  background: transparent;
+  color: var(--text-muted);
+
+  cursor: pointer;
+
+  transition:
+    color var(--transition-fast),
+    background var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.modalClose:hover {
+  color: var(--text-primary);
+  background: var(--bg-hover);
+  border-color: var(--border-hover);
+}
+
+.modalBody {
+  overflow-y: auto;
+  padding: 20px;
+}
+
+/* =========================================================
+   REVIEW INFO
+========================================================= */
+
+.reviewInfo {
+  display: grid;
+  gap: 9px;
+
+  margin-bottom: 20px;
+  padding: 14px;
+
+  border-radius: var(--radius-md);
+
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid var(--border-subtle);
+}
+
+.reviewInfo p {
+  margin: 0;
+
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.5;
+
+  overflow-wrap: anywhere;
+}
+
+.reviewInfo strong {
+  color: var(--text-primary);
+}
+
+.reviewInfo a {
+  color: var(--primary);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.reviewInfo a:hover {
+  text-decoration: underline;
+}
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.formGroup label {
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.textarea {
+  width: 100%;
+  min-height: 105px;
+
+  box-sizing: border-box;
+
+  resize: vertical;
+
+  padding: 12px;
+
+  border-radius: var(--radius-md);
+
+  border: 1px solid var(--border);
+
+  outline: none;
+
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1.5;
+
+  transition:
+    border-color var(--transition-normal),
+    box-shadow var(--transition-normal);
+}
+
+.textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.textarea:hover {
+  border-color: var(--border-hover);
+}
+
+.textarea:focus {
+  border-color: var(--border-focus);
+  box-shadow: none;
+}
+
+/* =========================================================
+   MODAL ACTIONS
+========================================================= */
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+
+  margin-top: 20px;
+}
+
+.cancelBtn {
+  min-height: 38px;
+
+  padding: 0 15px;
+
+  border-radius: var(--radius-sm);
+
+  border: 1px solid var(--border);
+
+  background: transparent;
+  color: var(--text-secondary);
+
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 650;
+
+  cursor: pointer;
+
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.cancelBtn:hover {
+  background: var(--bg-hover);
+  border-color: var(--border-hover);
+  color: var(--text-primary);
+}
+
+/* =========================================================
+   CERTIFICATE PREVIEW
+========================================================= */
+
+.certPreview {
+  position: relative;
+
+  padding: 30px 24px;
+
+  border-radius: var(--radius-lg);
+
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(56, 189, 248, 0.12),
+      transparent 45%
+    ),
+    linear-gradient(145deg, rgba(99, 102, 241, 0.08), rgba(139, 92, 246, 0.04)),
+    var(--bg-tertiary);
+
+  border: 1px solid var(--border-strong);
+
+  text-align: center;
+
+  overflow: hidden;
+
+  animation: cardEnter 0.4s ease both;
+}
+
+.certPreview::before {
+  content: "";
+
+  position: absolute;
+  inset: 8px;
+
+  border: 1px solid var(--border-subtle);
+  border-radius: calc(var(--radius-lg) - 4px);
+
+  pointer-events: none;
+}
+
+.certPreviewHeader {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+
+  margin-bottom: 24px;
+}
+
+.certPreviewHeader strong {
+  color: var(--text-primary);
+  font-size: 16px;
+}
+
+.certPreviewHeader span {
+  color: var(--text-muted);
+  font-size: 10px;
+}
+
+.certPreviewTitle {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+
+  margin-bottom: 20px;
+}
+
+.certPreviewTitle span {
+  color: var(--primary);
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+}
+
+.certPreviewTitle small {
+  color: var(--text-muted);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+}
+
+.certPreviewPresented {
+  position: relative;
+
+  margin: 0;
+
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.certPreviewName {
+  position: relative;
+
+  margin: 12px 0;
+
+  color: var(--text-primary);
+  font-size: 24px;
+  font-weight: 750;
+}
+
+.certPreviewCourse {
+  position: relative;
+
+  margin: 0 auto 6px;
+
+  max-width: 440px;
+
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.certPreviewCourseTitle {
+  position: relative;
+
+  margin: 5px 0 20px;
+
+  color: var(--primary);
+  font-size: 15px;
+}
+
+.certPreviewMeta {
+  position: relative;
+
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+
+  color: var(--text-muted);
+  font-size: 9px;
+}
+
+.certPreviewScore {
+  position: relative;
+
+  display: inline-flex;
+
+  margin-top: 16px;
+  padding: 6px 12px;
+
+  border-radius: var(--radius-full);
+
+  color: #86efac;
+  background: var(--success-soft);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.certPreviewAbout {
+  position: relative;
+
+  margin: 20px 0 8px;
+
+  color: var(--text-muted);
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+.certPreviewAppreciation {
+  position: relative;
+
+  margin: 0;
+
+  color: var(--text-secondary);
+  font-size: 10px;
+  font-style: italic;
+}
+
+/* =========================================================
+   ANIMATIONS
+========================================================= */
+
+@keyframes submissionEnter {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes cardEnter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalEnter {
+  from {
+    opacity: 0;
+    transform: translateY(15px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* =========================================================
+   LARGE TABLET
+========================================================= */
+
+@media (max-width: 1100px) {
+  .container {
+    padding: 22px;
+  }
+
+  .statsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .submissionList {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 370px));
+  }
+}
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 768px) {
+  .container {
+    padding: 18px;
+  }
+
+  .pageHeader {
+    margin-bottom: 20px;
+  }
+
+  .pageHeader h1 {
+    font-size: 24px;
+  }
+
+  .pageHeader p {
+    font-size: 13px;
+  }
+
+  .filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .select {
+    flex: none;
+    width: 100%;
+  }
+
+  /*
+    Mobile/tablet cards remain cards.
+    They don't become a huge full-width row.
+  */
+
+  .submissionList {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 360px));
+
+    gap: 15px;
+  }
+
+  .submissionCard {
+    max-width: 360px;
+    padding: 16px;
+  }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 560px) {
+  .container {
+    padding: 14px;
+  }
+
+  .pageHeader {
+    margin-bottom: 18px;
+  }
+
+  .pageHeader h1 {
+    font-size: 22px;
+  }
+
+  .pageHeader p {
+    margin-top: 5px;
+    font-size: 12px;
+  }
+
+  /* -----------------------------------------
+     STAT CARDS
+  ----------------------------------------- */
+
+  .statsGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+
+  .statCard {
+    gap: 9px;
+    padding: 13px;
+    border-radius: var(--radius-md);
+  }
+
+  .statIcon {
+    flex-basis: 36px;
+    width: 36px;
+    height: 36px;
+    font-size: 17px;
+  }
+
+  .statCard strong {
+    font-size: 19px;
+  }
+
+  .statCard p {
+    margin-top: 4px;
+    font-size: 10px;
+  }
+
+  /* -----------------------------------------
+     FILTER
+  ----------------------------------------- */
+
+  .filters {
+    gap: 9px;
+    margin-bottom: 20px;
+  }
+
+  .searchBox input,
+  .select {
+    height: 43px;
+    font-size: 12px;
+  }
+
+  .searchBox input {
+    padding-left: 38px;
+  }
+
+  .searchIcon {
+    left: 12px;
+    font-size: 13px;
+  }
+
+  /* -----------------------------------------
+     CARD LIST
+  ----------------------------------------- */
+
+  .submissionList {
+    /*
+      Card is centered and visually separated
+      from the screen edges.
+    */
+    grid-template-columns: minmax(0, 360px);
+    justify-content: center;
+    gap: 14px;
+  }
+
+  .submissionCard {
+    width: 100%;
+    max-width: 360px;
+    padding: 15px;
+    border-radius: var(--radius-lg);
+  }
+
+  .submissionHeader {
+    gap: 8px;
+    padding-bottom: 13px;
+  }
+
+  .avatar {
+    flex-basis: 38px;
+    width: 38px;
+    height: 38px;
+    font-size: 13px;
+  }
+
+  .studentInfo {
+    gap: 9px;
+  }
+
+  .studentInfo strong {
+    max-width: 155px;
+    font-size: 13px;
+  }
+
+  .studentInfo small {
+    max-width: 155px;
+    font-size: 10px;
+  }
+
+  .statusBadge {
+    min-height: 25px;
+    padding: 0 8px;
+    font-size: 9px;
+  }
+
+  .courseInfo {
+    padding: 13px 0 10px;
+  }
+
+  .courseInfo strong {
+    font-size: 13px;
+  }
+
+  .courseInfo small {
+    font-size: 10px;
+  }
+
+  .linksRow {
+    gap: 6px;
+    padding: 10px 0;
+  }
+
+  .linksRow a {
+    min-height: 28px;
+    padding: 0 8px;
+    font-size: 10px;
+  }
+
+  .feedbackText {
+    margin-top: 11px;
+    padding: 9px;
+    font-size: 10px;
+  }
+
+  .submissionMeta {
+    margin-top: 11px;
+    font-size: 9px;
+  }
+
+  .reviewActions {
+    gap: 7px;
+    margin-top: 13px;
+  }
+
+  .approveBtn,
+  .rejectBtn,
+  .certBtn {
+    min-height: 36px;
+    padding: 0 10px;
+    font-size: 11px;
+  }
+
+  /* -----------------------------------------
+     PAGINATION
+  ----------------------------------------- */
+
+  .pagination {
+    gap: 9px;
+    margin-top: 20px;
+  }
+
+  .pagination button {
+    min-height: 35px;
+    padding: 0 10px;
+    font-size: 10px;
+  }
+
+  .pagination span {
+    font-size: 10px;
+  }
+
+  /* -----------------------------------------
+     MODAL
+  ----------------------------------------- */
+
+  .modalOverlay {
+    align-items: flex-end;
+    padding: 10px;
+  }
+
+  .modal {
+    width: 100%;
+    max-height: calc(100vh - 20px);
+    border-radius: var(--radius-lg);
+  }
+
+  .modalHeader {
+    padding: 15px;
+  }
+
+  .modalHeader h3 {
+    font-size: 15px;
+  }
+
+  .modalBody {
+    padding: 15px;
+  }
+
+  .reviewInfo {
+    padding: 11px;
+    margin-bottom: 15px;
+  }
+
+  .reviewInfo p {
+    font-size: 11px;
+  }
+
+  .textarea {
+    min-height: 95px;
+    font-size: 12px;
+  }
+
+  .modalActions {
+    gap: 7px;
+  }
+
+  .cancelBtn,
+  .modalActions .approveBtn,
+  .modalActions .rejectBtn,
+  .modalActions .certBtn {
+    min-height: 36px;
+    font-size: 11px;
+  }
+
+  /* -----------------------------------------
+     CERTIFICATE
+  ----------------------------------------- */
+
+  .certPreview {
+    padding: 24px 15px;
+  }
+
+  .certPreviewTitle span {
+    font-size: 18px;
+  }
+
+  .certPreviewName {
+    font-size: 20px;
+  }
+
+  .certPreviewCourse {
+    font-size: 10px;
+  }
+
+  .certPreviewCourseTitle {
+    font-size: 13px;
+  }
+
+  .certPreviewMeta {
+    font-size: 8px;
+  }
+}
+
+/* =========================================================
+   VERY SMALL MOBILE
+========================================================= */
+
+@media (max-width: 380px) {
+  .container {
+    padding: 11px;
+  }
+
+  .statsGrid {
+    gap: 8px;
+  }
+
+  .statCard {
+    padding: 11px;
+  }
+
+  .statIcon {
+    flex-basis: 32px;
+    width: 32px;
+    height: 32px;
+    font-size: 15px;
+  }
+
+  .statCard strong {
+    font-size: 17px;
+  }
+
+  .statCard p {
+    font-size: 9px;
+  }
+
+  .submissionList {
+    grid-template-columns: minmax(0, 340px);
+  }
+
+  .submissionCard {
+    padding: 13px;
+  }
+
+  .studentInfo strong {
+    max-width: 135px;
+  }
+
+  .studentInfo small {
+    max-width: 135px;
+  }
+
+  .statusBadge {
+    font-size: 8px;
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .submissionCard,
+  .statCard,
+  .stateBox,
+  .modal,
+  .modalOverlay,
+  .successAlert,
+  .errorAlert {
+    animation: none;
+    transition: none;
+  }
+
+  .submissionCard:hover,
+  .statCard:hover,
+  .approveBtn:hover,
+  .rejectBtn:hover,
+  .certBtn:hover {
+    transform: none;
+  }
+}
