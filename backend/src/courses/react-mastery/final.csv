@@ -1,0 +1,51 @@
+question,optionA,optionB,optionC,optionD,correctOptionIndex
+"What is JavaScript?","Programming Language","Database","Operating System","Web Server",0
+"Which keyword declares a variable in JavaScript?","var","define","variable","declare",0
+"Which symbol is used for a single-line comment?","//","/*","<!--","##",0
+"Which method prints output to the console?","console.log()","print()","echo()","display()",0
+"Which data type stores true or false?","String","Boolean","Number","Object",1
+"Which operator checks both value and type?","==","=","===","!=" ,2
+"Which method adds an element to the end of an array?","pop()","push()","shift()","unshift()",1
+"Which method removes the last element from an array?","pop()","push()","shift()","slice()",0
+"Which keyword is used to define a function?","function","func","define","method",0
+"What does DOM stand for?","Document Object Model","Data Object Model","Document Order Model","Digital Object Management",0
+"Which keyword creates a constant variable?","let","var","const","static",2
+"Which method converts JSON string into JavaScript object?","JSON.parse()","JSON.stringify()","JSON.convert()","JSON.object()",0
+"Which method converts JavaScript object into JSON string?","JSON.parse()","JSON.stringify()","JSON.convert()","JSON.object()",1
+"Which loop executes while a condition is true?","for","while","switch","if",1
+"Which value represents an empty value?","undefined","null","false","0",1
+"Which operator is used for logical AND?","||","!","&&","&",2
+"Which operator is used for logical OR?","&&","||","!","|",1
+"Which operator is used for logical NOT?","!","&&","||","not",0
+"Which keyword is used to return a value from a function?","send","return","output","break",1
+"Which method removes the first element of an array?","pop()","push()","shift()","unshift()",2
+"Which method adds an element at the beginning of an array?","pop()","push()","shift()","unshift()",3
+"Which property gives the number of elements in an array?","size","count","length","index",2
+"Which index represents the first element of an array?","0","1","-1","first",0
+"Which method creates a new array by applying a function to each element?","filter()","map()","reduce()","find()",1
+"Which method filters array elements based on a condition?","map()","forEach()","filter()","reduce()",2
+"Which method reduces an array to a single value?","map()","reduce()","filter()","find()",1
+"Which method executes a function for each array element?","forEach()","map()","loop()","each()",0
+"Which method finds the first element matching a condition?","search()","find()","match()","first()",1
+"Which keyword is used to create a block-scoped variable?","var","let","define","global",1
+"Which keyword is used to handle errors?","try","catch","Both try and catch","error",2
+"Which block handles an error after try?","finally","catch","throw","error",1
+"Which keyword is used to manually throw an error?","catch","error","throw","raise",2
+"What is the default value of an uninitialized variable declared with let?","null","0","undefined","false",2
+"Which function converts a string into an integer?","parseInt()","parseString()","toInteger()","NumberString()",0
+"Which function converts a string into a floating-point number?","parseFloat()","parseDecimal()","toFloatString()","float()",0
+"Which function checks whether a value is NaN?","isNaN()","isNull()","isNumber()","checkNaN()",0
+"Which operator is used for assignment?","==","===","=","=>",2
+"Which operator is used for addition?","+","&","++","add",0
+"Which operator increments a value by one?","--","++","+=","**",1
+"Which operator is used for exponentiation?","^","**","//","pow",1
+"Which statement is used to make a decision?","if","loop","array","function",0
+"Which statement is used for multiple conditional branches?","switch","repeat","select","caseonly",0
+"Which keyword stops a loop immediately?","stop","exit","break","returnloop",2
+"Which keyword skips the current loop iteration?","skip","continue","next","pass",1
+"Which method joins array elements into a string?","join()","concat()","merge()","combine()",0
+"Which method combines two or more arrays?","join()","concat()","combine()","merge()",1
+"Which object stores key-value pairs?","Array","Object","String","Number",1
+"How do you access a property named name from object user?","user-name","user.name","user[name()]","user->name",1
+"Which syntax creates an arrow function?","function => ()","() => {}","=> function()","arrow {}",1
+"Which keyword refers to the current object context?","self","current","this","object",2

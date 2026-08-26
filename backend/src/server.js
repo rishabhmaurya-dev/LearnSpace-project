@@ -1,9 +1,21 @@
-import express from "express";
+import "dotenv/config";
+
 import connectDB from "./config/database.js";
 import app from "./app.js";
 
-connectDB();
+const startServer = async () => {
+  try {
+    await connectDB();
 
-app.listen(3000,()=>{
-   console.log("servr started successfully");
-})
+    const PORT = process.env.PORT || 3000;
+
+    app.listen(PORT, () => {
+      console.log(`Server started successfully on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error("Server startup failed:", error.message);
+    process.exit(1);
+  }
+};
+
+startServer();

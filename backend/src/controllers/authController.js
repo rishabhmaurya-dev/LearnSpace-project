@@ -24,7 +24,7 @@ export const register = async (req, res) => {
         .json({ message: "Admin registration via public route is restricted" });
     }
 
-    const allowedRoles = ["STUDENT", "COMPANY"];
+    const allowedRoles = ["STUDENT"];
     if (!allowedRoles.includes(normalizedRole)) {
       return res.status(400).json({ message: "Invalid role provided" });
     }
@@ -253,3 +253,4 @@ export const logoutAllDevices = async (req, res) => {
     });
   }
 };
+
