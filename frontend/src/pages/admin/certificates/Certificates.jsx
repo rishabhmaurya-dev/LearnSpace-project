@@ -1,9 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import toast from "react-hot-toast";
 
 import { fetchCertificates } from "../../../features/admin/certificate/adminCertificateThunks";
+
+import { deleteCertificate } from "../../../features/admin/certificate/adminCertificateThunks";
 
 import {
   clearCertificateError,
@@ -21,7 +23,10 @@ const Certificates = () => {
     error,
     success,
     message,
+    deletingId,
   } = useSelector((state) => state.adminCertificate);
+
+  const [deleteTarget, setDeleteTarget] = useState(null);
 
   /* =====================================================
      FETCH COURSE COMPLETION CERTIFICATES
@@ -67,12 +72,31 @@ const Certificates = () => {
     return () => clearTimeout(timer);
   }, [error, dispatch]);
 
+  /* =====================================================
+     DELETE HANDLER
+  ===================================================== */
+
+  const handleDelete = async () => {
+    if (!deleteTarget) return;
+
+    const result = await dispatch(
+      deleteCertificate(deleteTarget._id),
+    );
+
+    if (deleteCertificate.fulfilled.match(result)) {
+      toast.success(result.payload.message || "Certificate deleted");
+      setDeleteTarget(null);
+    } else {
+      toast.error(result.payload || "Failed to delete certificate");
+    }
+  };
+
   return (
     <div className={styles.container}>
 
       {/* =================================================
           HEADER
-      ================================================= */}
+      ======================================================= */}
 
       <div className={styles.pageHeader}>
         <div>
@@ -94,7 +118,7 @@ const Certificates = () => {
 
       {/* =================================================
           CONTENT
-      ================================================= */}
+      ======================================================= */}
 
       {loading ? (
         <div className={styles.stateBox}>
@@ -118,8 +142,58 @@ const Certificates = () => {
               key={cert._id}
               cert={cert}
               index={index}
+              deleting={deletingId === cert._id}
+              onDelete={() => setDeleteTarget(cert)}
             />
           ))}
+        </div>
+      )}
+
+      {/* =================================================
+          DELETE CONFIRM MODAL
+      ======================================================= */}
+
+      {deleteTarget && (
+        <div
+          className={styles.modalOverlay}
+          onClick={() => setDeleteTarget(null)}
+        >
+          <div
+            className={styles.confirmModal}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className={styles.confirmIcon}>🗑️</div>
+
+            <h3>Delete Certificate?</h3>
+
+            <p>
+              This will permanently delete the certificate for{" "}
+              <strong>{deleteTarget.studentName || "this student"}</strong>
+              {" "}({deleteTarget.certificateCode || "—"}). The linked
+              capstone will be reset so you can re-issue it, and the
+              related verified skill will be removed.
+            </p>
+
+            <div className={styles.confirmActions}>
+              <button
+                className={styles.cancelBtn}
+                onClick={() => setDeleteTarget(null)}
+                disabled={deletingId === deleteTarget._id}
+              >
+                Cancel
+              </button>
+
+              <button
+                className={styles.deleteBtn}
+                onClick={handleDelete}
+                disabled={deletingId === deleteTarget._id}
+              >
+                {deletingId === deleteTarget._id
+                  ? "Deleting..."
+                  : "Delete Certificate"}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
@@ -130,7 +204,7 @@ const Certificates = () => {
    CERTIFICATE CARD
 ========================================================= */
 
-const CertificateCard = ({ cert, index }) => {
+const CertificateCard = ({ cert, index, deleting = false, onDelete }) => {
   const courseTitle =
     cert.courseId?.title ||
     cert.metadata?.entityName ||
@@ -239,21 +313,33 @@ const CertificateCard = ({ cert, index }) => {
           </span>
         </div>
 
-        {cert.pdfUrl ? (
-          <a
-            href={cert.pdfUrl}
-            target="_blank"
-            rel="noreferrer"
-            className={styles.viewButton}
+        <div className={styles.cardActions}>
+          {cert.pdfUrl ? (
+            <a
+              href={cert.pdfUrl}
+              target="_blank"
+              rel="noreferrer"
+              className={styles.viewButton}
+            >
+              View Certificate
+              <span>↗</span>
+            </a>
+          ) : (
+            <span className={styles.noPdf}>
+              PDF unavailable
+            </span>
+          )}
+
+          <button
+            type="button"
+            className={styles.deleteBtn}
+            onClick={onDelete}
+            disabled={deleting}
+            title="Delete certificate"
           >
-            View Certificate
-            <span>↗</span>
-          </a>
-        ) : (
-          <span className={styles.noPdf}>
-            PDF unavailable
-          </span>
-        )}
+            {deleting ? "..." : "🗑️ Delete"}
+          </button>
+        </div>
 
       </div>
     </article>

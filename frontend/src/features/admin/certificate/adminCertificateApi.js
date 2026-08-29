@@ -16,12 +16,17 @@ export const getCertificatesApi = async (params = {}) => {
 
 /**
  * POST /admin/certificates/preview
- * Build a certificate preview for an approved capstone (no persistence).
+ * Renders the certificate from the official template (certificate.png)
+ * with the dynamic data filled in, and returns the PDF as a blob
+ * so the admin can see an exact preview (WYSIWYG). Nothing is
+ * persisted.
  */
 export const previewCertificateApi = async (capstoneSubmissionId) => {
-  const response = await api.post("/admin/certificates/preview", {
-    capstoneSubmissionId,
-  });
+  const response = await api.post(
+    "/admin/certificates/preview",
+    { capstoneSubmissionId },
+    { responseType: "blob" },
+  );
 
   return response.data;
 };
@@ -34,6 +39,16 @@ export const sendCertificateApi = async (capstoneSubmissionId) => {
   const response = await api.post("/admin/certificates/send", {
     capstoneSubmissionId,
   });
+
+  return response.data;
+};
+
+/**
+ * DELETE /admin/certificates/:certificateId
+ * Cascade delete a certificate (PDF + capstone reset + verified skill).
+ */
+export const deleteCertificateApi = async (certificateId) => {
+  const response = await api.delete(`/admin/certificates/${certificateId}`);
 
   return response.data;
 };

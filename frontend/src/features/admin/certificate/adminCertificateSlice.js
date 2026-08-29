@@ -4,6 +4,7 @@ import {
   fetchCertificates,
   previewCertificate,
   sendCertificate,
+  deleteCertificate,
 } from "./adminCertificateThunks";
 
 const initialState = {
@@ -28,6 +29,8 @@ const initialState = {
   previewLoading: false,
 
   sending: false,
+
+  deletingId: null,
 
   /* =====================================================
      ERROR / SUCCESS
@@ -56,6 +59,10 @@ const adminCertificateSlice = createSlice({
     },
 
     clearPreview: (state) => {
+      if (typeof state.preview?.url === "string") {
+        URL.revokeObjectURL(state.preview.url);
+      }
+
       state.preview = null;
     },
   },
@@ -100,11 +107,19 @@ const adminCertificateSlice = createSlice({
       .addCase(previewCertificate.fulfilled, (state, action) => {
         state.previewLoading = false;
 
-        state.preview = action.payload.preview || null;
+        if (typeof state.preview?.url === "string") {
+          URL.revokeObjectURL(state.preview.url);
+        }
+
+        state.preview = action.payload || null;
       })
 
       .addCase(previewCertificate.rejected, (state, action) => {
         state.previewLoading = false;
+
+        if (typeof state.preview?.url === "string") {
+          URL.revokeObjectURL(state.preview.url);
+        }
 
         state.preview = null;
 
@@ -138,6 +153,38 @@ const adminCertificateSlice = createSlice({
         state.success = false;
 
         state.error = action.payload || "Failed to send certificate";
+      });
+
+    /* =====================================================
+       DELETE CERTIFICATE
+       ===================================================== */
+
+    builder
+
+      .addCase(deleteCertificate.pending, (state, action) => {
+        state.deletingId = action.meta.arg;
+        state.error = null;
+      })
+
+      .addCase(deleteCertificate.fulfilled, (state, action) => {
+        state.deletingId = null;
+
+        state.success = true;
+
+        state.message =
+          action.payload.message || "Certificate deleted successfully";
+
+        const deletedId = action.payload.certificateId;
+
+        state.certificates = state.certificates.filter(
+          (cert) => String(cert._id) !== String(deletedId),
+        );
+      })
+
+      .addCase(deleteCertificate.rejected, (state, action) => {
+        state.deletingId = null;
+
+        state.error = action.payload || "Failed to delete certificate";
       });
   },
 });

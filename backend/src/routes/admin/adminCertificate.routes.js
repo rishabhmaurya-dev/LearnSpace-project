@@ -4,6 +4,7 @@ import {
   getCertificates,
   previewCertificate,
   sendCertificate,
+  deleteCertificate,
 } from "../../controllers/admin/adminCertificateController.js";
 
 import { protect, authorize } from "../../middlewares/auth.middleware.js";
@@ -25,5 +26,8 @@ router.post("/preview", previewCertificate);
 
 // Generate + persist + send a certificate
 router.post("/send", sendCertificate);
+
+// Cascade delete a certificate (resets capstone + cleans related data)
+router.delete("/:certificateId", deleteCertificate);
 
 export default router;

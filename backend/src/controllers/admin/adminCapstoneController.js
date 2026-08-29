@@ -5,6 +5,7 @@ import { Course } from "../../models/Course.model.js";
 import { User } from "../../models/User.model.js";
 import { StudentProfile } from "../../models/StudentProfile.model.js";
 import { CourseProgress } from "../../models/CourseProgress.model.js";
+import { reconcileCertificateIssuedStates } from "../../utils/certificateSync.js";
 
 const isValidObjectId = (id) => {
   return mongoose.Types.ObjectId.isValid(id);
@@ -17,6 +18,9 @@ const isValidObjectId = (id) => {
 
 export const getCapstoneSubmissions = async (req, res) => {
   try {
+    // Sync certificate state so manual DB changes are reflected in the UI.
+    await reconcileCertificateIssuedStates();
+
     const { search = "", status, page = 1, limit = 10 } = req.query;
 
     const currentPage = Math.max(Number(page), 1);

@@ -566,6 +566,63 @@
   padding-top: 17px;
 }
 
+.cardActions {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+}
+
+/* =========================================================
+   DELETE BUTTON
+========================================================= */
+
+.deleteBtn {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+
+  padding: 8px 11px;
+
+  color: #fca5a5;
+
+  background: rgba(239, 68, 68, 0.1);
+
+  border: 1px solid rgba(239, 68, 68, 0.3);
+
+  border-radius: 0px;
+
+  font-size: 0.7rem;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform var(--transition-fast),
+    background var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.deleteBtn:hover:not(:disabled) {
+  color: white;
+
+  background: rgba(239, 68, 68, 0.85);
+
+  border-color: rgba(239, 68, 68, 0.85);
+
+  transform: translateY(-2px);
+}
+
+.deleteBtn:disabled {
+  opacity: 0.5;
+
+  cursor: not-allowed;
+}
+
 /* =========================================================
    STATUS
 ========================================================= */
@@ -664,6 +721,209 @@
 
   font-size: 0.7rem;
   font-weight: 600;
+}
+
+/* =========================================================
+   DELETE CONFIRM MODAL
+========================================================= */
+
+.modalOverlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 1000;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background: rgba(2, 6, 23, 0.78);
+
+  animation: fadeIn 0.2s ease both;
+}
+
+.confirmModal {
+  width: min(420px, 100%);
+
+  box-sizing: border-box;
+
+  padding: 26px;
+
+  background: var(--bg-secondary);
+
+  border: 1px solid var(--border-strong);
+
+  border-radius: var(--radius-lg);
+
+  text-align: center;
+
+  animation: modalEnter 0.28s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.confirmIcon {
+  width: 52px;
+
+  height: 52px;
+
+  margin: 0 auto 14px;
+
+  display: grid;
+
+  place-items: center;
+
+  font-size: 1.5rem;
+
+  background: rgba(239, 68, 68, 0.12);
+
+  border: 1px solid rgba(239, 68, 68, 0.3);
+
+  border-radius: 50%;
+}
+
+.confirmModal h3 {
+  margin: 0 0 10px;
+
+  color: var(--text-primary);
+
+  font-size: 1.05rem;
+  font-weight: 750;
+}
+
+.confirmModal p {
+  margin: 0;
+
+  color: var(--text-muted);
+
+  font-size: 0.8rem;
+
+  line-height: 1.6;
+}
+
+.confirmModal p strong {
+  color: var(--text-primary);
+}
+
+.confirmActions {
+  display: flex;
+
+  gap: 10px;
+
+  margin-top: 20px;
+}
+
+.cancelBtn {
+  flex: 1;
+
+  min-height: 40px;
+
+  border: 1px solid var(--border);
+
+  border-radius: var(--radius-sm);
+
+  background: transparent;
+
+  color: var(--text-secondary);
+
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 650;
+
+  cursor: pointer;
+
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.cancelBtn:hover:not(:disabled) {
+  background: var(--bg-hover);
+
+  border-color: var(--border-hover);
+
+  color: var(--text-primary);
+}
+
+.cancelBtn:disabled {
+  opacity: 0.5;
+
+  cursor: not-allowed;
+}
+
+.confirmActions .deleteBtn {
+  flex: 1.4;
+
+  min-height: 40px;
+
+  border: none;
+
+  color: white;
+
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+
+  border-radius: var(--radius-sm);
+
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast),
+    opacity var(--transition-fast);
+}
+
+.confirmActions .deleteBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.confirmActions .deleteBtn:disabled {
+  opacity: 0.5;
+
+  cursor: not-allowed;
+
+  transform: none;
+}
+
+@keyframes modalEnter {
+  from {
+    opacity: 0;
+
+    transform: translateY(15px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes certificateFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-4px);
+  }
 }
 
 /* =========================================================
@@ -850,7 +1110,16 @@
     justify-content: center;
   }
 
-  .viewButton {
+  .cardActions {
+    width: 100%;
+
+    flex-direction: column;
+
+    align-items: stretch;
+  }
+
+  .cardActions .viewButton,
+  .cardActions .deleteBtn {
     width: 100%;
 
     box-sizing: border-box;

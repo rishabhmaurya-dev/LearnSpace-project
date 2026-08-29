@@ -10,11 +10,17 @@ import { User } from "../../models/User.model.js";
 import { CourseProgress } from "../../models/CourseProgress.model.js";
 
 import {
-  generateCertificatePdf,
+  generateCertificateFromTemplate,
   buildCertificatePreviewData,
+  CERT_ISSUER,
   PLATFORM_BRAND,
 } from "../../utils/certificateGenerator.js";
 import { StudentProfile } from "../../models/StudentProfile.model.js";
+
+import {
+  removePdfFile,
+  reconcileCertificateIssuedStates,
+} from "../../utils/certificateSync.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -90,6 +96,9 @@ export async function getCertificates(req, res) {
   try {
     const { type } = req.query;
 
+    // Sync certificate / capstone / UI state (dedupe + orphan cleanup + flags).
+    await reconcileCertificateIssuedStates();
+
     const filter = {};
     if (type === "COURSE" || type === "course") {
       filter.certificateType = "COURSE_COMPLETION";
@@ -110,7 +119,10 @@ export async function getCertificates(req, res) {
 /**
  * POST /api/admin/certificates/preview
  * Body: { capstoneSubmissionId }
- * Builds and returns the certificate preview payload WITHOUT persisting anything.
+ * Renders the certificate using the official template image
+ * (certificate.png) with the dynamic data filled in, and
+ * streams it back as a PDF for a WYSIWYG preview. Nothing is
+ * persisted.
  */
 export async function previewCertificate(req, res) {
   try {
@@ -134,28 +146,35 @@ export async function previewCertificate(req, res) {
 
     const studentName = student.name || "Student";
     const courseTitle = course.title;
-    const courseDescription = course.description || "";
     const certificateCode = makeCertificateCode();
     const issueDate = formatDate(new Date());
 
     const preview = buildCertificatePreviewData({
       studentName,
       courseTitle,
-      courseDescription,
+      courseDescription: course.description || "",
       certificateCode,
       issueDate,
       score: score != null ? `${score}%` : "",
     });
 
-    res.status(200).json({
-      success: true,
-      preview: {
-        ...preview,
-        capstoneSubmissionId: capstone._id,
-        studentEmail: student.email || "",
-        issuedBy: PLATFORM_BRAND.name,
-      },
+    const pdfBuffer = await generateCertificateFromTemplate({
+      studentName,
+      courseTitle,
+      certificateCode,
+      issueDate,
+      score: preview.score,
+      companyName: CERT_ISSUER,
+      verificationUrl: PLATFORM_BRAND.website,
     });
+
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader(
+      "Content-Disposition",
+      `inline; filename="certificate-preview-${certificateCode}.pdf"`,
+    );
+    res.setHeader("Content-Length", pdfBuffer.length);
+    res.status(200).send(pdfBuffer);
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -196,32 +215,28 @@ export async function sendCertificate(req, res) {
 
     const studentName = student.name || "Student";
     const courseTitle = course.title;
-    const courseDescription = course.description || "";
     const certificateCode = makeCertificateCode();
     const issueDate = formatDate(new Date());
 
-    const verificationUrl = `${process.env.FRONTEND_URL || "http://localhost:5173"}/student/certificates`;
+    const verificationUrl = PLATFORM_BRAND.website;
 
     const preview = buildCertificatePreviewData({
       studentName,
       courseTitle,
-      courseDescription,
+      courseDescription: course.description || "",
       certificateCode,
       issueDate,
       score: score != null ? `${score}%` : "",
     });
 
-    // Generate the PDF buffer.
-    const pdfBuffer = await generateCertificatePdf({
+    // Generate the PDF from the official certificate template
+    // (certificate.png) with the dynamic data filled in.
+    const pdfBuffer = await generateCertificateFromTemplate({
       studentName,
       courseTitle,
-      courseDescription,
       certificateCode,
       issueDate,
-      aboutWebsite: preview.aboutWebsite,
-      completionSentence: preview.completionSentence,
-      appreciationSentence: preview.appreciationSentence,
-      companyName: PLATFORM_BRAND.name,
+      companyName: CERT_ISSUER,
       verificationUrl,
       score: preview.score,
     });
@@ -250,14 +265,14 @@ export async function sendCertificate(req, res) {
       capstoneSubmissionId: capstone._id,
 
       title: `Certificate of Completion - ${courseTitle}`,
-      websiteName: PLATFORM_BRAND.name,
-      description: courseDescription,
+      websiteName: CERT_ISSUER,
+      description: preview.courseDescription || "",
 
       metadata: {
         studentName,
         entityName: courseTitle,
         subtitle: "",
-        companyName: PLATFORM_BRAND.name,
+        companyName: CERT_ISSUER,
         score: score,
       },
 
@@ -285,6 +300,8 @@ export async function sendCertificate(req, res) {
         {
           new: true,
           runValidators: true,
+          upsert: true,
+          setDefaultsOnInsert: true,
         },
       ).lean();
 
@@ -301,6 +318,99 @@ export async function sendCertificate(req, res) {
       success: true,
       message: "Certificate issued and sent successfully",
       certificate,
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+}
+
+/**
+ * DELETE /api/admin/certificates/:certificateId
+ * Deletes a certificate and its related data (cascade cleanup):
+ *   - removes the generated PDF file from disk
+ *   - resets the linked capstone so "Issue Certificate" appears again
+ *   - removes the associated verified skill if no other certificate
+ *     remains for that student + course
+ */
+export async function deleteCertificate(req, res) {
+  try {
+    const { certificateId } = req.params;
+
+    if (!mongoose.isValidObjectId(certificateId)) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid certificate id" });
+    }
+
+    const certificate = await Certificate.findById(certificateId);
+
+    if (!certificate) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Certificate not found" });
+    }
+
+    const capstoneId = certificate.capstoneSubmissionId;
+
+    // ------------------------------------------------------------------
+    // 1. Remove the PDF file
+    // ------------------------------------------------------------------
+
+    removePdfFile(certificate.pdfUrl);
+
+    // ------------------------------------------------------------------
+    // 2. Reset the linked capstone so the admin can re-issue
+    // ------------------------------------------------------------------
+
+    if (capstoneId) {
+      await CapstoneSubmission.updateOne(
+        { _id: capstoneId },
+        {
+          $set: {
+            certificateIssued: false,
+            certificateIssuedAt: null,
+          },
+        },
+      );
+    }
+
+    // ------------------------------------------------------------------
+    // 3. Delete the certificate record
+    // ------------------------------------------------------------------
+
+    await Certificate.deleteOne({ _id: certificate._id });
+
+    // ------------------------------------------------------------------
+    // 4. Remove the verified skill if no other certificate remains
+    //    for this student + course
+    // ------------------------------------------------------------------
+
+    if (certificate.studentId && certificate.courseId) {
+      const remainingCertificates = await Certificate.countDocuments({
+        studentId: certificate.studentId,
+        courseId: certificate.courseId,
+      });
+
+      if (remainingCertificates === 0) {
+        const course = await Course.findById(certificate.courseId)
+          .select("category")
+          .lean();
+
+        const category = course?.category?.trim();
+
+        if (category) {
+          await StudentProfile.updateOne(
+            { userId: certificate.studentId },
+            { $pull: { verifiedSkills: category } },
+          );
+        }
+      }
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Certificate deleted successfully",
+      certificateId: certificate._id,
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });

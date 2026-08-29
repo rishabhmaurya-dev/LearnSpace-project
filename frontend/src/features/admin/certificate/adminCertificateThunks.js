@@ -4,6 +4,7 @@ import {
   getCertificatesApi,
   previewCertificateApi,
   sendCertificateApi,
+  deleteCertificateApi,
 } from "./adminCertificateApi";
 
 /* =========================================================
@@ -31,8 +32,26 @@ export const previewCertificate = createAsyncThunk(
   "adminCertificate/previewCertificate",
   async (capstoneSubmissionId, { rejectWithValue }) => {
     try {
-      return await previewCertificateApi(capstoneSubmissionId);
+      const blob = await previewCertificateApi(capstoneSubmissionId);
+
+      const url = URL.createObjectURL(blob);
+
+      return { url };
     } catch (error) {
+      if (error.response?.data instanceof Blob) {
+        try {
+          const text = await error.response.data.text();
+
+          const payload = JSON.parse(text);
+
+          return rejectWithValue(
+            payload?.message || "Failed to preview certificate",
+          );
+        } catch (_) {
+          return rejectWithValue("Failed to preview certificate");
+        }
+      }
+
       return rejectWithValue(
         error.response?.data?.message || "Failed to preview certificate",
       );
@@ -52,6 +71,23 @@ export const sendCertificate = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(
         error.response?.data?.message || "Failed to send certificate",
+      );
+    }
+  },
+);
+
+/* =========================================================
+   4. DELETE CERTIFICATE
+   ========================================================= */
+
+export const deleteCertificate = createAsyncThunk(
+  "adminCertificate/deleteCertificate",
+  async (certificateId, { rejectWithValue }) => {
+    try {
+      return await deleteCertificateApi(certificateId);
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to delete certificate",
       );
     }
   },

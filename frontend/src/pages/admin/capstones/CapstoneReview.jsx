@@ -501,7 +501,10 @@ const CapstoneReview = () => {
       {/* CERTIFICATE PREVIEW MODAL */}
       {certificateTarget && (
         <div className={styles.modalOverlay} onClick={closeCertificate}>
-          <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+          <div
+            className={`${styles.modal} ${styles.certModal}`}
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className={styles.modalHeader}>
               <h3>Certificate Preview</h3>
               <button className={styles.modalClose} onClick={closeCertificate}>
@@ -518,58 +521,17 @@ const CapstoneReview = () => {
                 <div className={styles.errorAlert}>{certError}</div>
               )}
 
-              {!previewLoading && certPreview && (
+              {!previewLoading && certPreview?.url && (
                 <div className={styles.certPreview}>
-                  <div className={styles.certPreviewHeader}>
-                    <strong>{certPreview.companyName}</strong>
-                    <span>{certPreview.brandTagline}</span>
-                  </div>
-
-                  <div className={styles.certPreviewTitle}>
-                    <span>CERTIFICATE</span>
-                    <small>OF COMPLETION</small>
-                  </div>
-
-                  <p className={styles.certPreviewPresented}>
-                    This certificate is proudly presented to
-                  </p>
-
-                  <h2 className={styles.certPreviewName}>
-                    {certPreview.studentName}
-                  </h2>
-
-                  <p className={styles.certPreviewCourse}>
-                    {certPreview.completionSentence}
-                  </p>
-
-                  <h4 className={styles.certPreviewCourseTitle}>
-                    {certPreview.courseTitle}
-                  </h4>
-
-                  <div className={styles.certPreviewMeta}>
-                    <span>Issue Date: {certPreview.issueDate || "—"}</span>
-                    <span>
-                      Certificate ID: {certPreview.certificateCode || "—"}
-                    </span>
-                  </div>
-
-                  {certPreview.score && (
-                    <div className={styles.certPreviewScore}>
-                      Final Score: {certPreview.score}
-                    </div>
-                  )}
-
-                  <p className={styles.certPreviewAbout}>
-                    {certPreview.aboutWebsite}
-                  </p>
-
-                  <p className={styles.certPreviewAppreciation}>
-                    "{certPreview.appreciationSentence}"
-                  </p>
+                  <iframe
+                    src={certPreview.url}
+                    title="Certificate Preview"
+                    className={styles.certPreviewFrame}
+                  />
                 </div>
               )}
 
-              {!previewLoading && !certPreview && !certError && (
+              {!previewLoading && !certPreview?.url && !certError && (
                 <div className={styles.stateBox}>
                   No preview available for this submission.
                 </div>
@@ -582,7 +544,7 @@ const CapstoneReview = () => {
 
                 <button
                   className={styles.certBtn}
-                  disabled={sending || !certPreview}
+                  disabled={sending || !certPreview?.url}
                   onClick={handleSendCertificate}
                 >
                   {sending
