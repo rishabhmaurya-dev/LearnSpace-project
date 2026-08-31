@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { forgotPassword } from "../../features/auth/authThunks";
 
+import ScrollReveal from "../../animation/Scroll";
+
 import {
   clearAuthError,
   clearAuthSuccess,
@@ -41,45 +43,47 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className={styles.page}>
-      <div className={styles.card}>
-        <div className={styles.header}>
-          <h1>Forgot Password?</h1>
+    <ScrollReveal>
+      <div className={styles.page}>
+        <div className={styles.card}>
+          <div className={styles.header}>
+            <h1>Forgot Password?</h1>
 
-          <p>
-            Enter your registered email and we'll send you a password reset
-            link.
-          </p>
-        </div>
-
-        {error && <div className={styles.error}>{error}</div>}
-
-        {success && <div className={styles.success}>{message}</div>}
-
-        <form onSubmit={handleSubmit} className={styles.form}>
-          <div className={styles.field}>
-            <label htmlFor="email">Email Address</label>
-
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={handleChange}
-              placeholder="Enter your registered email address"
-              required
-            />
+            <p>
+              Enter your registered email and we'll send you a password reset
+              link.
+            </p>
           </div>
 
-          <button type="submit" disabled={loading} className={styles.button}>
-            {loading ? "Sending..." : "Send Reset Link"}
-          </button>
-        </form>
+          {error && <div className={styles.error}>{error}</div>}
 
-        <Link to="/login" className={styles.backLink}>
-          ← Back to Login
-        </Link>
+          {success && <div className={styles.success}>{message}</div>}
+
+          <form onSubmit={handleSubmit} className={styles.form}>
+            <div className={styles.field}>
+              <label htmlFor="email">Email Address</label>
+
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={handleChange}
+                placeholder="Enter your registered email address"
+                required
+              />
+            </div>
+
+            <button type="submit" disabled={loading} className={styles.button}>
+              {loading ? "Sending..." : "Send Reset Link"}
+            </button>
+          </form>
+
+          <Link to="/login" className={styles.backLink}>
+            ← Back to Login
+          </Link>
+        </div>
       </div>
-    </div>
+    </ScrollReveal>
   );
 };
 

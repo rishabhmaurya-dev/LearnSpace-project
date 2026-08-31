@@ -6,6 +6,8 @@ import { resetCourseEditor } from "../../../features/courses/courseSlice";
 
 import CourseWizard from "./CourseWizard";
 
+import styles from "./CreateCourse.module.css";
+
 const CreateCourse = () => {
   const dispatch = useDispatch();
 
@@ -13,7 +15,11 @@ const CreateCourse = () => {
     dispatch(resetCourseEditor());
   }, [dispatch]);
 
-  return <CourseWizard mode="create" />;
+  return (
+    <div className={styles.container}>
+      <CourseWizard mode="create" />
+    </div>
+  );
 };
 
 export default CreateCourse;

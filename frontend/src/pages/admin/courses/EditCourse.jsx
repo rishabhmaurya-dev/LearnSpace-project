@@ -10,7 +10,7 @@ import { clearCourseError } from "../../../features/courses/courseSlice";
 
 import CourseWizard from "./CourseWizard";
 
-import styles from "./course.module.css";
+import styles from "./EditCourse.module.css";
 
 const EditCourse = () => {
   const dispatch = useDispatch();
@@ -34,11 +34,21 @@ const EditCourse = () => {
   }, [dispatch]);
 
   if (detailsLoading) {
-    return <div className={styles.stateBox}>Loading course...</div>;
+    return (
+      <div className={styles.container}>
+        <div className={styles.stateBox}>Loading course...</div>
+      </div>
+    );
   }
 
   if (!selectedCourse) {
-    return <div className={styles.stateBox}>{error || "Course not found"}</div>;
+    return (
+      <div className={styles.container}>
+        <div className={styles.stateBox}>
+          {error || "Course not found"}
+        </div>
+      </div>
+    );
   }
 
   return <CourseWizard mode="edit" courseId={courseId} />;

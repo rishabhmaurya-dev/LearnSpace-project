@@ -334,10 +334,10 @@ const LearnSpace = () => {
           item.id !== INITIAL_MESSAGE.id &&
           (item.role === "user" || item.role === "assistant"),
       )
-      .slice(-10)
+      .slice(-4)
       .map((item) => ({
         role: item.role,
-        content: item.content,
+        content: item.content.slice(0, 500),
       }));
 
     /*

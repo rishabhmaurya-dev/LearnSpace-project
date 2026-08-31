@@ -26,7 +26,7 @@
 .lessonsSection,
 .finalCard {
   width: 100%;
-  max-width: var(--content-max-width);
+  max-width: 1000px;
 
   margin-left: auto;
   margin-right: auto;

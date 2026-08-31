@@ -18,7 +18,7 @@ export const CERT_ISSUER = "LearnSpace";
 export const PLATFORM_BRAND = {
   name: "LearnSpace",
   tagline: "Bridging Skills, Building Careers",
-  website: process.env.FRONTEND_URL || "https://google.com",
+  website: process.env.FRONTEND_URL || "https://jsconceptss.netlify.app",
 };
 
 /**

@@ -29,7 +29,7 @@ import CapstoneStep from "./steps/CapstoneStep";
 import ReviewStep from "./steps/ReviewStep";
 import CreateStep from "./steps/CreateStep";
 
-import styles from "./course.module.css";
+import styles from "./CourseWizard.module.css";
 
 const STEPS = [
   { label: "Basic Info", icon: "📋" },

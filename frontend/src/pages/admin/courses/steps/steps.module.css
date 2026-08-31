@@ -381,7 +381,9 @@
 .imagePreview img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  object-position: center;
+  padding: 8px;
 }
 
 .fileDrop {
@@ -796,7 +798,8 @@
   width: 56px;
   height: 56px;
   border-radius: var(--radius-sm);
-  object-fit: cover;
+  object-fit: contain;
+  object-position: center;
   background-color: var(--bg-surface-sunken);
   border: 1px solid var(--border-subtle);
   display: flex;

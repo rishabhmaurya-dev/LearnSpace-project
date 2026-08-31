@@ -1,0 +1,278 @@
+/* =========================================================
+   COURSE WIZARD PAGE — DARK THEME (VARIABLES-CSS DRIVEN)
+   Uses only tokens from styles/variables.css
+   ========================================================= */
+
+/* =========================================================
+   WIZARD CONTAINER
+   ========================================================= */
+
+.wizardContainer {
+  width: 100%;
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: 24px 44px 64px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+@media (max-width: 768px) {
+  .wizardContainer {
+    padding: 18px 20px 48px;
+  }
+}
+
+
+/* =========================================================
+   WIZARD HEADER
+   ========================================================= */
+
+.wizardHeader {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px 28px;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+@media (min-width: 860px) {
+  .wizardHeader {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.wizardHeader::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--brand-gradient);
+}
+
+.wizardHeader h1 {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-extrabold);
+  color: var(--text-primary);
+  margin: 0;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.wizardHeader p {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-secondary);
+  margin: 4px 0 0;
+}
+
+
+/* =========================================================
+   CANCEL (GHOST) BUTTON
+   ========================================================= */
+
+.ghostBtn {
+  height: 44px;
+  padding: 0 18px;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-sizing: border-box;
+  white-space: nowrap;
+  background-color: var(--bg-surface-sunken);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-subtle);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+
+.ghostBtn:hover {
+  color: var(--primary);
+  background-color: var(--bg-card-hover);
+  border-color: var(--border-hover);
+}
+
+.ghostBtn:active {
+  transform: var(--active-press);
+}
+
+
+/* =========================================================
+   STEPPER
+   ========================================================= */
+
+.stepper {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .stepper {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+.stepItem {
+  background-color: var(--bg-surface-sunken);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 10px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  user-select: none;
+}
+
+.stepItem:hover {
+  background-color: var(--bg-card-hover);
+  border-color: var(--border-hover);
+}
+
+.stepActive {
+  background-color: var(--bg-card);
+  border-color: var(--border-hover);
+}
+
+.stepDone {
+  border-color: var(--success-border);
+}
+
+.stepCircle {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  background-color: var(--bg-card);
+  border: 1.5px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.stepActive .stepCircle {
+  background: var(--brand-gradient);
+  color: var(--text-inverse);
+  border-color: var(--primary-light);
+}
+
+.stepDone .stepCircle {
+  background-color: var(--success);
+  color: var(--text-inverse);
+  border-color: var(--success-border);
+}
+
+.stepLabel {
+  font-size: 11px;
+  font-weight: var(--font-weight-bold);
+  color: var(--text-secondary);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.stepActive .stepLabel {
+  color: var(--primary);
+  font-weight: var(--font-weight-extrabold);
+}
+
+
+/* =========================================================
+   WIZARD BODY
+   ========================================================= */
+
+.wizardBody {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+
+/* =========================================================
+   WIZARD NAV
+   ========================================================= */
+
+.wizardNav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+}
+
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.primaryBtn,
+.secondaryBtn {
+  height: 44px;
+  padding: 0 20px;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-sizing: border-box;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+}
+
+.primaryBtn {
+  background: var(--brand-gradient);
+  color: var(--text-inverse);
+  border: 1px solid var(--primary-dark);
+}
+
+.primaryBtn:hover:not(:disabled) {
+  background: var(--brand-gradient-hover);
+  transform: var(--hover-lift-sm);
+}
+
+.secondaryBtn {
+  background-color: var(--bg-surface-sunken);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+}
+
+.secondaryBtn:hover:not(:disabled) {
+  background-color: var(--bg-card-hover);
+  border-color: var(--border-hover);
+  color: var(--primary);
+  transform: var(--hover-lift-sm);
+}
+
+.primaryBtn:active,
+.secondaryBtn:active {
+  transform: var(--active-press);
+}
+
+.primaryBtn:disabled,
+.secondaryBtn:disabled {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+  transform: none;
+}

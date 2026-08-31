@@ -1,2 +1,11 @@
 .env
-node_modules
+node_modules/
+ai-knowledge/
+backup/
+indexKnowledge
+testChunks
+testEmbedding
+testSearchKnowledge
+chunkMarkdown
+embedding
+searchKnowledge

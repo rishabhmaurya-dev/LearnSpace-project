@@ -5,6 +5,7 @@ import StudentActivityChart from "../../layouts/StudentLayout/StudentActivityCha
 
 import { fetchStudentDashboard } from "../../features/student/studentProfileThunks";
 import styles from "./student.module.css";
+import ScrollReveal from "../../animation/Scroll";
 
 const StudentDashboard = () => {
   const dispatch = useDispatch();
@@ -146,166 +147,179 @@ const StudentDashboard = () => {
       <StudentActivityChart />
       {/* ================= LOWER SECTIONS (STRUCTURED BENTO GRID) ================= */}
       {/* 1. RECENT COURSES (FULL WIDTH HERO SECTION) */}
-      <section className={styles.panelCard}>
-        <div className={styles.panelHeader}>
-          <div>
-            <h3 className={styles.panelTitle}>Recent Courses</h3>
-            <span className={styles.panelSubtitle}>
-              Pick up right where you left off
-            </span>
-          </div>
-          <Link
-            to="/student/courses"
-            className={`${styles.btn} ${styles.btnSecondary}`}
-          >
-            View All Courses
-          </Link>
-        </div>
 
-        {recentCourses.length === 0 ? (
-          <div className={styles.emptyState}>
-            <span>📚</span>
-            <p>No active courses found.</p>
+      <ScrollReveal>
+        <section className={styles.panelCard}>
+          <div className={styles.panelHeader}>
+            <div>
+              <h3 className={styles.panelTitle}>Recent Courses</h3>
+              <span className={styles.panelSubtitle}>
+                Pick up right where you left off
+              </span>
+            </div>
             <Link
-              to="/student/catalog"
-              className={`${styles.btn} ${styles.btnPrimary}`}
+              to="/student/courses"
+              className={`${styles.btn} ${styles.btnSecondary}`}
             >
-              Explore Courses
+              View All Courses
             </Link>
           </div>
-        ) : (
-          <div className={styles.courseGrid}>
-            {recentCourses.slice(0, 3).map((course) => {
-              const progress = Math.min(
-                100,
-                Math.round(Number(course.progressPercentage || 0)),
-              );
-              return (
-                <div className={styles.courseCardItem} key={course.courseId}>
-                  <div className={styles.courseCardTop}>
-                    <span className={styles.courseIconBox}>📘</span>
-                    <span className={styles.categoryChip}>
-                      {course.category || "General"}
+
+          {recentCourses.length === 0 ? (
+            <div className={styles.emptyState}>
+              <span>📚</span>
+              <p>No active courses found.</p>
+              <Link
+                to="/student/catalog"
+                className={`${styles.btn} ${styles.btnPrimary}`}
+              >
+                Explore Courses
+              </Link>
+            </div>
+          ) : (
+            <div className={styles.courseGrid}>
+              {recentCourses.slice(0, 3).map((course) => {
+                const progress = Math.min(
+                  100,
+                  Math.round(Number(course.progressPercentage || 0)),
+                );
+                return (
+                  <div className={styles.courseCardItem} key={course.courseId}>
+                    <div className={styles.courseCardTop}>
+                      <span className={styles.courseIconBox}>📘</span>
+                      <span className={styles.categoryChip}>
+                        {course.category || "General"}
+                      </span>
+                    </div>
+
+                    <h4 className={styles.courseCardTitle} title={course.title}>
+                      {course.title}
+                    </h4>
+
+                    <div className={styles.courseCardBottom}>
+                      <div className={styles.progressTrack}>
+                        <div
+                          className={styles.progressFill}
+                          style={{ width: `${progress}%` }}
+                        />
+                      </div>
+                      <div className={styles.progressMeta}>
+                        <span>Progress</span>
+                        <strong>{progress}%</strong>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </section>
+      </ScrollReveal>
+
+      {/* 2. THREE-COLUMN BALANCED FOOTER ROW */}
+      <ScrollReveal>
+        <div className={styles.footerThreeCol}>
+          {/* Col 1: Progress Distribution */}
+          <div className={styles.panelCard}>
+            <div className={styles.panelHeader}>
+              <div>
+                <h3 className={styles.panelTitle}>Progress Stages</h3>
+                <span className={styles.panelSubtitle}>Milestone metrics</span>
+              </div>
+            </div>
+
+            <div className={styles.compactList}>
+              {progressDistribution.length > 0 ? (
+                progressDistribution.map((item) => (
+                  <div className={styles.compactRow} key={item.label}>
+                    <span className={styles.compactLabel}>{item.label}</span>
+                    <span className={styles.badgePrimary}>
+                      {item.count} courses
                     </span>
                   </div>
-
-                  <h4 className={styles.courseCardTitle} title={course.title}>
-                    {course.title}
-                  </h4>
-
-                  <div className={styles.courseCardBottom}>
-                    <div className={styles.progressTrack}>
-                      <div
-                        className={styles.progressFill}
-                        style={{ width: `${progress}%` }}
-                      />
-                    </div>
-                    <div className={styles.progressMeta}>
-                      <span>Progress</span>
-                      <strong>{progress}%</strong>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
-      </section>
-      {/* 2. THREE-COLUMN BALANCED FOOTER ROW */}
-      <div className={styles.footerThreeCol}>
-        {/* Col 1: Progress Distribution */}
-        <div className={styles.panelCard}>
-          <div className={styles.panelHeader}>
-            <div>
-              <h3 className={styles.panelTitle}>Progress Stages</h3>
-              <span className={styles.panelSubtitle}>Milestone metrics</span>
+                ))
+              ) : (
+                <p className={styles.emptyText}>No progress data available</p>
+              )}
             </div>
           </div>
 
-          <div className={styles.compactList}>
-            {progressDistribution.length > 0 ? (
-              progressDistribution.map((item) => (
-                <div className={styles.compactRow} key={item.label}>
-                  <span className={styles.compactLabel}>{item.label}</span>
-                  <span className={styles.badgePrimary}>
-                    {item.count} courses
-                  </span>
-                </div>
-              ))
-            ) : (
-              <p className={styles.emptyText}>No progress data available</p>
-            )}
-          </div>
-        </div>
-
-        {/* Col 2: Activity & Capstone Summary */}
-        <div className={styles.panelCard}>
-          <div className={styles.panelHeader}>
-            <div>
-              <h3 className={styles.panelTitle}>Activity & Capstone</h3>
-              <span className={styles.panelSubtitle}>
-                Review status & lessons
-              </span>
-            </div>
-          </div>
-
-          <div className={styles.compactList}>
-            <div className={styles.compactRow}>
-              <span className={styles.compactLabel}>⏳ Capstone Pending</span>
-              <span className={styles.badgeWarning}>
-                {capstoneSummary.PENDING || 0}
-              </span>
-            </div>
-            <div className={styles.compactRow}>
-              <span className={styles.compactLabel}>✓ Capstone Approved</span>
-              <span className={styles.badgeSuccess}>
-                {capstoneSummary.APPROVED || 0}
-              </span>
-            </div>
-            {learningActivity.length > 0 && (
-              <div className={styles.compactRow}>
-                <span className={styles.compactLabel}>📅 Latest Activity</span>
-                <span className={styles.badgeNeutral}>
-                  {learningActivity[learningActivity.length - 1]?.lessons || 0}{" "}
-                  lessons (
-                  {learningActivity[learningActivity.length - 1]?.month})
+          {/* Col 2: Activity & Capstone Summary */}
+          <div className={styles.panelCard}>
+            <div className={styles.panelHeader}>
+              <div>
+                <h3 className={styles.panelTitle}>Activity & Capstone</h3>
+                <span className={styles.panelSubtitle}>
+                  Review status & lessons
                 </span>
               </div>
-            )}
-          </div>
-        </div>
+            </div>
 
-        {/* Col 3: Earned Certificates */}
-        <div className={styles.panelCard}>
-          <div className={styles.panelHeader}>
-            <div>
-              <h3 className={styles.panelTitle}>Certificates</h3>
-              <span className={styles.panelSubtitle}>Verified credentials</span>
+            <div className={styles.compactList}>
+              <div className={styles.compactRow}>
+                <span className={styles.compactLabel}>⏳ Capstone Pending</span>
+                <span className={styles.badgeWarning}>
+                  {capstoneSummary.PENDING || 0}
+                </span>
+              </div>
+              <div className={styles.compactRow}>
+                <span className={styles.compactLabel}>✓ Capstone Approved</span>
+                <span className={styles.badgeSuccess}>
+                  {capstoneSummary.APPROVED || 0}
+                </span>
+              </div>
+              {learningActivity.length > 0 && (
+                <div className={styles.compactRow}>
+                  <span className={styles.compactLabel}>
+                    📅 Latest Activity
+                  </span>
+                  <span className={styles.badgeNeutral}>
+                    {learningActivity[learningActivity.length - 1]?.lessons ||
+                      0}{" "}
+                    lessons (
+                    {learningActivity[learningActivity.length - 1]?.month})
+                  </span>
+                </div>
+              )}
             </div>
           </div>
 
-          <div className={styles.certList}>
-            {recentCertificates.length > 0 ? (
-              recentCertificates.slice(0, 2).map((cert, index) => (
-                <div className={styles.certItem} key={index}>
-                  <div className={styles.certTop}>
-                    <span className={styles.certIcon}>📜</span>
-                    <div className={styles.certDetails}>
-                      <strong className={styles.certTitle}>{cert.title}</strong>
-                      <code>{cert.code}</code>
+          {/* Col 3: Earned Certificates */}
+          <div className={styles.panelCard}>
+            <div className={styles.panelHeader}>
+              <div>
+                <h3 className={styles.panelTitle}>Certificates</h3>
+                <span className={styles.panelSubtitle}>
+                  Verified credentials
+                </span>
+              </div>
+            </div>
+
+            <div className={styles.certList}>
+              {recentCertificates.length > 0 ? (
+                recentCertificates.slice(0, 2).map((cert, index) => (
+                  <div className={styles.certItem} key={index}>
+                    <div className={styles.certTop}>
+                      <span className={styles.certIcon}>📜</span>
+                      <div className={styles.certDetails}>
+                        <strong className={styles.certTitle}>
+                          {cert.title}
+                        </strong>
+                        <code>{cert.code}</code>
+                      </div>
                     </div>
+                    <span className={styles.certDate}>
+                      Issued: {new Date(cert.issuedAt).toLocaleDateString()}
+                    </span>
                   </div>
-                  <span className={styles.certDate}>
-                    Issued: {new Date(cert.issuedAt).toLocaleDateString()}
-                  </span>
-                </div>
-              ))
-            ) : (
-              <p className={styles.emptyText}>No certificates earned yet</p>
-            )}
+                ))
+              ) : (
+                <p className={styles.emptyText}>No certificates earned yet</p>
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      </ScrollReveal>
     </div>
   );
 };

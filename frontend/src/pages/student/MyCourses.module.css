@@ -3,7 +3,7 @@
    ========================================================= */
 .container {
   width: 100%;
-  max-width: var(--content-max-width, 1200px);
+  max-width: 1000px;
   margin: 0 auto;
   padding: 32px var(--page-padding, 24px) 64px var(--page-padding, 24px);
   background: var(--bg-primary-radial, #f8fafc);

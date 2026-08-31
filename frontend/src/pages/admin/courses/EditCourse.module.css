@@ -1,0 +1,45 @@
+/* =========================================================
+   EDIT COURSE PAGE — DARK THEME (VARIABLES-CSS DRIVEN)
+   Loading / not-found state styling for the Edit screen.
+   ========================================================= */
+
+.container {
+  width: 100%;
+  min-height: 100%;
+
+  background: var(--bg-primary);
+
+  box-sizing: border-box;
+}
+
+.stateBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+
+  padding: 48px 44px;
+
+  box-sizing: border-box;
+
+  text-align: center;
+
+  background-color: var(--bg-surface-sunken);
+
+  border: 1px dashed var(--border-strong);
+
+  border-radius: var(--radius-md);
+
+  font-size: var(--font-size-sm);
+
+  color: var(--text-muted);
+}
+
+@media (max-width: 768px) {
+  .stateBox {
+    padding: 40px 20px;
+  }
+}

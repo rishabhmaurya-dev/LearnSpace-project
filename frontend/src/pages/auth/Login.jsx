@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
+import ScrollReveal from "../../animation/Scroll";
+
 import {
   clearAuthError,
   clearAuthSuccess,
@@ -67,100 +69,102 @@ const Login = () => {
   };
 
   return (
-    <div className={styles.page}>
-      <div className={styles.content}>
-        <div className={styles.brand}>
-          <div className={styles.brandIcon}>L</div>
+    <ScrollReveal>
+      <div className={styles.page}>
+        <div className={styles.content}>
+          <div className={styles.brand}>
+            <div className={styles.brandIcon}>L</div>
 
-          <div>
-            <span className={styles.brandName}>Learn</span>
-            <span className={styles.brandAccent}>Space</span>
-          </div>
-        </div>
-
-        <div className={styles.card}>
-          <div className={styles.header}>
-            <h1>Welcome Back</h1>
-
-            <p>Continue your learning journey</p>
-          </div>
-
-          {error && (
-            <div className={styles.error}>
-              {error}
+            <div>
+              <span className={styles.brandName}>Learn</span>
+              <span className={styles.brandAccent}>Space</span>
             </div>
-          )}
+          </div>
 
-          <form onSubmit={handleSubmit} className={styles.form}>
-            <div className={styles.field}>
-              <label htmlFor="email">Email Address</label>
+          <div className={styles.card}>
+            <div className={styles.header}>
+              <h1>Welcome Back</h1>
 
-              <div className={styles.inputWrapper}>
-                <input
-                  id="email"
-                  type="email"
-                  name="email"
-                  placeholder="Enter your email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                />
+              <p>Continue your learning journey</p>
+            </div>
+
+            {error && <div className={styles.error}>{error}</div>}
+
+            <form onSubmit={handleSubmit} className={styles.form}>
+              <div className={styles.field}>
+                <label htmlFor="email">Email Address</label>
+
+                <div className={styles.inputWrapper}>
+                  <input
+                    id="email"
+                    type="email"
+                    name="email"
+                    placeholder="Enter your email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
               </div>
-            </div>
 
-            <div className={styles.field}>
-              <label htmlFor="password">Password</label>
+              <div className={styles.field}>
+                <label htmlFor="password">Password</label>
 
-              <div className={styles.inputWrapper}>
-                <input
-                  id="password"
-                  type="password"
-                  name="password"
-                  placeholder="Enter your password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  required
-                />
+                <div className={styles.inputWrapper}>
+                  <input
+                    id="password"
+                    type="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
               </div>
+
+              <div className={styles.forgot}>
+                <Link to="/forgot-password">Forgot Password?</Link>
+              </div>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className={styles.button}
+              >
+                {loading ? (
+                  <>
+                    <span className={styles.spinner} />
+                    Logging in...
+                  </>
+                ) : (
+                  <>
+                    Login
+                    <span>→</span>
+                  </>
+                )}
+              </button>
+            </form>
+
+            <div className={styles.divider}>
+              <span />
+              <small>New to LearnSpace?</small>
+              <span />
             </div>
 
-            <div className={styles.forgot}>
-              <Link to="/forgot-password">Forgot Password?</Link>
+            <div className={styles.footer}>
+              <span>Don't have an account?</span>
+
+              <Link to="/register">Create Account</Link>
             </div>
-
-            <button type="submit" disabled={loading} className={styles.button}>
-              {loading ? (
-                <>
-                  <span className={styles.spinner} />
-                  Logging in...
-                </>
-              ) : (
-                <>
-                  Login
-                  <span>→</span>
-                </>
-              )}
-            </button>
-          </form>
-
-          <div className={styles.divider}>
-            <span />
-            <small>New to LearnSpace?</small>
-            <span />
           </div>
 
-          <div className={styles.footer}>
-            <span>Don't have an account?</span>
-
-            <Link to="/register">Create Account</Link>
-          </div>
+          <p className={styles.bottomText}>
+            Learn skills. Build projects. Grow your career.
+          </p>
         </div>
-
-        <p className={styles.bottomText}>
-          Learn skills. Build projects. Grow your career.
-        </p>
       </div>
-    </div>
+    </ScrollReveal>
   );
 };
 

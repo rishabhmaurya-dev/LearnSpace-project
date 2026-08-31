@@ -3,7 +3,7 @@
    ========================================================= */
 .profilePage {
   width: 100%;
-  max-width: var(--content-max-width);
+  max-width: 1000px;
   margin: 0 auto;
   padding: var(--page-padding);
   background: var(--bg-primary-radial);

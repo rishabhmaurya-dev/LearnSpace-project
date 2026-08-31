@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
+import ScrollReveal from "../../animation/Scroll";
+
 import { Link, useNavigate } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -78,130 +80,136 @@ const Register = () => {
   };
 
   return (
-    <div className={styles.page}>
-      <div className={styles.content}>
-        {/* BRAND */}
-        <div className={styles.brand}>
-          <div className={styles.brandIcon}>L</div>
+    <ScrollReveal>
+      <div className={styles.page}>
+        <div className={styles.content}>
+          {/* BRAND */}
+          <div className={styles.brand}>
+            <div className={styles.brandIcon}>L</div>
 
-          <div>
-            <span className={styles.brandName}>Learn</span>
-            <span className={styles.brandAccent}>Space</span>
+            <div>
+              <span className={styles.brandName}>Learn</span>
+              <span className={styles.brandAccent}>Space</span>
+            </div>
           </div>
+
+          {/* REGISTER CARD */}
+          <div className={styles.card}>
+            <div className={styles.header}>
+              <h1>Create Account</h1>
+
+              <p>Start learning, building and growing today.</p>
+            </div>
+
+            {error && (
+              <div className={styles.error}>
+                <span>{error}</span>
+              </div>
+            )}
+
+            {success && (
+              <div className={styles.success}>
+                <span>{message}</span>
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className={styles.form}>
+              {/* NAME */}
+              <div className={styles.field}>
+                <label htmlFor="name">Full Name</label>
+
+                <div className={styles.inputWrapper}>
+                  <input
+                    id="name"
+                    type="text"
+                    name="name"
+                    placeholder="Enter your name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* EMAIL */}
+              <div className={styles.field}>
+                <label htmlFor="email">Email Address</label>
+
+                <div className={styles.inputWrapper}>
+                  <input
+                    id="email"
+                    type="email"
+                    name="email"
+                    placeholder="Enter your email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* PASSWORD */}
+              <div className={styles.field}>
+                <label htmlFor="password">Password</label>
+
+                <div className={styles.inputWrapper}>
+                  <input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    placeholder="Create a password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    minLength={6}
+                    required
+                  />
+                  <button
+                    type="button"
+                    className={styles.passwordToggle}
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                  </button>
+                </div>
+              </div>
+              <button
+                type="submit"
+                disabled={loading}
+                className={styles.button}
+              >
+                {loading ? (
+                  <>
+                    <span className={styles.spinner} />
+                    Creating Account...
+                  </>
+                ) : (
+                  <>
+                    Create Account
+                    <span>→</span>
+                  </>
+                )}
+              </button>
+            </form>
+
+            <div className={styles.divider}>
+              <span />
+              <small>Already a member?</small>
+              <span />
+            </div>
+
+            <div className={styles.footer}>
+              <span>Already have an account?</span>
+
+              <Link to="/login">Login</Link>
+            </div>
+          </div>
+
+          <p className={styles.bottomText}>
+            Learn skills. Build projects. Shape your future.
+          </p>
         </div>
-
-        {/* REGISTER CARD */}
-        <div className={styles.card}>
-          <div className={styles.header}>
-            <h1>Create Account</h1>
-
-            <p>Start learning, building and growing today.</p>
-          </div>
-
-          {error && (
-            <div className={styles.error}>
-              <span>{error}</span>
-            </div>
-          )}
-
-          {success && (
-            <div className={styles.success}>
-              <span>{message}</span>
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className={styles.form}>
-            {/* NAME */}
-            <div className={styles.field}>
-              <label htmlFor="name">Full Name</label>
-
-              <div className={styles.inputWrapper}>
-                <input
-                  id="name"
-                  type="text"
-                  name="name"
-                  placeholder="Enter your name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-            </div>
-
-            {/* EMAIL */}
-            <div className={styles.field}>
-              <label htmlFor="email">Email Address</label>
-
-              <div className={styles.inputWrapper}>
-                <input
-                  id="email"
-                  type="email"
-                  name="email"
-                  placeholder="Enter your email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-            </div>
-
-            {/* PASSWORD */}
-            <div className={styles.field}>
-              <label htmlFor="password">Password</label>
-
-              <div className={styles.inputWrapper}>
-                <input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  name="password"
-                  placeholder="Create a password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  minLength={6}
-                  required
-                />
-                <button
-                  type="button"
-                  className={styles.passwordToggle}
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? <FaEyeSlash /> : <FaEye />}
-                </button>
-              </div>
-            </div>
-            <button type="submit" disabled={loading} className={styles.button}>
-              {loading ? (
-                <>
-                  <span className={styles.spinner} />
-                  Creating Account...
-                </>
-              ) : (
-                <>
-                  Create Account
-                  <span>→</span>
-                </>
-              )}
-            </button>
-          </form>
-
-          <div className={styles.divider}>
-            <span />
-            <small>Already a member?</small>
-            <span />
-          </div>
-
-          <div className={styles.footer}>
-            <span>Already have an account?</span>
-
-            <Link to="/login">Login</Link>
-          </div>
-        </div>
-
-        <p className={styles.bottomText}>
-          Learn skills. Build projects. Shape your future.
-        </p>
       </div>
-    </div>
+    </ScrollReveal>
   );
 };
 

@@ -1,32 +1,204 @@
 export const CardGridSkeleton = ({ count = 6 }) => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 w-full">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 w-full">
       {[...Array(count)].map((_, i) => (
         <div
           key={i}
-          className="flex flex-col rounded-2xl border border-slate-200 bg-white p-3.5 animate-pulse"
+          className="
+            relative
+            overflow-hidden
+            flex flex-col
+            rounded-2xl
+            border border-slate-200/80
+            bg-white
+            p-3.5
+            shadow-sm
+          "
         >
-          {/* Thumbnail Skeleton */}
-          <div className="w-full aspect-video bg-slate-200 rounded-xl mb-3" />
+          {/* =========================================
+              SHIMMER OVERLAY
+          ========================================= */}
 
-          {/* Tags */}
-          <div className="flex gap-2 mb-2">
-            <div className="h-4 w-20 bg-slate-100 rounded" />
-            <div className="h-4 w-20 bg-slate-100 rounded" />
+          <div
+            className="
+              pointer-events-none
+              absolute
+              inset-0
+              -translate-x-full
+              animate-[shimmer_1.8s_infinite]
+              bg-gradient-to-r
+              from-transparent
+              via-white/70
+              to-transparent
+            "
+          />
+
+          {/* =========================================
+              THUMBNAIL
+          ========================================= */}
+
+          <div
+            className="
+              relative
+              w-full
+              aspect-video
+              overflow-hidden
+              rounded-xl
+              bg-gradient-to-br
+              from-slate-200
+              via-slate-100
+              to-slate-200
+              mb-4
+            "
+          >
+            <div
+              className="
+                absolute
+                inset-0
+                -translate-x-full
+                animate-[shimmer_1.8s_infinite]
+                bg-gradient-to-r
+                from-transparent
+                via-white/80
+                to-transparent
+              "
+            />
+
+            {/* Fake image icon */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-slate-300/70" />
+            </div>
           </div>
 
-          {/* Title */}
-          <div className="h-5 w-4/5 bg-slate-200 rounded mb-2" />
+          {/* =========================================
+              CATEGORY + STATUS
+          ========================================= */}
 
-          {/* Description */}
-          <div className="h-3.5 w-full bg-slate-100 rounded mb-1.5" />
-          <div className="h-3.5 w-2/3 bg-slate-100 rounded mb-3" />
+          <div className="flex items-center justify-between gap-2 mb-3">
+            <div
+              className="
+                relative
+                overflow-hidden
+                h-5
+                w-24
+                rounded-md
+                bg-slate-100
+              "
+            >
+              <div className="absolute inset-0 -translate-x-full animate-[shimmer_1.8s_infinite] bg-gradient-to-r from-transparent via-white/80 to-transparent" />
+            </div>
 
-          {/* Badge Box */}
-          <div className="h-10 w-full bg-slate-100 rounded-lg mb-3" />
+            <div
+              className="
+                relative
+                overflow-hidden
+                h-5
+                w-16
+                rounded-full
+                bg-slate-100
+              "
+            >
+              <div className="absolute inset-0 -translate-x-full animate-[shimmer_1.8s_infinite] bg-gradient-to-r from-transparent via-white/80 to-transparent" />
+            </div>
+          </div>
 
-          {/* Button */}
-          <div className="h-9 w-full bg-slate-200 rounded-xl mt-auto" />
+          {/* =========================================
+              TITLE
+          ========================================= */}
+
+          <div
+            className="
+              relative
+              overflow-hidden
+              h-5
+              w-[82%]
+              rounded-md
+              bg-slate-200
+              mb-2.5
+            "
+          >
+            <div className="absolute inset-0 -translate-x-full animate-[shimmer_1.8s_infinite] bg-gradient-to-r from-transparent via-white/80 to-transparent" />
+          </div>
+
+          {/* =========================================
+              DESCRIPTION
+          ========================================= */}
+
+          <div className="space-y-2 mb-4">
+            <div
+              className="
+                relative
+                overflow-hidden
+                h-3.5
+                w-full
+                rounded
+                bg-slate-100
+              "
+            >
+              <div className="absolute inset-0 -translate-x-full animate-[shimmer_1.8s_infinite] bg-gradient-to-r from-transparent via-white/80 to-transparent" />
+            </div>
+
+            <div
+              className="
+                relative
+                overflow-hidden
+                h-3.5
+                w-[68%]
+                rounded
+                bg-slate-100
+              "
+            >
+              <div className="absolute inset-0 -translate-x-full animate-[shimmer_1.8s_infinite] bg-gradient-to-r from-transparent via-white/80 to-transparent" />
+            </div>
+          </div>
+
+          {/* =========================================
+              STATS
+          ========================================= */}
+
+          <div
+            className="
+              relative
+              overflow-hidden
+              flex
+              items-center
+              justify-between
+              rounded-xl
+              border
+              border-slate-100
+              bg-slate-50/80
+              px-3
+              py-2.5
+              mb-4
+            "
+          >
+            {[1, 2, 3].map((item) => (
+              <div key={item} className="flex flex-col items-center gap-1">
+                <div className="h-3.5 w-8 rounded bg-slate-200" />
+                <div className="h-2.5 w-12 rounded bg-slate-100" />
+              </div>
+            ))}
+
+            <div className="absolute inset-0 -translate-x-full animate-[shimmer_1.8s_infinite] bg-gradient-to-r from-transparent via-white/70 to-transparent" />
+          </div>
+
+          {/* =========================================
+              BUTTON
+          ========================================= */}
+
+          <div
+            className="
+              relative
+              overflow-hidden
+              h-10
+              w-full
+              rounded-xl
+              bg-slate-200
+              mt-auto
+            "
+          >
+            <div className="absolute inset-0 -translate-x-full animate-[shimmer_1.8s_infinite] bg-gradient-to-r from-transparent via-white/80 to-transparent" />
+          </div>
         </div>
       ))}
     </div>

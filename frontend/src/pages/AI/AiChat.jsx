@@ -215,7 +215,11 @@ const AIChat = () => {
 
     const history = conversation
       .filter((item) => item.role === "user" || item.role === "assistant")
-      .slice(-10);
+      .slice(-4)
+      .map((item) => ({
+        role: item.role,
+        content: item.content.slice(0, 500),
+      }));
 
     setConversation((prev) => [...prev, { role: "user", content: text }]);
 

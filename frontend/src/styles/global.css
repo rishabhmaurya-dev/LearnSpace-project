@@ -161,7 +161,7 @@ ol {
 
 ::-webkit-scrollbar-thumb {
   background: var(--border-strong);
-  border-radius: 0;
+  border-radius: var(--radius-full);
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -286,8 +286,100 @@ ol {
 }
 
 /* =========================================
+   WEB3 — AURORA / GRADIENT MESH
+   Ambient color washes behind page content
+   ========================================= */
+
+.aurora-grid::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background: var(--cyber-mesh-gradient);
+  opacity: 0.5;
+}
+
+.aurora-grid::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    1400px 700px at 50% -20%,
+    rgba(247, 147, 26, 0.06),
+    transparent 60%
+  );
+}
+
+/* =========================================
+   WEB3 — GLASS PANELS
+   Frosted, depth-filled surfaces
+   ========================================= */
+
+.glass {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: var(--glass-blur-md);
+  -webkit-backdrop-filter: var(--glass-blur-md);
+  box-shadow: var(--shadow-convex-md);
+  border-radius: var(--radius-lg);
+}
+
+.glass-strong {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-convex-lg);
+  border-radius: var(--radius-lg);
+}
+
+.glass-sunken {
+  background: var(--glass-bg-sunken);
+  border: 1px solid var(--glass-border-subtle);
+  box-shadow: var(--shadow-inset-sm);
+  border-radius: var(--radius-md);
+}
+
+/* Gold glow text */
+.text-glow {
+  color: var(--accent);
+  text-shadow: var(--text-glow);
+}
+
+.text-gradient-gold {
+  background: var(--brand-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* =========================================
+   WEB3 — CTA GLOW
+   ========================================= */
+
+.btn-glow {
+  background: var(--brand-gradient);
+  color: var(--text-inverse);
+  border: none;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-primary);
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast),
+    filter var(--transition-fast);
+}
+
+.btn-glow:hover {
+  box-shadow: var(--shadow-primary-hover);
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+}
+
+/* =========================================
    REDUCED MOTION
-========================================= */
+   ========================================= */
 
 @media (prefers-reduced-motion: reduce) {
   *,

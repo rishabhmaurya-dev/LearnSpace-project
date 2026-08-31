@@ -1,203 +1,218 @@
 /* =========================================================
-   BOLD TYPOGRAPHY DESIGN TOKENS
-   Single source of truth for legacy CSS components
-========================================================= */
+   WEB3 DESIGN TOKENS
+   Single source of truth for the entire application.
+   Change a token here and the whole website re-themes.
+   ========================================================= */
 
 :root {
   /* =========================================================
-     1. CORE COLORS
+     1. CORE COLORS — DEEP VOID / METALLIC GOLD
   ========================================================= */
 
-  --background: #0a0a0a;
-  --foreground: #fafafa;
+  --background: #0b0b12;
+  --foreground: #f7f7fa;
 
-  --bg-primary: #0a0a0a;
-  --bg-secondary: #0f0f0f;
-  --bg-tertiary: #1a1a1a;
+  --bg-primary: #0b0b12;
+  --bg-secondary: #101018;
+  --bg-tertiary: #171720;
 
-  --bg-card: #0f0f0f;
-  --bg-card-hover: #1a1a1a;
-  --bg-surface-sunken: #0a0a0a;
-  --bg-surface-pressed: #1a1a1a;
-  --bg-surface-elevated: #0f0f0f;
+  --bg-card: #13131c;
+  --bg-card-hover: #1a1a26;
+  --bg-surface-sunken: #0b0b12;
+  --bg-surface-pressed: #1a1a26;
+  --bg-surface-elevated: #15151f;
 
-  --muted: #1a1a1a;
-  --muted-foreground: #737373;
+  --muted: #1a1a26;
+  --muted-foreground: #8a8a99;
 
-  --text-primary: #fafafa;
-  --text-secondary: #a3a3a3;
-  --text-muted: #737373;
-  --text-disabled: #525252;
-  --text-inverse: #0a0a0a;
+  --text-primary: #f7f7fa;
+  --text-secondary: #a6a6b5;
+  --text-muted: #7d7d8c;
+  --text-disabled: #4a4a5a;
+  --text-inverse: #0b0b12;
 
   /* =========================================================
-     2. BRAND / ACCENT
+     2. BRAND / ACCENT — ORANGE-GOLD (#F7931A)
   ========================================================= */
 
-  --primary: #ff3d00;
-  --primary-hover: #ff5722;
-  --primary-light: #ff6a3d;
-  --primary-dark: #cc3100;
-  --primary-soft: rgba(255, 61, 0, 0.1);
-  --primary-soft-hover: rgba(255, 61, 0, 0.16);
-  --primary-contrast: #0a0a0a;
+  --primary: #f7931a;
+  --primary-hover: #ffa845;
+  --primary-light: #ffc46b;
+  --primary-dark: #c56f00;
+  --primary-soft: rgba(247, 147, 26, 0.12);
+  --primary-soft-hover: rgba(247, 147, 26, 0.18);
+  --primary-contrast: #0b0b12;
 
-  --accent: #ff3d00;
-  --accent-hover: #ff5722;
-  --accent-foreground: #0a0a0a;
+  --accent: #f7931a;
+  --accent-hover: #ffa845;
+  --accent-foreground: #0b0b12;
 
-  /* Legacy aliases, taaki purane components instantly break na hon */
-  --secondary: #1a1a1a;
-  --secondary-hover: #262626;
-  --secondary-light: #404040;
-  --secondary-dark: #0f0f0f;
-  --secondary-soft: rgba(255, 255, 255, 0.05);
-  --secondary-soft-hover: rgba(255, 255, 255, 0.08);
+  /* Legacy aliases — keep old components working */
+  --secondary: #1c1c28;
+  --secondary-hover: #242433;
+  --secondary-light: #2e2e40;
+  --secondary-dark: #101018;
+  --secondary-soft: rgba(255, 255, 255, 0.045);
+  --secondary-soft-hover: rgba(255, 255, 255, 0.07);
 
-  --accent-cyan: #fafafa;
-  --accent-cyan-hover: #d4d4d4;
+  --accent-cyan: #e6e6f0;
+  --accent-cyan-hover: #c8c8d8;
   --accent-cyan-light: #ffffff;
-  --accent-cyan-soft: rgba(250, 250, 250, 0.08);
+  --accent-cyan-soft: rgba(255, 255, 255, 0.07);
 
   --accent-emerald: #22c55e;
   --accent-emerald-hover: #16a34a;
   --accent-emerald-light: #4ade80;
-  --accent-emerald-soft: rgba(34, 197, 94, 0.1);
+  --accent-emerald-soft: rgba(34, 197, 94, 0.12);
 
   --accent-amber: #f59e0b;
   --accent-amber-hover: #d97706;
   --accent-amber-light: #fbbf24;
-  --accent-amber-soft: rgba(245, 158, 11, 0.1);
+  --accent-amber-soft: rgba(245, 158, 11, 0.12);
 
-  --accent-orange: #ff3d00;
-  --accent-orange-hover: #ff5722;
-  --accent-orange-light: #ff6a3d;
-  --accent-orange-soft: rgba(255, 61, 0, 0.1);
+  --accent-orange: #f7931a;
+  --accent-orange-hover: #ffa845;
+  --accent-orange-light: #ffc46b;
+  --accent-orange-soft: rgba(247, 147, 26, 0.12);
 
-  --accent-pink: #fafafa;
-  --accent-pink-hover: #d4d4d4;
+  --accent-pink: #e6e6f0;
+  --accent-pink-hover: #c8c8d8;
   --accent-pink-light: #ffffff;
-  --accent-pink-soft: rgba(250, 250, 250, 0.08);
+  --accent-pink-soft: rgba(255, 255, 255, 0.07);
 
-  --accent-rose: #ef4444;
-  --accent-rose-hover: #dc2626;
-  --accent-rose-light: #f87171;
-  --accent-rose-soft: rgba(239, 68, 68, 0.1);
+  --accent-rose: #f04438;
+  --accent-rose-hover: #d92d20;
+  --accent-rose-light: #f97066;
+  --accent-rose-soft: rgba(240, 68, 56, 0.12);
 
-  --accent-teal: #a3a3a3;
-  --accent-teal-hover: #d4d4d4;
-  --accent-teal-light: #fafafa;
-  --accent-teal-soft: rgba(250, 250, 250, 0.08);
+  --accent-teal: #a6a6b5;
+  --accent-teal-hover: #d0d0dc;
+  --accent-teal-light: #f7f7fa;
+  --accent-teal-soft: rgba(255, 255, 255, 0.07);
 
-  --accent-purple: #a3a3a3;
-  --accent-purple-soft: rgba(163, 163, 163, 0.1);
+  --accent-purple: #a78bfa;
+  --accent-purple-soft: rgba(167, 139, 250, 0.12);
 
   /* =========================================================
-     3. STATUS COLORS
-     These remain semantic, not decorative
+     3. STATUS COLORS — SEMANTIC
   ========================================================= */
 
   --success: #22c55e;
   --success-hover: #16a34a;
-  --success-soft: rgba(34, 197, 94, 0.1);
+  --success-soft: rgba(34, 197, 94, 0.12);
   --success-border: rgba(34, 197, 94, 0.35);
 
   --warning: #f59e0b;
   --warning-hover: #d97706;
-  --warning-soft: rgba(245, 158, 11, 0.1);
+  --warning-soft: rgba(245, 158, 11, 0.12);
   --warning-border: rgba(245, 158, 11, 0.35);
 
-  --danger: #ef4444;
-  --danger-hover: #dc2626;
-  --danger-soft: rgba(239, 68, 68, 0.1);
-  --danger-border: rgba(239, 68, 68, 0.35);
+  --danger: #f04438;
+  --danger-hover: #d92d20;
+  --danger-soft: rgba(240, 68, 56, 0.12);
+  --danger-border: rgba(240, 68, 56, 0.35);
 
-  --info: #fafafa;
-  --info-hover: #d4d4d4;
-  --info-soft: rgba(250, 250, 250, 0.08);
-  --info-border: rgba(250, 250, 250, 0.2);
-
-  /* =========================================================
-     4. BORDERS
-  ========================================================= */
-
-  --border: #262626;
-  --border-strong: #404040;
-  --border-subtle: #1a1a1a;
-  --border-hover: #ff3d00;
-  --border-focus: #ff3d00;
-  --divider: #262626;
+  --info: #e6e6f0;
+  --info-hover: #c8c8d8;
+  --info-soft: rgba(255, 255, 255, 0.07);
+  --info-border: rgba(255, 255, 255, 0.18);
 
   /* =========================================================
-     5. NO SHADOW / NO GLOW
+     4. BORDERS — GLASS PANELS
   ========================================================= */
 
-  --shadow-convex-xs: none;
-  --shadow-convex-sm: none;
-  --shadow-convex-md: none;
-  --shadow-convex-lg: none;
-  --shadow-convex-xl: none;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.14);
+  --border-subtle: rgba(255, 255, 255, 0.05);
+  --border-hover: #f7931a;
+  --border-focus: #f7931a;
+  --divider: rgba(255, 255, 255, 0.08);
 
-  --shadow-inset-xs: none;
-  --shadow-inset-sm: none;
-  --shadow-inset-md: none;
-  --shadow-inset-deep: none;
+  /* =========================================================
+     5. SHADOWS — DEPTH + GOLDEN GLOW
+  ========================================================= */
 
-  --shadow-primary: none;
-  --shadow-primary-hover: none;
-  --shadow-violet: none;
-  --shadow-pink: none;
-  --shadow-cyan: none;
-  --shadow-emerald: none;
-  --shadow-amber: none;
-  --shadow-rose: none;
+  --shadow-convex-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-convex-sm: 0 2px 8px rgba(0, 0, 0, 0.35);
+  --shadow-convex-md: 0 6px 20px rgba(0, 0, 0, 0.45);
+  --shadow-convex-lg: 0 12px 36px rgba(0, 0, 0, 0.55);
+  --shadow-convex-xl: 0 24px 60px rgba(0, 0, 0, 0.6);
 
-  --card-shadow: none;
-  --card-shadow-hover: none;
+  --shadow-inset-xs: inset 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-inset-sm: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+  --shadow-inset-md: inset 0 4px 10px rgba(0, 0, 0, 0.5);
+  --shadow-inset-deep: inset 0 8px 20px rgba(0, 0, 0, 0.6);
 
+  --shadow-primary: 0 4px 18px rgba(247, 147, 26, 0.35);
+  --shadow-primary-hover: 0 8px 28px rgba(247, 147, 26, 0.5);
+
+  --shadow-violet: 0 8px 28px rgba(167, 139, 250, 0.35);
+  --shadow-pink: 0 8px 28px rgba(240, 68, 56, 0.3);
+  --shadow-cyan: 0 8px 28px rgba(56, 189, 248, 0.3);
+  --shadow-emerald: 0 8px 28px rgba(34, 197, 94, 0.3);
+  --shadow-amber: 0 8px 28px rgba(245, 158, 11, 0.32);
+  --shadow-rose: 0 8px 28px rgba(240, 68, 56, 0.3);
+
+  --card-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+  --card-shadow-hover: 0 14px 40px rgba(0, 0, 0, 0.55);
+
+  /* Glow text — gold */
   --text-engraved: none;
   --text-embossed: none;
+  --text-glow: 0 0 18px rgba(247, 147, 26, 0.45);
 
   /* =========================================================
-     6. GRADIENT COMPATIBILITY
-     Old components can still render, but visual language
-     stays restrained.
+     6. GRADIENTS — AURORA / METALLIC
   ========================================================= */
 
-  --brand-gradient: linear-gradient(
-    90deg,
-    #ff3d00 0%,
-    #ff3d00 100%
+  --brand-gradient: linear-gradient(90deg, #f7931a 0%, #ffb64d 100%);
+  --brand-gradient-hover: linear-gradient(90deg, #ffa845 0%, #ffc46b 100%);
+  --brand-gradient-soft: linear-gradient(
+    135deg,
+    rgba(247, 147, 26, 0.16),
+    rgba(255, 196, 107, 0.06)
   );
 
-  --brand-gradient-hover: linear-gradient(
-    90deg,
-    #ff5722 0%,
-    #ff5722 100%
+  /* Gradient mesh / aurora bands for heroes */
+  --cyber-mesh-gradient: radial-gradient(
+      1200px 600px at 12% -10%,
+      rgba(247, 147, 26, 0.22),
+      transparent 60%
+    ),
+    radial-gradient(
+      1000px 500px at 90% 10%,
+      rgba(167, 139, 250, 0.16),
+      transparent 55%
+    ),
+    radial-gradient(
+      900px 500px at 50% 120%,
+      rgba(56, 189, 248, 0.1),
+      transparent 55%
+    );
+
+  --surface-bevel-gradient: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.06),
+    rgba(255, 255, 255, 0.01) 45%,
+    rgba(0, 0, 0, 0.35)
   );
 
-  --brand-gradient-soft: rgba(255, 61, 0, 0.08);
-
-  --cyber-mesh-gradient: none;
-  --surface-bevel-gradient: none;
-
-  --bg-primary-radial: #0a0a0a;
+  --bg-primary-radial: #0b0b12;
 
   /* =========================================================
-     7. LEGACY GLASS VARIABLES
-     Keep aliases temporarily for existing components.
+     7. GLASS — FROSTED PANELS
   ========================================================= */
 
-  --glass-bg: #0f0f0f;
-  --glass-bg-hover: #1a1a1a;
-  --glass-bg-sunken: #0a0a0a;
+  --glass-bg: rgba(19, 19, 28, 0.6);
+  --glass-bg-hover: rgba(26, 26, 38, 0.7);
+  --glass-bg-sunken: rgba(11, 11, 18, 0.6);
 
-  --glass-border: #262626;
-  --glass-border-subtle: #1a1a1a;
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-border-subtle: rgba(255, 255, 255, 0.04);
 
-  --glass-blur-sm: none;
-  --glass-blur-md: none;
-  --glass-blur-lg: none;
+  --glass-blur-sm: blur(6px);
+  --glass-blur-md: blur(12px);
+  --glass-blur-lg: blur(24px);
 
   /* =========================================================
      8. TYPOGRAPHY
@@ -239,16 +254,16 @@
   --font-weight-extrabold: 800;
 
   /* =========================================================
-     9. SHARP RADIUS
+     9. RADIUS — GLASS EDGES
   ========================================================= */
 
-  --radius: 0px;
-  --radius-xs: 0px;
-  --radius-sm: 0px;
-  --radius-md: 0px;
-  --radius-lg: 0px;
-  --radius-xl: 0px;
-  --radius-full: 0px;
+  --radius: 10px;
+  --radius-xs: 6px;
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --radius-full: 999px;
 
   /* =========================================================
      10. MOTION
@@ -260,15 +275,15 @@
   --transition-normal: 200ms cubic-bezier(0.25, 0, 0, 1);
   --transition-smooth: 500ms cubic-bezier(0.25, 0, 0, 1);
 
-  /* No lift or scale */
-  --hover-lift: none;
-  --hover-lift-sm: none;
-  --hover-scale: none;
-  --active-scale: none;
+  /* Lift / hover */
+  --hover-lift: translateY(-6px);
+  --hover-lift-sm: translateY(-3px);
+  --hover-scale: scale(1.03);
+  --active-scale: scale(0.97);
   --active-press: translateY(1px);
 
-  --focus-ring: 0 0 0 2px #ff3d00;
-  --focus-ring-strong: 0 0 0 2px #ff3d00;
+  --focus-ring: 0 0 0 3px rgba(247, 147, 26, 0.4);
+  --focus-ring-strong: 0 0 0 3px rgba(247, 147, 26, 0.6);
 
   /* =========================================================
      11. FORM & LAYOUT
@@ -276,8 +291,9 @@
 
   --input-height: 48px;
   --input-padding-x: 16px;
-  --input-bg: #1a1a1a;
-  --input-border: #262626;
+  --input-bg: #101018;
+  --input-border: rgba(255, 255, 255, 0.1);
+  --input-placeholder: #7d7d8c;
 
   --button-height: 48px;
   --opacity-disabled: 0.5;
@@ -306,7 +322,7 @@
 
 /* =========================================================
    GLOBAL BASE
-========================================================= */
+   ========================================================= */
 
 * {
   box-sizing: border-box;

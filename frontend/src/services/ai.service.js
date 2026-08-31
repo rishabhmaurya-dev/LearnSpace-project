@@ -1,16 +1,16 @@
 import api from "./axios";
 
-/*
-=========================================================
-SEND MESSAGE
-=========================================================
-*/
-
 export const sendAIMessage = async ({ message, conversation = [] }) => {
-  const response = await api.post("/ai/chat", {
-    message,
-    conversation,
-  });
+  const response = await api.post(
+    "/ai/chat",
+    {
+      message,
+      conversation,
+    },
+    {
+      timeout: 100000,
+    },
+  );
 
   return response.data;
 };

@@ -3,7 +3,7 @@
    ========================================================= */
 .finalAssessmentPage {
   width: 100%;
-  max-width: 1100px;
+  max-width: 1000px;
   margin: 0 auto;
   padding: 32px var(--page-padding) 80px var(--page-padding);
   background: var(--bg-primary-radial);
