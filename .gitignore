@@ -3,10 +3,10 @@ node_modules/
 
 backend/ai-knowledge/
 backend/backup/
-backend/src/scripts/indexKnowledge
-backend/src/scripts/testChunks
-backend/src/scripts/testEmbedding
-backend/src/scripts/testSearchKnowledge
-backend/src/utils/chunkMarkdown
-backend/src/utils/embedding
-backend/src/utils/searchKnowledge
+backend/src/scripts/indexKnowledge.js
+backend/src/scripts/testChunks.js
+backend/src/scripts/testEmbedding.js
+backend/src/scripts/testSearchKnowledge.js
+backend/src/utils/chunkMarkdown.js
+backend/src/utils/embedding.js
+backend/src/utils/searchKnowledge.js
