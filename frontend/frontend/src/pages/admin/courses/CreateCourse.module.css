@@ -1,0 +1,77 @@
+/* =========================================================
+   CREATE COURSE PAGE — DARK THEME (VARIABLES-CSS DRIVEN)
+   Wraps the CourseWizard in a scoped page container.
+   ========================================================= */
+
+.container {
+  width: 100%;
+  min-height: 100%;
+
+  background: var(--bg-primary);
+
+  box-sizing: border-box;
+}
+
+/* Page-level intro banner shown above the wizard */
+.banner {
+  width: 100%;
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+
+  padding: 20px 44px 0;
+
+  box-sizing: border-box;
+}
+
+.bannerCard {
+  background: var(--bg-card);
+
+  border: 1px solid var(--border);
+
+  border-radius: var(--radius-lg);
+
+  padding: 22px 28px;
+
+  position: relative;
+
+  overflow: hidden;
+}
+
+.bannerCard::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+  right: 0;
+
+  height: 3px;
+
+  background: var(--brand-gradient);
+}
+
+.bannerCard h1 {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-extrabold);
+
+  color: var(--text-primary);
+
+  margin: 0;
+
+  letter-spacing: -0.02em;
+}
+
+.bannerCard p {
+  font-size: var(--font-size-sm);
+
+  color: var(--text-secondary);
+
+  margin: 6px 0 0;
+}
+
+@media (max-width: 768px) {
+  .banner {
+    padding: 16px 20px 0;
+  }
+}

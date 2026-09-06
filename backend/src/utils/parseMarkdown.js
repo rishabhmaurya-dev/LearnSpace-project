@@ -1,14 +1,29 @@
-
 const normalizeContent = (content) => {
   if (!content) return "";
 
-  return content
-    // Windows newline -> Unix newline
-    .replace(/\r\n/g, "\n")
-    .replace(/\r/g, "\n")
-    // If literal "\n" is stored in DB, convert it to actual newline
-    .replace(/\\n/g, "\n")
-    .trim();
+  return (
+    content
+      // Windows newline -> Unix newline
+      .replace(/\r\n/g, "\n")
+      .replace(/\r/g, "\n")
+      // If literal "\n" is stored in DB, convert it to actual newline
+      .replace(/\\n/g, "\n")
+      .trim()
+  );
+};
+
+const normalizeCodeExample = (content) => {
+  const normalized = normalizeContent(content);
+
+  if (!normalized) return "";
+
+  const lines = normalized.split("\n");
+
+  if (lines[0] && /^[xX]$/.test(lines[0].trim())) {
+    lines.shift();
+  }
+
+  return lines.join("\n").trim();
 };
 
 const extractSection = (markdown, heading) => {
@@ -24,10 +39,31 @@ const extractSection = (markdown, heading) => {
 
 const extractCodeExample = (content) => {
   const match = content.match(
-    /```(?:javascript|js|jsx|typescript|ts|html|css)?\s*([\s\S]*?)```/i,
+    /```([\w+#-]*)\s*([\s\S]*?)```/i,
   );
 
-  return match ? normalizeContent(match[1]) : "";
+  if (!match) return { code: "", language: "" };
+
+  const rawLang = (match[1] || "").trim().toLowerCase();
+
+  const langMap = {
+    js: "javascript",
+    ts: "typescript",
+    py: "python",
+    cs: "csharp",
+    "c++": "cpp",
+    rb: "ruby",
+    sh: "bash",
+    shell: "bash",
+    ps1: "powershell",
+    yml: "yaml",
+    md: "markdown",
+    txt: "plaintext",
+  };
+
+  const language = langMap[rawLang] || rawLang || "plaintext";
+
+  return { code: normalizeContent(match[2]), language };
 };
 
 /**
@@ -46,9 +82,7 @@ const extractUrl = (content) => {
   // 1. Markdown link:
   // [text](url)
   // [text](<url>)
-  const markdownLink = trimmed.match(
-    /!?\[[^\]]*\]\(<?([^)>]+)>?\)/,
-  );
+  const markdownLink = trimmed.match(/!?\[[^\]]*\]\(<?([^)>]+)>?\)/);
 
   if (markdownLink && markdownLink[1]) {
     return markdownLink[1].trim();
@@ -63,14 +97,10 @@ const extractUrl = (content) => {
   }
 
   // 3. Bare URL
-  const bareUrl = trimmed.match(
-    /https?:\/\/[^\s<>"']+/,
-  );
+  const bareUrl = trimmed.match(/https?:\/\/[^\s<>"']+/);
 
   if (bareUrl) {
-    return bareUrl[0]
-      .replace(/[),.;]+$/, "")
-      .trim();
+    return bareUrl[0].replace(/[),.;]+$/, "").trim();
   }
 
   // 4. Fallback:
@@ -96,67 +126,45 @@ export const parseLessonMarkdown = (markdown) => {
   const titleMatch = normalizedMarkdown.match(/^#\s+(.+)$/m);
 
   if (!titleMatch) {
-    throw new Error(
-      "Markdown must contain a main title using '# Title'",
-    );
+    throw new Error("Markdown must contain a main title using '# Title'");
   }
 
   const title = titleMatch[1].trim();
 
-  const topicHeading =
-    extractSection(normalizedMarkdown, "Topic") || title;
+  const topicHeading = extractSection(normalizedMarkdown, "Topic") || title;
 
-  const definition = extractSection(
-    normalizedMarkdown,
-    "Definition",
-  );
+  const definition = extractSection(normalizedMarkdown, "Definition");
 
   const detailedMeaning = extractSection(
     normalizedMarkdown,
     "Detailed Meaning",
   );
 
-  const example = extractSection(
-    normalizedMarkdown,
-    "Example",
-  );
+  const example = extractSection(normalizedMarkdown, "Example");
 
-  const codeSection = extractSection(
-    normalizedMarkdown,
-    "Code Example",
-  );
+  const codeSection = extractSection(normalizedMarkdown, "Code Example");
+
+  const extractedCode = extractCodeExample(codeSection);
 
   const codeExampleExplanation = extractSection(
     normalizedMarkdown,
     "Code Explanation",
   );
 
-  const videoSection = extractSection(
-    normalizedMarkdown,
-    "Video",
-  );
+  const videoSection = extractSection(normalizedMarkdown, "Video");
 
-  const notesSection = extractSection(
-    normalizedMarkdown,
-    "Notes",
-  );
+  const notesSection = extractSection(normalizedMarkdown, "Notes");
 
   if (!definition) {
-    throw new Error(
-      `Definition section missing in lesson '${title}'`,
-    );
+    throw new Error(`Definition section missing in lesson '${title}'`);
   }
 
   if (!detailedMeaning) {
-    throw new Error(
-      `Detailed Meaning section missing in lesson '${title}'`,
-    );
+    throw new Error(`Detailed Meaning section missing in lesson '${title}'`);
   }
 
   if (!example) {
-    throw new Error(
-      `Example section missing in lesson '${title}'`,
-    );
+    throw new Error(`Example section missing in lesson '${title}'`);
   }
 
   return {
@@ -169,11 +177,11 @@ export const parseLessonMarkdown = (markdown) => {
 
     example: normalizeContent(example),
 
-    codeExample: extractCodeExample(codeSection),
+    codeExample: normalizeCodeExample(extractedCode.code),
 
-    codeExampleExplanation: normalizeContent(
-      codeExampleExplanation,
-    ),
+    codeLanguage: extractedCode.language || "",
+
+    codeExampleExplanation: normalizeContent(codeExampleExplanation),
 
     videoUrl: extractUrl(videoSection),
 

@@ -24,9 +24,7 @@ const ReviewStep = ({ course, lessons, onNext }) => {
   const hasCapstone =
     course.capstoneProject?.title && course.capstoneProject?.description;
 
-  /* =========================================
-     PUBLISH READINESS CHECKLIST
-  ========================================= */
+  /* publish readiness checklist */
 
   const checklist = [
     {
@@ -67,9 +65,7 @@ const ReviewStep = ({ course, lessons, onNext }) => {
       </p>
 
       <div className={styles.reviewGrid}>
-        {/* =========================================
-            BASIC INFO
-        ========================================= */}
+        {/* basic info */}
 
         <div className={styles.reviewSection}>
           <h4>📋 Basic Info</h4>
@@ -109,9 +105,7 @@ const ReviewStep = ({ course, lessons, onNext }) => {
           </div>
         </div>
 
-        {/* =========================================
-            LESSONS & MCQ
-        ========================================= */}
+        {/* lessons & mcq */}
 
         <div className={styles.reviewSection}>
           <h4>
@@ -142,9 +136,7 @@ const ReviewStep = ({ course, lessons, onNext }) => {
           )}
         </div>
 
-        {/* =========================================
-            FINAL QUIZ
-        ========================================= */}
+        {/* final quiz */}
 
         <div className={styles.reviewSection}>
           <h4>
@@ -172,9 +164,7 @@ const ReviewStep = ({ course, lessons, onNext }) => {
           )}
         </div>
 
-        {/* =========================================
-            CAPSTONE
-        ========================================= */}
+        {/* capstone */}
 
         <div className={styles.reviewSection}>
           <h4>🎯 Capstone</h4>
@@ -205,9 +195,7 @@ const ReviewStep = ({ course, lessons, onNext }) => {
         </div>
       </div>
 
-      {/* =========================================
-          PUBLISH CHECKLIST
-      ========================================= */}
+      {/* publish checklist */}
 
       <div className={styles.reviewSection} style={{ marginTop: 20 }}>
         <h4>✅ Publish Readiness</h4>
@@ -229,9 +217,7 @@ const ReviewStep = ({ course, lessons, onNext }) => {
         </div>
       </div>
 
-      {/* =========================================
-          NAV
-      ========================================= */}
+      {/* nav */}
 
       <div className={styles.wizardNav}>
         <div></div>

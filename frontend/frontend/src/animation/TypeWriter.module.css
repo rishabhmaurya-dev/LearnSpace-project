@@ -1,0 +1,316 @@
+/* =========================================
+   TYPEWRITER
+========================================= */
+
+.Typewriter {
+  display: inline-flex;
+  align-items: center;
+
+  position: relative;
+
+  white-space: nowrap;
+
+  font-family: var(--font-family);
+
+  font-size: 25px;
+  line-height: 1.2;
+
+  font-weight: 400;
+
+  letter-spacing: -0.7px;
+
+  min-height: 1.2em;
+
+  isolation: isolate;
+}
+
+/* =========================================
+   TEXT WRAPPER
+========================================= */
+
+.textWrapper {
+  display: inline-block;
+
+  position: relative;
+
+  min-width: 1px;
+
+  /* Prevent rendering jump */
+  transform: translateZ(0);
+
+  will-change: contents;
+}
+
+/* =========================================
+   TEXT
+========================================= */
+
+.text {
+  display: inline-block;
+
+  position: relative;
+
+  background: linear-gradient(
+    90deg,
+    #1976d2 0%,
+    #42a5f5 22%,
+    #7c3aed 45%,
+    #db2777 68%,
+    #42a5f5 88%,
+    #1976d2 100%
+  );
+  letter-spacing: 2px;
+  background-size: 250% 100%;
+  background-position: 0% 50%;
+
+  -webkit-background-clip: text;
+  background-clip: text;
+
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+
+  animation: gradientMove 6s ease-in-out infinite;
+
+  will-change: background-position;
+
+  transform: translateZ(0);
+
+  backface-visibility: hidden;
+
+  -webkit-font-smoothing: antialiased;
+
+  text-rendering: optimizeLegibility;
+}
+
+/* =========================================
+   TYPING
+========================================= */
+
+.typing .text {
+  animation:
+    gradientMove 6s ease-in-out infinite,
+    typingGlow 2.8s ease-in-out infinite;
+}
+
+/* =========================================
+   DELETING
+========================================= */
+
+.deleting .text {
+  animation:
+    gradientMove 6s ease-in-out infinite,
+    deletingGlow 1.4s ease-in-out infinite;
+}
+
+/* =========================================
+   GRADIENT
+========================================= */
+
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  25% {
+    background-position: 35% 50%;
+  }
+
+  50% {
+    background-position: 70% 50%;
+  }
+
+  75% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* =========================================
+   TYPING GLOW
+========================================= */
+
+@keyframes typingGlow {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 2px rgba(25, 118, 210, 0.08));
+  }
+
+  50% {
+    filter: drop-shadow(0 0 5px rgba(25, 118, 210, 0.2))
+      drop-shadow(0 0 10px rgba(124, 58, 237, 0.1));
+  }
+}
+
+/* =========================================
+   DELETE GLOW
+========================================= */
+
+@keyframes deletingGlow {
+  0%,
+  100% {
+    transition: 0.01s ease-in;
+    filter: drop-shadow(0 0 2px rgba(25, 118, 210, 0.08));
+  }
+
+  50% {
+    filter: drop-shadow(0 0 6px rgba(156, 39, 176, 0.22));
+  }
+}
+
+/* =========================================
+   CURSOR
+========================================= */
+
+.cursor {
+  display: inline-block;
+
+  flex-shrink: 0;
+
+  width: 2px;
+  height: 1.08em;
+
+  margin-left: 7px;
+
+  position: relative;
+  top: 1px;
+
+  border-radius: 999px;
+
+  background: linear-gradient(
+    180deg,
+    #42a5f5 0%,
+    #1976d2 30%,
+    #7c3aed 55%,
+    #db2777 75%,
+    #9c27b0 100%
+  );
+
+  box-shadow:
+    0 0 4px rgba(25, 118, 210, 0.65),
+    0 0 9px rgba(124, 58, 237, 0.4),
+    0 0 15px rgba(156, 39, 176, 0.2);
+
+  animation:
+    cursorBlink 0.9s ease-in-out infinite,
+    cursorPulse 1.8s ease-in-out infinite;
+
+  will-change: opacity, transform, box-shadow;
+
+  transform-origin: center;
+}
+
+/* =========================================
+   CURSOR BLINK
+========================================= */
+
+@keyframes cursorBlink {
+  0%,
+  42% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.25;
+  }
+
+  58%,
+  100% {
+    opacity: 1;
+  }
+}
+
+/* =========================================
+   CURSOR PULSE
+========================================= */
+
+@keyframes cursorPulse {
+  0%,
+  100% {
+    transform: scaleY(0.94);
+
+    box-shadow:
+      0 0 4px rgba(25, 118, 210, 0.55),
+      0 0 9px rgba(124, 58, 237, 0.3);
+  }
+
+  50% {
+    transform: scaleY(1);
+
+    box-shadow:
+      0 0 6px rgba(25, 118, 210, 0.85),
+      0 0 12px rgba(124, 58, 237, 0.5),
+      0 0 19px rgba(156, 39, 176, 0.25);
+  }
+}
+
+/* =========================================
+   HOVER
+========================================= */
+
+.Typewriter:hover .text {
+  filter: drop-shadow(0 0 6px rgba(25, 118, 210, 0.25))
+    drop-shadow(0 0 12px rgba(124, 58, 237, 0.18));
+}
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 768px) {
+  .Typewriter {
+    font-size: 25px;
+    letter-spacing: -0.5px;
+  }
+
+  .cursor {
+    width: 2px;
+    margin-left: 6px;
+  }
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 480px) {
+  .Typewriter {
+    font-size: 22px;
+    letter-spacing: -0.35px;
+  }
+
+  .cursor {
+    width: 2px;
+    height: 1em;
+    margin-left: 5px;
+    top: 0;
+  }
+}
+
+/* =========================================
+   SMALL MOBILE
+========================================= */
+
+@media (max-width: 360px) {
+  .Typewriter {
+    font-size: 20px;
+  }
+
+  .cursor {
+    width: 2px;
+    margin-left: 4px;
+  }
+}
+
+/* =========================================
+   REDUCED MOTION
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .text,
+  .cursor {
+    animation: none;
+  }
+}

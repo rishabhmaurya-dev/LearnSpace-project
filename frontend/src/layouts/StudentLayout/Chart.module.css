@@ -1,6 +1,4 @@
-/* =========================================================
-   CHART CARD (MUI TOKENS + ELEVATED HOVER)
-   ========================================================= */
+/* chart card */
 .chartCard {
   background-color: var(--bg-card);
   border: 1px solid var(--border);
@@ -23,9 +21,7 @@
   border-color: var(--border-hover);
 }
 
-/* =========================================================
-   HEADER & METADATA
-   ========================================================= */
+/* header & metadata */
 .chartHeader {
   display: flex;
   flex-direction: column;
@@ -94,18 +90,14 @@
   animation: pulseGlow 1.8s infinite cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* =========================================================
-   CANVAS CONTAINER
-   ========================================================= */
+/* canvas container */
 .chartWrapper {
   position: relative;
   width: 100%;
   height: 260px;
 }
 
-/* =========================================================
-   PULSE KEYFRAMES
-   ========================================================= */
+/* pulse keyframes */
 @keyframes pulseGlow {
   0% {
     transform: scale(0.95);

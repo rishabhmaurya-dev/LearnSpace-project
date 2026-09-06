@@ -4,150 +4,404 @@ import ScrollReveal from "../animation/Scroll";
 
 import { useNavigate } from "react-router-dom";
 
-const FEATURES = [
+// platform modules
+const MODULES = [
   {
-    icon: "◆",
-    title: "Structured Courses",
-    desc: "Step-by-step learning paths that guide you from fundamentals to mastery, one focused module at a time.",
+    icon: "📚",
+    title: "Course Catalog",
+    desc: "Browse published courses, filter by category, search by keyword, and enroll in the skills you want to master.",
   },
   {
-    icon: "◈",
-    title: "Interactive Practice",
-    desc: "Build real skills with hands-on lessons, coding challenges, and exercises designed to stick.",
+    icon: "🎬",
+    title: "Structured Lessons",
+    desc: "Learn through rich markdown lessons with syntax-highlighted code, complete with your own course progress.",
   },
   {
-    icon: "▣",
-    title: "Quizzes & Assessments",
-    desc: "Test your knowledge with interactive quizzes that give instant feedback so you always know where you stand.",
+    icon: "🧠",
+    title: "Quizzes & Final Assessment",
+    desc: "Lock in each module with quizzes and finish with a capstone-based final assessment before you graduate.",
   },
   {
-    icon: "◎",
-    title: "Progress Tracking",
-    desc: "See your learning velocity in real time with clear progress bars, streaks, and completion metrics.",
+    icon: "🚀",
+    title: "Capstone Projects",
+    desc: "Submit a real-world capstone project that is reviewed by admins as the final proof of your skills.",
   },
   {
-    icon: "◉",
-    title: "Verified Certificates",
-    desc: "Earn a certificate for every course you complete and prove your skills wherever you go.",
+    icon: "🏆",
+    title: "Student Leaderboard",
+    desc: "See how you rank against peers in real time on the student leaderboard, powered by your activity.",
   },
   {
-    icon: "✧",
-    title: "Learn At Your Pace",
-    desc: "Lifetime access and a pace that fits your schedule. Start, pause, and resume without losing momentum.",
+    icon: "📊",
+    title: "Progress Dashboard",
+    desc: "Track completion, activity streaks, and learning velocity at a glance on your personal dashboard.",
+  },
+  {
+    icon: "🤖",
+    title: "LearnSpace AI Mentor",
+    desc: "Ask an AI companion to explain concepts, debug your code, or help you prep for assessments — in real time.",
+  },
+  {
+    icon: "🛡️",
+    title: "QR Verified Certificates",
+    desc: "Complete a course and earn a QR-verified PDF certificate you can share and verify anywhere.",
   },
 ];
 
-const PROCESS = [
+// learner journey
+const FLOW = [
   {
-    title: "Choose a Path",
-    desc: "Browse structured courses and pick the skill you want to master next.",
+    step: "01",
+    title: "Create Your Account",
+    desc: "Register as a Student or Admin and land directly in your own workspace.",
   },
   {
+    step: "02",
+    title: "Browse & Enroll",
+    desc: "Explore the course catalog by category, search topics, and enroll in a course.",
+  },
+  {
+    step: "03",
     title: "Learn & Practice",
-    desc: "Watch lessons, read notes, and apply what you learn with interactive exercises.",
+    desc: "Work through markdown lessons, code examples, and quizzes at your own pace.",
   },
   {
-    title: "Test Yourself",
-    desc: "Take quizzes after every module to lock in knowledge and track your progress.",
+    step: "04",
+    title: "Final + Capstone",
+    desc: "Take the final assessment and submit your capstone project for admin review.",
   },
   {
+    step: "05",
     title: "Get Certified",
-    desc: "Complete the course, earn your certificate, and move to the next level.",
+    desc: "Earn a QR-verified certificate and showcase it on your profile and resume.",
   },
 ];
 
-const PLANS = [
-  {
-    name: "Explorer",
-    price: "$0",
-    period: "/forever",
-    desc: "Start learning today — no credit card required.",
-    features: [
-      "Access to starter courses",
-      "Interactive quizzes",
-      "Personal progress tracking",
-      "Community support",
-    ],
-    cta: "Start Free",
-    featured: false,
-  },
-  {
-    name: "Pro",
-    price: "$12",
-    period: "/month",
-    desc: "Everything you need to go deep and stay consistent.",
-    features: [
-      "All courses included",
-      "Priority practice exercises",
-      "Detailed analytics",
-      "Verified certificates",
-      "Ad-free experience",
-    ],
-    cta: "Go Pro",
-    featured: true,
-  },
-  {
-    name: "Teams",
-    price: "$29",
-    period: "/month",
-    desc: "For squads and classrooms that learn together.",
-    features: [
-      "Everything in Pro",
-      "Up to 10 members",
-      "Team progress dashboards",
-      "Admin controls & reports",
-    ],
-    cta: "Contact Sales",
-    featured: false,
-  },
+// roles
+const STUDENT_ITEMS = [
+  "Personal dashboard & progress tracking",
+  "Course catalog, enrollment & my courses",
+  "Lesson learning with quizzes & final assessment",
+  "Capstone project submission",
+  "QR-verified certificates",
+  "Student leaderboard standings",
+  "LearnSpace AI mentor access",
 ];
 
+const ADMIN_ITEMS = [
+  "Admin analytics dashboard",
+  "Students overview, details & leaderboard",
+  "Course builder — lessons, quizzes & capstone",
+  "Capstone submission review",
+  "Certificate management & issuance",
+  "Course publish / draft lifecycle",
+];
+
+// faq
 const FAQS = [
   {
-    q: "Do I need a credit card to start?",
-    a: "No. The Explorer plan is free forever with no credit card required. You can upgrade to Pro whenever you're ready.",
+    q: "How do I start learning?",
+    a: "Create a student account, log in, open the course catalog, pick a course by category, and enroll. Your dashboard will then guide you through lessons, quizzes, and the final assessment.",
   },
   {
-    q: "How do certificates work?",
-    a: "Once you complete all modules and quizzes in a course, you'll unlock a verified certificate you can download and share on your profile or resume.",
+    q: "What is a capstone project?",
+    a: "Each course ends with a real-world capstone project. You submit your work directly in the platform and an admin reviews the submission before it is finalised.",
   },
   {
-    q: "Can I learn at my own pace?",
-    a: "Absolutely. All courses are self-paced and you get lifetime access, so you can start, pause, and resume whenever it fits your schedule.",
+    q: "How do course certificates work?",
+    a: "Once you complete the lessons, quizzes, and capstone of a course, you earn a certificate in your Certificates page as a downloadable PDF with a QR code that anyone can scan to verify it.",
   },
   {
-    q: "What subjects are available?",
-    a: "We cover modern full-stack development, including React, Node.js, Python, databases, and more — with new courses added regularly.",
+    q: "What is LearnSpace AI?",
+    a: "It's a built-in AI learning companion. You can ask it to explain course concepts, debug your code, or help you prepare for assessments — responses stream live in your chat.",
   },
   {
-    q: "Can I change or cancel my plan anytime?",
-    a: "Yes. You can upgrade, downgrade, or cancel your subscription at any time directly from your account settings.",
+    q: "Is there a leaderboard?",
+    a: "Yes. Students are ranked on a live leaderboard based on their learning activity and progress, so you can see how you compare with your peers.",
+  },
+  {
+    q: "What can an admin do on the platform?",
+    a: "Admins get a full studio: an analytics dashboard, student management and leaderboard, a course builder with lessons/quizzes/capstone steps, capstone review and certificate management.",
   },
 ];
 
+// tour mock uis
+
+const MockLearner = () => (
+  <div className="lm-shell">
+    <aside className="lm-side">
+      <div className="lm-side-logo">
+        <img src="/learnspace-logo-1024x1024.png" alt="LearnSpace" />
+        LearnSpace
+      </div>
+      {[
+        ["▦", "Dashboard", true],
+        ["📚", "My Courses", false],
+        ["🛍️", "Catalog", false],
+        ["🪪", "Certificates", false],
+        ["🤖", "AI Mentor", false],
+        ["👤", "Profile", false],
+      ].map(([icon, label, active]) => (
+        <div
+          key={label}
+          className={`lm-nav ${active ? "lm-nav-active" : ""}`}
+        >
+          <span className="lm-nav-icon">{icon}</span>
+          <span>{label}</span>
+        </div>
+      ))}
+    </aside>
+
+    <div className="lm-main">
+      <div className="lm-topbar">
+        <div>
+          <span className="lm-eyebrow">Course · Introduction to React</span>
+          <div className="lm-title">useEffect — Handling Side Effects</div>
+        </div>
+        <div className="lm-progress">
+          <span>Progress</span>
+          <div className="lm-progress-bg">
+            <div className="lm-progress-fill" />
+          </div>
+          <strong>65%</strong>
+        </div>
+      </div>
+
+      <div className="lm-body">
+        <div className="lm-lessons">
+          <span className="lm-panel-title">Lessons</span>
+          {[
+            ["Introduction", true],
+            ["Components & Props", true],
+            ["useState in depth", false],
+            ["useEffect & Side Effects", false],
+            ["Handling Events", false],
+          ].map(([t, done], i) => (
+            <div
+              key={t}
+              className={`lm-lesson ${i === 3 ? "lm-lesson-active" : ""}`}
+            >
+              <span className={`lm-dot ${done ? "lm-done" : ""}`}>
+                {done ? "✓" : "•"}
+              </span>
+              {t}
+            </div>
+          ))}
+        </div>
+
+        <div className="lm-content">
+          <p className="lm-mk">
+            The <span className="mk-k">useEffect</span> hook lets you run side
+            effects after React renders your component — data fetching, timers,
+            and DOM updates.
+          </p>
+
+          <pre className="lm-code">
+            <span className="mk-k">const</span>{" "}
+            <span className="mk-f">CountButton</span> = () =&gt;
+            {"{"}
+            {"\n"}
+            {"  "}
+            <span className="mk-k">const</span> [count,{" "}
+            <span className="mk-f">setCount</span>] ={" "}
+            <span className="mk-f">useState</span>(<span className="mk-n">0</span>
+            );{"\n"}
+            {"\n"}
+            {"  "}
+            <span className="mk-f">useEffect</span>(() =&gt; {"{"}
+            {"\n"}
+            {"    "}
+            <span className="mk-f">document</span>.title = `Count: $`
+            {"{"}count{"}"}`;{"\n"}
+            {"  "}
+            {"}"}, [count]);{"\n"}
+            {"  "}
+            <span className="mk-k">return</span> (
+            {"\n"}
+            {"    "}
+            <span className="mk-p">&lt;</span>
+            <span className="mk-tag">button</span>
+            <span className="mk-p">&gt;</span>
+            {"{"}count{"}"}
+            <span className="mk-p">&lt;/</span>
+            <span className="mk-tag">button</span>
+            <span className="mk-p">&gt;</span>
+            {"\n"}
+            {"  "}
+            );{"\n"}
+            {"};"}
+          </pre>
+
+          <div className="lm-actions">
+            <span className="lm-quiz-chip">📝 Module Quiz — 5 questions</span>
+            <span className="lm-btn-demo">Next Lesson →</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+const MockStudio = () => (
+  <div className="lm-shell lm-studio">
+    <div className="lm-studio-top">
+      <div>
+        <span className="lm-eyebrow">Admin Studio · Course Builder</span>
+        <div className="lm-title">Node.js Full-Stack Program</div>
+      </div>
+      <span className="lm-badge-live">✓ Published</span>
+    </div>
+
+    <div className="lm-stepper">
+      {["Basic Info", "Lessons", "Quizzes", "Capstone", "Review"].map(
+        (label, i) => (
+          <div
+            key={label}
+            className={`lm-step ${i < 4 ? "lm-step-done" : ""} ${
+              i === 0 ? "lm-step-current" : ""
+            }`}
+          >
+            <span className="lm-step-icon">{i < 4 ? "✓" : i + 1}</span>
+            {label}
+          </div>
+        ),
+      )}
+    </div>
+
+    <div className="lm-studio-body">
+      <div className="lm-form-col">
+        <label className="lm-field">
+          <span>Course Title</span>
+          <div className="lm-input-fill">Introduction to React</div>
+        </label>
+        <label className="lm-field">
+          <span>Category</span>
+          <div className="lm-input-fill">Frontend Development</div>
+        </label>
+        <label className="lm-field">
+          <span>Description</span>
+          <div className="lm-input-area" />
+        </label>
+      </div>
+
+      <div className="lm-preview-col">
+        <span className="lm-panel-title">Course Stats</span>
+        <div className="lm-stat-row">
+          {[
+            ["📚", "14", "Lessons"],
+            ["🧠", "8", "Quizzes"],
+            ["🚀", "1", "Capstone"],
+            ["🎓", "320", "Students"],
+          ].map(([icon, num, label]) => (
+            <div key={label} className="lm-stat-cell">
+              <span>{icon}</span>
+              <strong>{num}</strong>
+              <small>{label}</small>
+            </div>
+          ))}
+        </div>
+        <div className="lm-preview-actions">
+          <span className="lm-btn-demo">Add Lesson</span>
+          <span className="lm-btn-ghost">Preview Course</span>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+const MockAi = () => (
+  <div className="lm-shell lm-ai">
+    <div className="lm-ai-header">
+      <span className="lm-ai-avatar">✦</span>
+      <div>
+        <div className="lm-title">LearnSpace AI</div>
+        <span className="lm-ai-sub">Your interactive AI learning companion</span>
+      </div>
+      <span className="lm-btn-ghost">Clear Chat</span>
+    </div>
+
+    <div className="lm-chat">
+      <div className="lm-bubble lm-bubble-bot">
+        <span className="lm-bubble-name">LearnSpace AI</span>
+        <p>
+          Hello! I can explain concepts, debug your code, or help you prep for
+          your next assessment. Try asking me something like...
+        </p>
+      </div>
+
+      <div className="lm-bubble lm-bubble-user">
+        How does JWT authentication work step-by-step?
+      </div>
+
+      <div className="lm-bubble lm-bubble-bot">
+        <span className="lm-bubble-name">LearnSpace AI</span>
+        <p>Great question! Here's the flow:</p>
+        <pre className="lm-code lm-ai-code">
+          <span className="mk-n">1.</span> Login sends credentials to the API
+          {"\n"}
+          <span className="mk-n">2.</span> Server verifies and signs a JWT
+          {"\n"}
+          <span className="mk-n">3.</span> Client stores the token securely
+          {"\n"}
+          <span className="mk-n">4.</span> Every request sends:{"\n"}
+          {"  "}
+          <span className="mk-s">"Authorization: Bearer &lt;token&gt;"</span>
+        </pre>
+        <p>Every subsequent request is now authenticated with that token.</p>
+      </div>
+
+      <div className="lm-typing">
+        <span />
+        <span />
+        <span />
+      </div>
+    </div>
+
+    <div className="lm-input-row">
+      <div className="lm-input-pill">Ask LearnSpace AI anything...</div>
+      <span className="lm-send">➤</span>
+    </div>
+  </div>
+);
+
 const Landing = () => {
-  const [selectedTopic, setSelectedTopic] = useState("useState");
   const [openFaq, setOpenFaq] = useState(0);
+  const [tourTab, setTourTab] = useState("learner");
 
   const navigate = useNavigate();
 
   return (
     <div className="ls-landing">
-      {/* =========================================
-          NAVBAR
-      ========================================= */}
+      {/* navbar */}
       <nav className="ls-navbar">
         <div className="ls-container ls-nav-wrapper">
           <a href="#home" className="ls-logo">
-            <span className="ls-logo-mark">L</span>
-            Learn<span>Space</span>
+            <img
+              src="/learnspace-logo-1024x1024.png"
+              alt="LearnSpace"
+              className="ls-logo-img"
+            />
+            <span>
+              Learn<span className="ls-logo-accent">Space</span>
+            </span>
           </a>
 
           <ul className="ls-nav-links">
-            <li><a href="#features">Features</a></li>
-            <li><a href="#flow">How It Works</a></li>
-            <li><a href="#pricing">Pricing</a></li>
-            <li><a href="#faq">FAQ</a></li>
+            <li>
+              <a href="#modules">Modules</a>
+            </li>
+            <li>
+              <a href="#flow">How It Works</a>
+            </li>
+            <li>
+              <a href="#roles">Workspaces</a>
+            </li>
+            <li>
+              <a href="#tour">Tour</a>
+            </li>
+            <li>
+              <a href="#faq">FAQ</a>
+            </li>
           </ul>
 
           <div className="ls-nav-actions">
@@ -169,25 +423,24 @@ const Landing = () => {
       </nav>
 
       <div className="ls-main">
-        {/* =========================================
-            HERO
-        ========================================= */}
+        {/* hero */}
         <ScrollReveal>
           <section className="ls-hero ls-container" id="home">
             <div className="ls-tagline-badge">
-              Learn. Practice. Prove Your Skills.
+              <span className="ls-badge-dot" />
+              Your all-in-one learning platform
             </div>
 
             <h1 className="ls-hero-title">
-              Build Skills That
+              Learn. Practice.
               <br />
-              <span className="ls-gradient">Take You Further</span>
+              <span className="ls-gradient">Prove It with Capstones.</span>
             </h1>
 
             <p className="ls-hero-subtitle">
-              Learn in a structured way, practice with interactive lessons, test
-              your knowledge through quizzes, track your progress, and earn
-              certificates as you master new skills.
+              Enroll in structured courses, work through lessons and quizzes,
+              submit a real capstone project, and walk away with a QR-verified
+              certificate — supported by your own AI mentor.
             </p>
 
             <div className="ls-hero-cta">
@@ -202,287 +455,233 @@ const Landing = () => {
                 className="ls-btn ls-btn-outline ls-btn-hero"
                 onClick={() => navigate("/login")}
               >
-                Continue Learning
+                Continue as Student
               </button>
             </div>
 
-            <div className="ls-hero-stats">
-              <div className="ls-stat">
-                <span className="ls-stat-value">
-                  12<em>k+</em>
-                </span>
-                <span className="ls-stat-label">Active Learners</span>
-              </div>
-              <div className="ls-stat">
-                <span className="ls-stat-value">
-                  85<em>+</em>
-                </span>
-                <span className="ls-stat-label">Structured Courses</span>
-              </div>
-              <div className="ls-stat">
-                <span className="ls-stat-value">
-                  4.9<em>/5</em>
-                </span>
-                <span className="ls-stat-label">Avg. Rating</span>
-              </div>
+            <div className="ls-hero-chips">
+              <span className="ls-chip">📚 Structured lessons</span>
+              <span className="ls-chip">🧠 Quizzes & final assessment</span>
+              <span className="ls-chip">🚀 Capstone submission</span>
+              <span className="ls-chip">🛡️ QR verified certificates</span>
+              <span className="ls-chip">🤖 AI mentor</span>
             </div>
           </section>
         </ScrollReveal>
 
-        {/* =========================================
-            SOCIAL PROOF — INFINITE MARQUEE
-        ========================================= */}
+        {/* technology marquee */}
         <ScrollReveal>
           <div className="ls-marquee-wrapper">
             <div className="ls-marquee-content">
-              <div className="ls-marquee-item">React.js</div>
-              <div className="ls-marquee-item">Node.js</div>
-              <div className="ls-marquee-item">Python</div>
-              <div className="ls-marquee-item">MongoDB</div>
-              <div className="ls-marquee-item">Hands-on Practice</div>
-              <div className="ls-marquee-item">Interactive Quizzes</div>
-              <div className="ls-marquee-item">Progress Tracking</div>
-              <div className="ls-marquee-item">Verified Certificates</div>
-              <div className="ls-marquee-item">React.js</div>
-              <div className="ls-marquee-item">Node.js</div>
-              <div className="ls-marquee-item">Python</div>
-              <div className="ls-marquee-item">MongoDB</div>
-              <div className="ls-marquee-item">Hands-on Practice</div>
-              <div className="ls-marquee-item">Interactive Quizzes</div>
-              <div className="ls-marquee-item">Progress Tracking</div>
-              <div className="ls-marquee-item">Verified Certificates</div>
+              {[
+                "React.js",
+                "Node.js",
+                "Express",
+                "MongoDB",
+                "Redux",
+                "BCrypt & JWT",
+                "Markdown Lessons",
+                "Structured Quizzes",
+                "Capstone Review",
+                "QR Certificates",
+                "AI Mentor",
+              ].map((item, i) => (
+                <span className="ls-marquee-item" key={`${item}-${i}`}>
+                  {item}
+                  <i>✦</i>
+                </span>
+              ))}
             </div>
           </div>
         </ScrollReveal>
 
-        {/* =========================================
-            FEATURES
-        ========================================= */}
+        {/* modules */}
         <ScrollReveal>
-          <section className="ls-section ls-container" id="features">
+          <section className="ls-section ls-container" id="modules">
             <div className="ls-section-head">
-              <span className="ls-section-eyebrow">Why LearnSpace</span>
-              <h2 className="ls-section-title">Everything You Need to Level Up</h2>
+              <span className="ls-section-eyebrow">Platform Modules</span>
+              <h2 className="ls-section-title">
+                Everything Is Built Around Real Learning
+              </h2>
               <p className="ls-section-subtitle">
-                A complete learning loop — discover, practice, test, and prove
-                your skills in one focused platform.
+                Every module below is a live part of the platform — from the
+                student catalog to the admin review desk.
               </p>
             </div>
 
-            <div className="ls-features-grid">
-              {FEATURES.map((f) => (
-                <div className="ls-feature-card" key={f.title}>
-                  <div className="ls-feature-icon">{f.icon}</div>
-                  <h3>{f.title}</h3>
-                  <p>{f.desc}</p>
+            <div className="ls-modules-grid">
+              {MODULES.map((m) => (
+                <div className="ls-module-card" key={m.title}>
+                  <div className="ls-module-icon">{m.icon}</div>
+                  <h3>{m.title}</h3>
+                  <p>{m.desc}</p>
                 </div>
               ))}
             </div>
           </section>
         </ScrollReveal>
 
-        {/* =========================================
-            PROCESS / HOW IT WORKS
-        ========================================= */}
+        {/* how it works */}
         <ScrollReveal>
-          <section className="ls-section ls-container" id="flow">
-            <div className="ls-section-head">
-              <span className="ls-section-eyebrow">How It Works</span>
-              <h2 className="ls-section-title">From Beginner to Certified in 4 Steps</h2>
-              <p className="ls-section-subtitle">
-                A simple, repeatable process that turns curiosity into confidence.
-              </p>
-            </div>
-
-            <div className="ls-flow-grid">
-              {PROCESS.map((step, i) => (
-                <div className="ls-flow-card" key={step.title}>
-                  <div className="ls-step-num">0{i + 1}</div>
-                  <h3>{step.title}</h3>
-                  <p>{step.desc}</p>
-                </div>
-              ))}
-            </div>
-          </section>
-        </ScrollReveal>
-
-        {/* =========================================
-            INTERACTIVE LMS DEMO
-        ========================================= */}
-        <ScrollReveal>
-          <section className="ls-container" id="courses">
-            <div className="ls-lms-demo">
-              <div className="ls-lms-header">
-                <div>
-                  <span className="ls-tagline-badge" style={{ marginBottom: 4 }}>
-                    Interactive Learning Experience
-                  </span>
-
-                  <h3
-                    style={{
-                      margin: 0,
-                      fontFamily: "var(--font-heading)",
-                      fontSize: "22px",
-                      fontWeight: 700,
-                      letterSpacing: "-0.03em",
-                      color: "var(--foreground)",
-                    }}
-                  >
-                    React.js Complete Course
-                  </h3>
-                </div>
-
-                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                  <div>
-                    <small
-                      style={{
-                        color: "var(--muted-foreground)",
-                        fontFamily: "var(--font-mono)",
-                        fontSize: "11px",
-                        letterSpacing: "0.05em",
-                        textTransform: "uppercase",
-                      }}
-                    >
-                      Course Progress
-                    </small>
-
-                    <div className="ls-progress-bar-bg">
-                      <div className="ls-progress-fill"></div>
-                    </div>
-                  </div>
-
-                  <span
-                    style={{
-                      fontFamily: "var(--font-mono)",
-                      fontWeight: 700,
-                      fontSize: "18px",
-                      color: "var(--accent)",
-                    }}
-                  >
-                    65%
-                  </span>
-                </div>
+          <section className="ls-section ls-section-alt" id="flow">
+            <div className="ls-container">
+              <div className="ls-section-head">
+                <span className="ls-section-eyebrow">How It Works</span>
+                <h2 className="ls-section-title">
+                  From Sign-Up to Certified in 5 Steps
+                </h2>
+                <p className="ls-section-subtitle">
+                  A repeatable journey that takes you from your first lesson to
+                  a verified certificate.
+                </p>
               </div>
 
-              <div className="ls-lms-grid">
-                <div className="ls-resource-box">
-                  <h4
-                    style={{
-                      margin: "0 0 16px 0",
-                      fontFamily: "var(--font-mono)",
-                      fontSize: "11px",
-                      fontWeight: 600,
-                      letterSpacing: "0.15em",
-                      textTransform: "uppercase",
-                      color: "var(--muted-foreground)",
-                    }}
-                  >
-                    Course Topics
-                  </h4>
-
-                  <div className="ls-topic-list">
-                    {[
-                      "Introduction",
-                      "Components",
-                      "Props",
-                      "useState",
-                      "useEffect",
-                    ].map((topic) => (
-                      <button
-                        key={topic}
-                        className={`ls-topic-btn ${
-                          selectedTopic === topic ? "active" : ""
-                        }`}
-                        onClick={() => setSelectedTopic(topic)}
-                      >
-                        {topic}
-                      </button>
-                    ))}
+              <div className="ls-flow-grid">
+                {FLOW.map((step) => (
+                  <div className="ls-flow-card" key={step.title}>
+                    <div className="ls-step-num">{step.step}</div>
+                    <h3>{step.title}</h3>
+                    <p>{step.desc}</p>
                   </div>
-
-                  <div className="ls-resource-list">
-                    <button className="ls-btn ls-btn-resource">
-                      Download CheatSheet
-                    </button>
-
-                    <button className="ls-btn ls-btn-resource">Topic Notes</button>
-                  </div>
-                </div>
-
-                <div className="ls-video-player-card">
-                  <div className="ls-video-header">
-                    <span>Video Lesson: {selectedTopic}</span>
-                    <span>12 min</span>
-                  </div>
-
-                  <div className="ls-player-screen">
-                    <div className="ls-play-button">▶</div>
-                  </div>
-
-                  <div className="ls-video-actions">
-                    <button className="ls-btn ls-btn-primary">Take Topic Quiz</button>
-                    <button className="ls-btn ls-btn-outline">Next Lesson →</button>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
           </section>
         </ScrollReveal>
 
-        {/* =========================================
-            PRICING
-        ========================================= */}
+        {/* roles / workspaces */}
         <ScrollReveal>
-          <section className="ls-section ls-container" id="pricing">
+          <section className="ls-section ls-container" id="roles">
             <div className="ls-section-head">
-              <span className="ls-section-eyebrow">Pricing</span>
-              <h2 className="ls-section-title">Simple, Transparent Plans</h2>
+              <span className="ls-section-eyebrow">Roles & Workspaces</span>
+              <h2 className="ls-section-title">
+                Two Homes, One Platform
+              </h2>
               <p className="ls-section-subtitle">
-                Start free, upgrade when you're ready. Cancel anytime.
+                Students get a learning workspace; admins get a full studio to
+                build courses, review capstones, and manage learners.
               </p>
             </div>
 
-            <div className="ls-pricing-grid">
-              {PLANS.map((plan) => (
-                <div
-                  className={`ls-price-card ${plan.featured ? "featured" : ""}`}
-                  key={plan.name}
-                >
-                  {plan.featured && <span className="ls-price-badge">Most Popular</span>}
+            <div className="ls-roles">
+              <div className="ls-role-card">
+                <div className="ls-role-tag">STUDENT</div>
+                <h3>Learner Workspace</h3>
+                <p>
+                  Your dashboard, courses, lessons, quizzes, capstones,
+                  certificates, leaderboard, and AI mentor — everything in one
+                  place.
+                </p>
+                <ul>
+                  {STUDENT_ITEMS.map((item) => (
+                    <li key={item}>
+                      <span className="ls-check">✓</span> {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
 
-                  <span className="ls-price-name">{plan.name}</span>
-                  <div className="ls-price-amount">
-                    {plan.price}
-                    <small>{plan.period}</small>
-                  </div>
-                  <p className="ls-price-desc">{plan.desc}</p>
+              <div className="ls-role-card ls-role-admin">
+                <div className="ls-role-tag">ADMIN</div>
+                <h3>Admin Studio</h3>
+                <p>
+                  A powerful command center to publish courses, shape
+                  assessments, and keep quality high across the platform.
+                </p>
+                <ul>
+                  {ADMIN_ITEMS.map((item) => (
+                    <li key={item}>
+                      <span className="ls-check">✓</span> {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </section>
+        </ScrollReveal>
 
-                  <ul className="ls-price-features">
-                    {plan.features.map((f) => (
-                      <li key={f}>{f}</li>
-                    ))}
-                  </ul>
+        {/* interactive platform tour */}
+        <ScrollReveal>
+          <section className="ls-section ls-section-alt" id="tour">
+            <div className="ls-container">
+              <div className="ls-section-head">
+                <span className="ls-section-eyebrow">Live Tour</span>
+                <h2 className="ls-section-title">See the Platform in Action</h2>
+                <p className="ls-section-subtitle">
+                  Real interfaces from the app — switch between the learner
+                  workspace, the admin studio, and the AI mentor.
+                </p>
+              </div>
 
+              <div className="ls-tour">
+                <div className="ls-tour-tabs">
                   <button
-                    className={`ls-btn ${plan.featured ? "ls-btn-primary" : "ls-btn-outline"}`}
-                    onClick={() => navigate("/register")}
+                    className={`ls-tour-tab ${
+                      tourTab === "learner" ? "active" : ""
+                    }`}
+                    onClick={() => setTourTab("learner")}
                   >
-                    {plan.cta}
+                    🎓 Learner Workspace
+                  </button>
+                  <button
+                    className={`ls-tour-tab ${
+                      tourTab === "studio" ? "active" : ""
+                    }`}
+                    onClick={() => setTourTab("studio")}
+                  >
+                    🛠️ Admin Studio
+                  </button>
+                  <button
+                    className={`ls-tour-tab ${
+                      tourTab === "ai" ? "active" : ""
+                    }`}
+                    onClick={() => setTourTab("ai")}
+                  >
+                    🤖 AI Mentor
                   </button>
                 </div>
-              ))}
+
+                <div className="ls-tour-panel">
+                  {tourTab === "learner" && <MockLearner />}
+                  {tourTab === "studio" && <MockStudio />}
+                  {tourTab === "ai" && <MockAi />}
+                </div>
+              </div>
             </div>
           </section>
         </ScrollReveal>
 
-        {/* =========================================
-            FAQ
-        ========================================= */}
+        {/* certificate band */}
+        <ScrollReveal>
+          <section className="ls-container">
+            <div className="ls-cert-band">
+              <div className="ls-cert-icon">🛡️</div>
+              <div>
+                <h2>QR-Verified Certificates You Can Actually Prove</h2>
+                <p>
+                  Pass the lessons, quizzes, and capstone of any course and a
+                  certificate lands in your profile — every PDF carries a QR
+                  code anyone can scan to verify it instantly.
+                </p>
+              </div>
+              <button
+                className="ls-btn ls-btn-primary ls-btn-hero"
+                onClick={() => navigate("/register")}
+              >
+                Claim Yours →
+              </button>
+            </div>
+          </section>
+        </ScrollReveal>
+
+        {/* faq */}
         <ScrollReveal>
           <section className="ls-section ls-container" id="faq">
-            <div className="ls-section-head" style={{ margin: "0 auto 56px", textAlign: "center" }}>
+            <div className="ls-section-head">
               <span className="ls-section-eyebrow">FAQ</span>
-              <h2 className="ls-section-title">Frequently Asked Questions</h2>
+              <h2 className="ls-section-title">
+                Frequently Asked Questions
+              </h2>
             </div>
 
             <div className="ls-faq">
@@ -507,9 +706,7 @@ const Landing = () => {
           </section>
         </ScrollReveal>
 
-        {/* =========================================
-            CTA BANNER
-        ========================================= */}
+        {/* cta banner */}
         <ScrollReveal>
           <section className="ls-container">
             <div className="ls-cta-banner">
@@ -521,8 +718,8 @@ const Landing = () => {
                   Next Skill?
                 </h2>
                 <p>
-                  Join LearnSpace and start learning with structured courses,
-                  interactive quizzes, progress tracking, and certificates.
+                  Join LearnSpace — enroll in a course, finish your capstone,
+                  and earn a certificate you can verify anywhere.
                 </p>
               </div>
 
@@ -537,56 +734,87 @@ const Landing = () => {
         </ScrollReveal>
       </div>
 
-      {/* =========================================
-          FOOTER
-      ========================================= */}
+      {/* footer */}
       <ScrollReveal>
         <footer className="ls-footer">
           <div className="ls-container">
             <div className="ls-footer-grid">
               <div className="ls-footer-col">
-                <a href="#home" className="ls-logo" style={{ marginBottom: "16px" }}>
-                  <span className="ls-logo-mark">L</span>
-                  Learn<span>Space</span>
+                <a href="#home" className="ls-logo ls-footer-logo">
+                  <img
+                    src="/learnspace-logo-1024x1024.png"
+                    alt="LearnSpace"
+                    className="ls-logo-img"
+                  />
+                  <span>
+                    Learn<span className="ls-logo-accent">Space</span>
+                  </span>
                 </a>
 
                 <p className="ls-footer-desc">
-                  Learn, practice, and build real skills with structured courses,
-                  interactive quizzes, and progress tracking.
+                  A complete learning platform — structured lessons, quizzes,
+                  capstone projects, QR-verified certificates, and an AI mentor.
                 </p>
+              </div>
+
+              <div className="ls-footer-col">
+                <h4>Learn</h4>
+                <ul>
+                  <li>
+                    <a href="#modules">Course Catalog</a>
+                  </li>
+                  <li>
+                    <a href="#modules">Lessons & Quizzes</a>
+                  </li>
+                  <li>
+                    <a href="#modules">Capstone Projects</a>
+                  </li>
+                  <li>
+                    <a href="#modules">Certificates</a>
+                  </li>
+                </ul>
               </div>
 
               <div className="ls-footer-col">
                 <h4>Platform</h4>
                 <ul>
-                  <li><a href="#home">Home</a></li>
-                  <li><a href="#features">Features</a></li>
-                  <li><a href="#flow">How It Works</a></li>
-                  <li><a href="#pricing">Pricing</a></li>
+                  <li>
+                    <a href="#flow">How It Works</a>
+                  </li>
+                  <li>
+                    <a href="#roles">Student Workspace</a>
+                  </li>
+                  <li>
+                    <a href="#roles">Admin Studio</a>
+                  </li>
+                  <li>
+                    <a href="#tour">Platform Tour</a>
+                  </li>
                 </ul>
               </div>
 
               <div className="ls-footer-col">
-                <h4>Learning</h4>
+                <h4>Support</h4>
                 <ul>
-                  <li><a href="#courses">Course Catalog</a></li>
-                  <li><a href="#courses">Interactive Quizzes</a></li>
-                  <li><a href="#courses">Track Progress</a></li>
-                </ul>
-              </div>
-
-              <div className="ls-footer-col">
-                <h4>Achievements</h4>
-                <ul>
-                  <li><a href="#courses">Certificates</a></li>
-                  <li><a href="#courses">Learning Progress</a></li>
-                  <li><a href="#courses">Student Profile</a></li>
+                  <li>
+                    <a href="#faq">FAQ</a>
+                  </li>
+                  <li>
+                    <a href="/login">Student Login</a>
+                  </li>
+                  <li>
+                    <a href="/register">Create Account</a>
+                  </li>
+                  <li>
+                    <a href="/login">Admin Login</a>
+                  </li>
                 </ul>
               </div>
             </div>
 
             <div className="ls-copyright">
-              © {new Date().getFullYear()} LearnSpace. All rights reserved.
+              © {new Date().getFullYear()} LearnSpace Learning Platform. All rights
+              reserved.
             </div>
           </div>
         </footer>

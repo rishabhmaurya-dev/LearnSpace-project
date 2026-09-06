@@ -24,9 +24,10 @@ import {
   clearPreview,
 } from "../../../features/admin/certificate/adminCertificateSlice";
 
-import { toast } from "react-hot-toast";
+import { toast } from "react-toastify";
 import styles from "./CapstoneReview.module.css";
 import { GradualSpacing } from "../../../animation/Text";
+import { CapstoneSubmissionsSkeleton } from "../../../components/AppSkeletons";
 const CapstoneReview = () => {
   const dispatch = useDispatch();
 
@@ -43,9 +44,7 @@ const CapstoneReview = () => {
 
   const [searchParams, setSearchParams] = useSearchParams();
 
-  /* -----------------------------------------------------
-     LOCAL STATE
-  ----------------------------------------------------- */
+  // local state
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState(
     (searchParams.get("status") || "").toUpperCase(),
@@ -68,9 +67,7 @@ const CapstoneReview = () => {
     error: certError,
   } = useSelector((state) => state.adminCertificate);
 
-  /* -----------------------------------------------------
-     DEBOUNCE SEARCH
-  ----------------------------------------------------- */
+  // debounce search
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(search);
@@ -79,9 +76,7 @@ const CapstoneReview = () => {
     return () => clearTimeout(timer);
   }, [search]);
 
-  /* -----------------------------------------------------
-     FETCH DATA HELPER
-  ----------------------------------------------------- */
+  // fetch data helper
   const refreshData = () => {
     dispatch(fetchCapstoneStats());
     dispatch(
@@ -98,9 +93,7 @@ const CapstoneReview = () => {
     refreshData();
   }, [dispatch, debouncedSearch, status, page, limit]);
 
-  /* -----------------------------------------------------
-     CLEAR MESSAGES
-  ----------------------------------------------------- */
+  // clear messages
   useEffect(() => {
     if (success) {
       toast.success(message || "Operation successful", { duration: 2500 });
@@ -117,9 +110,7 @@ const CapstoneReview = () => {
     }
   }, [error, dispatch]);
 
-  /* -----------------------------------------------------
-     HANDLERS
-  ----------------------------------------------------- */
+  // handlers
   const openReview = (submission, action) => {
     setReviewTarget(submission);
     setReviewAction(action);
@@ -174,9 +165,7 @@ const CapstoneReview = () => {
     setPage(newPage);
   };
 
-  /* -----------------------------------------------------
-     CERTIFICATE HANDLERS
-  ----------------------------------------------------- */
+  // certificate handlers
   const openCertificate = (submission) => {
     setCertificateTarget(submission);
     dispatch(clearCertificateError());
@@ -276,7 +265,9 @@ const CapstoneReview = () => {
 
       {/* SUBMISSIONS LIST */}
       {loading ? (
-        <div className={styles.stateBox}>Loading submissions...</div>
+        <div className={styles.submissionList}>
+          <CapstoneSubmissionsSkeleton />
+        </div>
       ) : submissions.length === 0 ? (
         <div className={styles.stateBox}>No submissions found</div>
       ) : (

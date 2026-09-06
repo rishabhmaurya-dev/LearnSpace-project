@@ -45,24 +45,24 @@ const StudentActivityChart = () => {
       {
         label: "Progress Metrics",
         data: dataValues,
-        borderColor: "#1976d2",
+        borderColor: "#237a4b",
         borderWidth: 3,
         tension: 0.42,
         fill: true,
         backgroundColor: (context) => {
           const ctx = context.chart.ctx;
           const gradient = ctx.createLinearGradient(0, 0, 0, 240);
-          gradient.addColorStop(0, "rgba(25, 118, 210, 0.28)");
-          gradient.addColorStop(0.65, "rgba(109, 40, 217, 0.08)");
-          gradient.addColorStop(1, "rgba(25, 118, 210, 0.00)");
+          gradient.addColorStop(0, "rgba(35, 122, 75, 0.28)");
+          gradient.addColorStop(0.65, "rgba(79, 181, 138, 0.08)");
+          gradient.addColorStop(1, "rgba(35, 122, 75, 0.00)");
           return gradient;
         },
-        pointBackgroundColor: "#9c27b0",
+        pointBackgroundColor: "#2e8f5b",
         pointBorderColor: "#ffffff",
         pointBorderWidth: 2.5,
         pointRadius: 6,
         pointHoverRadius: 9,
-        pointHoverBackgroundColor: "#7c3aed",
+        pointHoverBackgroundColor: "#174f34",
         pointHoverBorderColor: "#ffffff",
         pointHoverBorderWidth: 3,
       },
@@ -85,12 +85,12 @@ const StudentActivityChart = () => {
         display: false,
       },
       tooltip: {
-        backgroundColor: "rgba(15, 23, 42, 0.92)",
-        titleColor: "#ffffff",
+        backgroundColor: "#ffffff",
+        titleColor: "#17221c",
         titleFont: { size: 12, weight: "700" },
-        bodyColor: "#93c5fd",
+        bodyColor: "#405047",
         bodyFont: { size: 12, weight: "600" },
-        borderColor: "rgba(255, 255, 255, 0.12)",
+        borderColor: "rgba(23, 34, 28, 0.12)",
         borderWidth: 1,
         padding: 12,
         boxPadding: 4,

@@ -1,9 +1,6 @@
-/* =========================================================
-   PAGE CONTAINER & CANVAS
-   ========================================================= */
 .profilePage {
   width: 100%;
-  max-width: 1000px;
+  max-width: 1320px;
   margin: 0 auto;
   padding: var(--page-padding);
   background: var(--bg-primary-radial);
@@ -15,9 +12,6 @@
   gap: 24px;
 }
 
-/* =========================================================
-   TOP PROFILE HERO CARD
-   ========================================================= */
 .heroCard {
   background-color: var(--bg-card);
   border-radius: var(--radius-lg);
@@ -120,9 +114,6 @@
   border-radius: var(--radius-full);
 }
 
-/* =========================================================
-   TWO-COLUMN ASYMMETRIC GRID
-   ========================================================= */
 .profileLayout {
   display: grid;
   grid-template-columns: 1fr;
@@ -147,9 +138,6 @@
   flex-direction: column;
 }
 
-/* =========================================================
-   SHARED PANEL CARDS
-   ========================================================= */
 .panelCard {
   background-color: var(--bg-card);
   border: 1px solid var(--border);
@@ -188,9 +176,6 @@
   margin: 0;
 }
 
-/* =========================================================
-   LEFT SIDEBAR: STATS & SKILLS
-   ========================================================= */
 .statsList {
   display: flex;
   flex-direction: column;
@@ -279,9 +264,6 @@
   line-height: 1.45;
 }
 
-/* =========================================================
-   RIGHT CONTENT: DETAILS VIEW
-   ========================================================= */
 .infoGroup {
   display: flex;
   flex-direction: column;
@@ -371,9 +353,6 @@
   font-style: italic;
 }
 
-/* =========================================================
-   FORM CONTROLS & EDIT MODE
-   ========================================================= */
 .formSection {
   display: flex;
   flex-direction: column;
@@ -474,9 +453,6 @@ textarea.textInput {
   margin-top: 10px;
 }
 
-/* =========================================================
-   BUTTONS
-   ========================================================= */
 .editBtn,
 .saveBtn,
 .cancelBtn {
@@ -529,9 +505,6 @@ textarea.textInput {
   transform: none !important;
 }
 
-/* =========================================================
-   PAGE STATES & LOADERS
-   ========================================================= */
 .profileState {
   display: flex;
   flex-direction: column;

@@ -63,8 +63,12 @@ const StudentSidebar = ({ isOpen, onClose }) => {
       {/* Sidebar Drawer */}
       <aside className={`${styles.sidebar} ${isOpen ? styles.open : ""}`}>
         <div className={styles.logo}>
-          <NavLink to="/student/dashboard" className={styles.logoBrand} onClick={onClose}>
-            <span className={styles.logoMark}>LS</span>
+          <NavLink
+            to="/student/dashboard"
+            className={styles.logoBrand}
+            onClick={onClose}
+          >
+            <img src="/learnspace-logo-1024x1024.png" alt="LearnSpace" className={styles.logoMark} />
             <span className={styles.logoText}>
               LEARN<strong>SPACE</strong>
             </span>

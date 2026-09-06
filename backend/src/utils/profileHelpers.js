@@ -1,4 +1,4 @@
-import User from "../models/User.js";
+import { User } from "../models/User.model.js";
 import bcrypt from "bcryptjs";
 
 // Helper 1: User update with Email & Name duplicate check

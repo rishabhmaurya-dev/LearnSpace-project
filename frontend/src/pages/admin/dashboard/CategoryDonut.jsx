@@ -7,11 +7,11 @@ import styles from "./CategoryDonut.module.css";
 ChartJS.register(ArcElement, Tooltip);
 
 const FALLBACK_PALETTE = [
-  "#2563eb",
-  "#6366f1",
-  "#7c3aed",
-  "#0891b2",
-  "#db2777",
+  "#237a4b",
+  "#2e8f5b",
+  "#4fb58a",
+  "#5cb882",
+  "#8fd4a9",
   "#d97706",
 ];
 
@@ -31,15 +31,15 @@ const CategoryDonut = () => {
   const theme = useMemo(() => {
     const root = getComputedStyle(document.documentElement);
     return {
-      bgCard: root.getPropertyValue("--bg-card").trim() || "#c1d0e0",
+bgCard: root.getPropertyValue("--bg-card").trim() || "#ffffff",
       borderSubtle:
         root.getPropertyValue("--border-subtle").trim() ||
-        "rgba(228, 238, 248, 0.24)",
-      textPrimary: root.getPropertyValue("--text-primary").trim() || "#090e17",
-      textMuted: root.getPropertyValue("--text-muted").trim() || "#475569",
-      slate900: root.getPropertyValue("--slate-900").trim() || "#0f172a",
+        "rgba(223, 232, 226, 0.24)",
+      textPrimary: root.getPropertyValue("--text-primary").trim() || "#17221c",
+      textMuted: root.getPropertyValue("--text-muted").trim() || "#718076",
+      slate900: root.getPropertyValue("--slate-900").trim() || "#0e1510",
       tintHighlight:
-        root.getPropertyValue("--tint-highlight").trim() || "#e4eef8",
+        root.getPropertyValue("--tint-highlight").trim() || "#e8f5ed",
       palette: [
         root.getPropertyValue("--primary").trim() || FALLBACK_PALETTE[0],
         root.getPropertyValue("--secondary").trim() || FALLBACK_PALETTE[1],
@@ -82,10 +82,10 @@ const CategoryDonut = () => {
         display: false,
       },
       tooltip: {
-        backgroundColor: "rgba(15, 23, 42, 0.94)",
-        titleColor: "#dbe6f2",
-        bodyColor: "#9cb0c9",
-        borderColor: "rgba(228, 238, 248, 0.2)",
+        backgroundColor: "#ffffff",
+        titleColor: "#17221c",
+        bodyColor: "#405047",
+        borderColor: "rgba(23, 34, 28, 0.12)",
         borderWidth: 1,
         padding: 12,
         boxWidth: 8,

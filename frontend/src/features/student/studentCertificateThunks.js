@@ -5,10 +5,6 @@ import {
   downloadCertificatePdfApi,
 } from "./studentCertificateApi";
 
-/* =========================================================
-   1. FETCH MY CERTIFICATES
-   ========================================================= */
-
 export const fetchMyCertificates = createAsyncThunk(
   "studentCertificate/fetchMyCertificates",
   async (_, { rejectWithValue }) => {
@@ -21,10 +17,6 @@ export const fetchMyCertificates = createAsyncThunk(
     }
   },
 );
-
-/* =========================================================
-   2. DOWNLOAD CERTIFICATE PDF
-   ========================================================= */
 
 export const downloadCertificatePdf = createAsyncThunk(
   "studentCertificate/downloadCertificatePdf",

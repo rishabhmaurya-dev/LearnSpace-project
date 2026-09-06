@@ -2,10 +2,6 @@ import multer from "multer";
 
 const memoryStorage = multer.memoryStorage();
 
-/* =========================================================
-   COURSE IMAGES
-========================================================= */
-
 const imageFilter = (req, file, cb) => {
   const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/jpg"];
 
@@ -33,10 +29,6 @@ export const uploadCourseImages = multer({
     maxCount: 1,
   },
 ]);
-
-/* =========================================================
-   MARKDOWN FILE
-========================================================= */
 
 const markdownFilter = (req, file, cb) => {
   const allowedTypes = [
@@ -74,10 +66,7 @@ export const uploadMultipleLessonMarkdown = multer({
   },
 }).array("lessonFiles", 50);
 
-/* =========================================================
-   LESSON MARKDOWN + MCQ CSV (combined)
-   Fields: "lessonFile" (.md) + "lessonMcqCsv" (.csv)
-========================================================= */
+// fields: "lessonFile" (.md) + "lessonMcqCsv" (.csv)
 
 export const uploadLessonWithMcq = multer({
   storage: memoryStorage,
@@ -110,10 +99,6 @@ export const uploadLessonWithMcq = multer({
   { name: "lessonMcqCsv", maxCount: 1 },
 ]);
 
-/* =========================================================
-   CSV FILE
-========================================================= */
-
 const csvFilter = (req, file, cb) => {
   const isCsv = file.originalname.toLowerCase().endsWith(".csv");
 
@@ -134,10 +119,7 @@ export const uploadCsv = multer({
   },
 }).single("csvFile");
 
-/* =========================================================
-   COMPANY PROFILE FILES
-   Fields: "logo" (image) + "document" (image/pdf)
-========================================================= */
+// fields: "logo" (image) + "document" (image/pdf)
 
 const companyDocumentFilter = (req, file, cb) => {
   const allowedImages = ["image/jpeg", "image/png", "image/webp", "image/jpg"];
@@ -190,10 +172,7 @@ export const uploadCompanyProfileFiles = multer({
   { name: "document", maxCount: 1 },
 ]);
 
-/* =========================================================
-   STUDENT PROFILE FILES
-   Field: "avatar" (image)
-========================================================= */
+// field: "avatar" (image)
 
 export const uploadStudentFiles = multer({
   storage: memoryStorage,

@@ -9,9 +9,7 @@ const isValidObjectId = (id) => {
   return mongoose.Types.ObjectId.isValid(id);
 };
 
-/* =========================================================
-   HELPERS
-========================================================= */
+// helpers
 
 const parseLessonMcqCsv = (csvText) => {
   const records = parse(csvText, {
@@ -72,11 +70,6 @@ const parseLessonMcqCsv = (csvText) => {
 
   return questions;
 };
-
-/* =========================================================
-   UPLOAD LESSON MARKDOWN
-   STEP 2
-========================================================= */
 
 export const uploadLessonMarkdown = async (req, res) => {
   try {
@@ -163,10 +156,7 @@ export const uploadLessonMarkdown = async (req, res) => {
   }
 };
 
-/* =========================================================
-   UPLOAD LESSON MARKDOWN + MCQ CSV (combined)
-   STEP 2 — single request creates lesson AND its MCQs
-========================================================= */
+// upload markdown + mcq csv in one request (creates lesson and its mcqs)
 
 export const uploadLessonWithMcq = async (req, res) => {
   try {
@@ -287,10 +277,6 @@ export const uploadLessonWithMcq = async (req, res) => {
   }
 };
 
-/* =========================================================
-   UPLOAD MULTIPLE MARKDOWN FILES
-========================================================= */
-
 export const uploadMultipleLessonMarkdown = async (req, res) => {
   try {
     const { courseId } = req.params;
@@ -382,10 +368,6 @@ export const uploadMultipleLessonMarkdown = async (req, res) => {
   }
 };
 
-/* =========================================================
-   GET COURSE LESSONS
-========================================================= */
-
 export const getCourseLessons = async (req, res) => {
   try {
     const { courseId } = req.params;
@@ -449,10 +431,6 @@ export const getCourseLessons = async (req, res) => {
     });
   }
 };
-
-/* =========================================================
-   DELETE LESSON
-========================================================= */
 
 export const deleteLesson = async (req, res) => {
   try {

@@ -59,10 +59,6 @@ const authSlice = createSlice({
   },
 
   extraReducers: (builder) => {
-    // =========================================
-    // REGISTER
-    // =========================================
-
     builder
       .addCase(registerUser.pending, (state) => {
         state.loading = true;
@@ -82,10 +78,6 @@ const authSlice = createSlice({
         state.error = action.payload;
         state.success = false;
       });
-
-    // =========================================
-    // LOGIN
-    // =========================================
 
     builder
       .addCase(loginUser.pending, (state) => {
@@ -124,18 +116,12 @@ const authSlice = createSlice({
         state.success = false;
       });
 
-    // =========================================
-    // REFRESH
-    // =========================================
-
     builder
       .addCase(refreshUser.pending, (state) => {
         state.rehydrating = true;
       })
 
       .addCase(refreshUser.fulfilled, (state, action) => {
-        console.log("🔥 REDUX REFRESH FULFILLED:", action.payload);
-
         state.rehydrating = false;
 
         state.user = action.payload.user;
@@ -145,28 +131,21 @@ const authSlice = createSlice({
         state.isAuthenticated = true;
 
         state.error = null;
-
-        console.log("🔥 AUTH STATE:", {
-          isAuthenticated: state.isAuthenticated,
-          rehydrating: state.rehydrating,
-          hasToken: !!state.accessToken,
-          user: state.user,
-        });
       })
 
-      .addCase(refreshUser.rejected, (state) => {
+      .addCase(refreshUser.rejected, (state, action) => {
         state.rehydrating = false;
 
-        state.user = null;
+        const status = action.payload?.status || 0;
 
-        state.accessToken = null;
-
-        state.isAuthenticated = false;
+        // Only clear auth on genuine 401 (session expired)
+        // Network/proxy errors (status 0, 502, 503, etc.) keep existing auth
+        if (status === 401) {
+          state.user = null;
+          state.accessToken = null;
+          state.isAuthenticated = false;
+        }
       });
-
-    // =========================================
-    // LOGOUT
-    // =========================================
 
     builder
       .addCase(logoutUser.pending, (state) => {
@@ -195,10 +174,6 @@ const authSlice = createSlice({
         state.error = action.payload;
       });
 
-    // =========================================
-    // LOGOUT ALL
-    // =========================================
-
     builder
       .addCase(logoutAllDevices.pending, (state) => {
         state.loading = true;
@@ -226,10 +201,6 @@ const authSlice = createSlice({
         state.error = action.payload;
       });
 
-    // =========================================
-    // FORGOT PASSWORD
-    // =========================================
-
     builder
       .addCase(forgotPassword.pending, (state) => {
         state.loading = true;
@@ -256,10 +227,6 @@ const authSlice = createSlice({
 
         state.error = action.payload;
       });
-
-    // =========================================
-    // RESET PASSWORD
-    // =========================================
 
     builder
       .addCase(resetPassword.pending, (state) => {

@@ -1,9 +1,5 @@
 import api from "../../services/axios";
 
-/* =========================================================
-   STUDENT COURSE API
-========================================================= */
-
 export const getPublishedCoursesApi = async () => {
   const response = await api.get("/student/courses");
   return response.data;
@@ -24,7 +20,7 @@ export const getCourseLearningDataApi = async (courseId) => {
   return response.data;
 };
 
-/* ---------------- Lesson Quiz ---------------- */
+// lesson quiz
 
 export const getLessonQuizApi = async (lessonId) => {
   const response = await api.get(`/student/lessons/${lessonId}/quiz`);
@@ -38,7 +34,7 @@ export const submitLessonQuizApi = async (lessonId, answers) => {
   return response.data;
 };
 
-/* ---------------- Final Quiz ---------------- */
+// final quiz
 
 export const getFinalQuizApi = async (courseId) => {
   const response = await api.get(`/student/courses/${courseId}/quiz`);
@@ -52,7 +48,7 @@ export const submitFinalQuizApi = async (courseId, answers) => {
   return response.data;
 };
 
-/* ---------------- Capstone ---------------- */
+// capstone
 
 export const getMyCapstoneSubmissionApi = async (courseId) => {
   const response = await api.get(`/student/courses/${courseId}/capstone`);

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 
 import {
   fetchCourseLearningData,
@@ -35,18 +35,13 @@ const FinalAssessment = () => {
     message,
   } = useSelector((state) => state.studentCourse);
 
-  /* =====================================================
-     LOCAL STATE
-  ===================================================== */
   const [finalAnswers, setFinalAnswers] = useState({});
   const [capForm, setCapForm] = useState({
     githubRepoUrl: "",
     liveDemoUrl: "",
   });
 
-  /* =====================================================
-     LOAD DATA
-  ===================================================== */
+  // load course data
   useEffect(() => {
     if (!courseId) return;
 
@@ -58,9 +53,7 @@ const FinalAssessment = () => {
     };
   }, [dispatch, courseId]);
 
-  /* =====================================================
-     NOTIFICATIONS (SUCCESS & ERROR)
-  ===================================================== */
+  // success & error notifications
   useEffect(() => {
     if (!success) return;
 
@@ -87,9 +80,7 @@ const FinalAssessment = () => {
     return () => clearTimeout(timer);
   }, [error, dispatch]);
 
-  /* =====================================================
-     FINAL QUIZ HANDLERS
-  ===================================================== */
+  // final quiz handlers
   const openFinalQuiz = () => {
     setFinalAnswers({});
     dispatch(fetchFinalQuiz(courseId));
@@ -103,7 +94,7 @@ const FinalAssessment = () => {
   };
 
   const handleSubmitFinalQuiz = () => {
-    if (!finalQuiz) return;
+    if (!finalQuiz || submitting || finalQuizPassed) return;
 
     const answers = Object.entries(finalAnswers).map(
       ([questionId, selectedIndex]) => ({
@@ -121,14 +112,14 @@ const FinalAssessment = () => {
   };
 
   const handleRetakeFinalQuiz = () => {
+    if (submitting || finalQuizPassed) return;
+
     dispatch(clearFinalQuiz());
     setFinalAnswers({});
     dispatch(fetchFinalQuiz(courseId));
   };
 
-  /* =====================================================
-     CAPSTONE HANDLERS
-  ===================================================== */
+  // capstone handlers
   const handleCapstoneChange = (event) => {
     const { name, value } = event.target;
     setCapForm((prev) => ({
@@ -152,9 +143,7 @@ const FinalAssessment = () => {
     );
   };
 
-  /* =====================================================
-     HELPER
-  ===================================================== */
+  // helper
   const formatDate = (value) => {
     if (!value) return "—";
     const date = new Date(value);
@@ -167,9 +156,7 @@ const FinalAssessment = () => {
         });
   };
 
-  /* =====================================================
-     LOADING & NOT FOUND STATES
-  ===================================================== */
+  // loading & not found states
   if (learningLoading && !learningData) {
     return (
       <div className={styles.pageState}>
@@ -190,9 +177,7 @@ const FinalAssessment = () => {
     );
   }
 
-  /* =====================================================
-     DERIVED DYNAMIC DATA (ORDER FIXED TO PREVENT CRASH)
-  ===================================================== */
+  // derived dynamic data (fixed order prevents crash)
   const course = learningData.course || {};
   const progress = learningData.progress || {};
   const lessons = Array.isArray(learningData.lessons)
@@ -211,7 +196,7 @@ const FinalAssessment = () => {
 
   const passingPercentage = Number(course.passingPercentage || 0);
 
-  // Status & Lock Flags (Defined FIRST before stat cards/checklists)
+  // status & lock flags (set before stat cards/checklists)
   const courseCompleted =
     Boolean(progress.isCompleted) ||
     Number(progress.progressPercentage || 0) >= 100;
@@ -223,9 +208,7 @@ const FinalAssessment = () => {
   const capstoneRejected = capstoneStatus === "REJECTED";
   const certificateIssued = Boolean(capstoneSubmission?.certificateIssued);
 
-  /* =====================================================
-     STATS STRIP & CHECKLIST DATA (NOW SAFE)
-  ===================================================== */
+  // stats strip & checklist data
   const statCards = [
     {
       icon: "📚",
@@ -290,7 +273,6 @@ const FinalAssessment = () => {
 
   return (
     <div className={styles.finalAssessmentPage}>
-      {/* ================= HEADER ================= */}
       <header className={styles.assessmentHeader}>
         <div>
           <span className={styles.eyebrow}>COURSE COMPLETION</span>
@@ -324,7 +306,6 @@ const FinalAssessment = () => {
         </Link>
       </header>
 
-      {/* ================= LOCK OR ACTIVE SECTIONS ================= */}
       {!courseCompleted ? (
         <section className={styles.lockedCard}>
           <div className={styles.lockIcon}>🔒</div>
@@ -342,7 +323,6 @@ const FinalAssessment = () => {
         </section>
       ) : (
         <>
-          {/* STATS STRIP */}
           <section className={styles.statsStrip}>
             {statCards.map((stat) => (
               <div key={stat.label} className={styles.statCard}>
@@ -367,7 +347,7 @@ const FinalAssessment = () => {
             ))}
           </section>
 
-          {/* CERTIFICATION READINESS */}
+          {/* certification readiness */}
           <section className={styles.assessmentCard}>
             <div className={styles.cardHeader}>
               <div>
@@ -422,7 +402,7 @@ const FinalAssessment = () => {
             )}
           </section>
 
-          {/* FINAL QUIZ */}
+          {/* final quiz */}
           <section className={styles.assessmentCard}>
             <div className={styles.cardHeader}>
               <div>
@@ -440,12 +420,12 @@ const FinalAssessment = () => {
               )}
             </div>
 
-            {/* QUIZ TOGGLE BUTTON */}
+            {/* quiz toggle button */}
             {!finalQuiz || finalQuiz.course?._id !== courseId ? (
               <button
                 type="button"
                 className={styles.primaryButton}
-                disabled={capstoneApproved}
+                disabled={capstoneApproved || finalQuizPassed || submitting}
                 onClick={openFinalQuiz}
               >
                 {finalQuizPassed ? "Retake Final Quiz" : "Start Final Quiz"} →
@@ -460,7 +440,7 @@ const FinalAssessment = () => {
               </button>
             )}
 
-            {/* QUIZ FORM VIEW */}
+            {/* quiz form view */}
             {finalQuiz && finalQuiz.course?._id === courseId && (
               <FinalQuizView
                 quiz={finalQuiz}
@@ -475,7 +455,7 @@ const FinalAssessment = () => {
             )}
           </section>
 
-          {/* CAPSTONE PROJECT */}
+          {/* capstone project */}
           <section className={styles.assessmentCard}>
             <div className={styles.cardHeader}>
               <div>
@@ -511,7 +491,7 @@ const FinalAssessment = () => {
               )}
             </div>
 
-            {/* PROJECT BRIEF */}
+            {/* project brief */}
             {(course.capstoneProject?.description ||
               course.capstoneProject?.submissionRequirements) && (
               <div className={styles.projectBrief}>
@@ -530,7 +510,7 @@ const FinalAssessment = () => {
               </div>
             )}
 
-            {/* CAPSTONE FORM / LOCKED */}
+            {/* capstone form / locked */}
             {!capstoneUnlocked ? (
               <div className={styles.capstoneLocked}>
                 <div>🔒</div>
@@ -584,7 +564,7 @@ const FinalAssessment = () => {
               </div>
             )}
 
-            {/* SUBMISSION SUMMARY */}
+            {/* submission summary */}
             {capstoneSubmission && (
               <div className={styles.submissionSummary}>
                 <h3>📤 Submission Details</h3>
@@ -648,7 +628,7 @@ const FinalAssessment = () => {
             )}
           </section>
 
-          {/* LESSON PERFORMANCE RECAP */}
+          {/* lesson performance recap */}
           {lessons.length > 0 && (
             <section className={styles.assessmentCard}>
               <div className={styles.cardHeader}>
@@ -720,9 +700,7 @@ const FinalAssessment = () => {
   );
 };
 
-/* =====================================================
-   FINAL QUIZ COMPONENT
-===================================================== */
+/* final quiz view */
 const FinalQuizView = ({
   quiz,
   answers,

@@ -81,10 +81,6 @@ const CourseLearn = () => {
 
   return (
     <div className={styles.learnPage}>
-      {/* =========================
-          COURSE HEADER
-      ========================= */}
-
       <header className={styles.learnHeader}>
         <div className={styles.headerContent}>
           <div className={styles.headerText}>
@@ -124,10 +120,6 @@ const CourseLearn = () => {
           </div>
         </div>
       </header>
-
-      {/* =========================
-          PROGRESS
-      ========================= */}
 
       <section className={styles.progressCard}>
         <div className={styles.progressTop}>
@@ -199,10 +191,6 @@ const CourseLearn = () => {
         </div>
       </section>
 
-      {/* =========================
-          LESSONS
-      ========================= */}
-
       <section className={styles.lessonsSection}>
         <div className={styles.lessonsHeader}>
           <div>
@@ -227,14 +215,12 @@ const CourseLearn = () => {
                   isLocked ? styles.lessonLocked : ""
                 }`}
               >
-                {/* NUMBER */}
-
+                {/* number */}
                 <div className={styles.lessonNumber}>
                   {lesson.isCompleted ? "✓" : lesson.lessonNumber}
                 </div>
 
-                {/* INFO */}
-
+                {/* info */}
                 <div className={styles.lessonInfo}>
                   <h3>
                     {isLocked && "🔒 "}
@@ -275,8 +261,7 @@ const CourseLearn = () => {
                   )}
                 </div>
 
-                {/* BUTTON */}
-
+                {/* button */}
                 {lesson.isUnlocked ? (
                   <Link
                     to={`/student/courses/${courseId}/learn/${lesson._id}`}
@@ -294,10 +279,6 @@ const CourseLearn = () => {
           })}
         </div>
       </section>
-
-      {/* =========================
-          FINAL ASSESSMENT
-      ========================= */}
 
       <section
         className={`${styles.finalCard} ${

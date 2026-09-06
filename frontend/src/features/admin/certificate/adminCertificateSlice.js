@@ -8,21 +8,9 @@ import {
 } from "./adminCertificateThunks";
 
 const initialState = {
-  /* =====================================================
-     CERTIFICATES LIST
-     ===================================================== */
-
   certificates: [],
 
-  /* =====================================================
-     PREVIEW
-     ===================================================== */
-
   preview: null,
-
-  /* =====================================================
-     LOADING STATES
-     ===================================================== */
 
   loading: false,
 
@@ -31,10 +19,6 @@ const initialState = {
   sending: false,
 
   deletingId: null,
-
-  /* =====================================================
-     ERROR / SUCCESS
-     ===================================================== */
 
   error: null,
 
@@ -68,12 +52,7 @@ const adminCertificateSlice = createSlice({
   },
 
   extraReducers: (builder) => {
-    /* =====================================================
-       LIST CERTIFICATES
-       ===================================================== */
-
     builder
-
       .addCase(fetchCertificates.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -93,12 +72,7 @@ const adminCertificateSlice = createSlice({
         state.error = action.payload || "Failed to fetch certificates";
       });
 
-    /* =====================================================
-       PREVIEW CERTIFICATE
-       ===================================================== */
-
     builder
-
       .addCase(previewCertificate.pending, (state) => {
         state.previewLoading = true;
         state.error = null;
@@ -126,12 +100,7 @@ const adminCertificateSlice = createSlice({
         state.error = action.payload || "Failed to preview certificate";
       });
 
-    /* =====================================================
-       SEND CERTIFICATE
-       ===================================================== */
-
     builder
-
       .addCase(sendCertificate.pending, (state) => {
         state.sending = true;
         state.success = false;
@@ -155,12 +124,7 @@ const adminCertificateSlice = createSlice({
         state.error = action.payload || "Failed to send certificate";
       });
 
-    /* =====================================================
-       DELETE CERTIFICATE
-       ===================================================== */
-
     builder
-
       .addCase(deleteCertificate.pending, (state, action) => {
         state.deletingId = action.meta.arg;
         state.error = null;

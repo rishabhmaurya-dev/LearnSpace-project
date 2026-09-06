@@ -6,13 +6,6 @@ const ProtectedRoute = () => {
     (state) => state.auth,
   );
 
-  console.log("🛡️ PROTECTED ROUTE:", {
-    isAuthenticated,
-    rehydrating,
-    hasToken: !!accessToken,
-    user,
-  });
-
   if (rehydrating) {
     return;
   }

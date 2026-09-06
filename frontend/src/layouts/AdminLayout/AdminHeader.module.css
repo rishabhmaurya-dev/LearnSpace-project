@@ -1,8 +1,3 @@
-/* ==========================================================================
-   ADMIN HEADER — Bold Typography Design System
-   Clean. Minimal. Sharp edges.
-   ========================================================================== */
-
 .header {
   position: sticky;
   top: 0;
@@ -11,8 +6,13 @@
   height: 72px;
   width: 100%;
   padding: 0 24px;
-  background: var(--background);
-  border-bottom: 1px solid var(--border);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.82),
+    rgba(255, 255, 255, 0.68)
+  );
+  backdrop-filter: var(--glass-blur-md);
+  border-bottom: 1px solid var(--admin-panel-border);
   box-sizing: border-box;
   display: flex;
   align-items: center;
@@ -20,9 +20,7 @@
   gap: 16px;
 }
 
-/* =========================================================
-   LEFT: HAMBURGER + TITLE
-   ========================================================= */
+/* left: hamburger + title */
 .leftContainer {
   display: flex;
   align-items: center;
@@ -36,12 +34,18 @@
   justify-content: center;
   width: 38px;
   height: 38px;
-  background: var(--muted);
-  border: 1px solid var(--border);
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-subtle);
   color: var(--foreground);
   font-size: 18px;
   cursor: pointer;
-  transition: all 150ms cubic-bezier(0.25, 0, 0, 1);
+  box-shadow: var(--shadow-convex-xs);
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast),
+    background-color var(--transition-fast);
   flex-shrink: 0;
   margin-right: 4px;
 }
@@ -49,6 +53,8 @@
 .menuToggleBtn:hover {
   color: var(--accent);
   border-color: var(--accent);
+  background: var(--bg-card);
+  box-shadow: var(--shadow-convex-sm);
 }
 
 .menuToggleBtn:active {
@@ -85,28 +91,35 @@
   text-overflow: ellipsis;
 }
 
-/* =========================================================
-   RIGHT: USER PROFILE
-   ========================================================= */
+/* right: user profile */
 .profile {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 6px 16px 6px 8px;
-  border: 1px solid var(--border);
+  padding: 8px 16px 8px 10px;
+  border: 1px solid var(--admin-panel-border);
+  background: var(--bg-surface-glass);
+  backdrop-filter: var(--glass-blur-sm);
   cursor: default;
-  transition: border-color 150ms cubic-bezier(0.25, 0, 0, 1);
+  box-shadow: var(--shadow-convex-xs);
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast),
+    border-color var(--transition-fast),
+    background-color var(--transition-fast);
   flex-shrink: 0;
 }
 
 .profile:hover {
   border-color: var(--accent);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-convex-sm);
 }
 
 .avatar {
   width: 32px;
   height: 32px;
-  background: var(--accent);
+  background: var(--brand-gradient);
   color: var(--accent-foreground);
   font-family: var(--font-heading);
   font-size: 13px;
@@ -115,6 +128,7 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  box-shadow: var(--shadow-primary);
 }
 
 .userInfo {
@@ -145,9 +159,7 @@
   max-width: 140px;
 }
 
-/* =========================================================
-   RESPONSIVE
-   ========================================================= */
+/* responsive */
 @media (max-width: 768px) {
   .header {
     padding: 0 16px;

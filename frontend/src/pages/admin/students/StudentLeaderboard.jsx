@@ -17,9 +17,7 @@ const StudentLeaderboard = () => {
   const { leaderboard, leaderboardPagination, leaderboardLoading, error } =
     useSelector((state) => state.adminStudent);
 
-  /* -----------------------------------------------------
-      LOCAL STATE
-  ----------------------------------------------------- */
+  /* local state */
   const [search, setSearch] = useState("");
   const [skill, setSkill] = useState("");
   const [limit, setLimit] = useState(20);
@@ -28,9 +26,7 @@ const StudentLeaderboard = () => {
 
   const hasFilters = Boolean(search || skill);
 
-  /* -----------------------------------------------------
-      DEBOUNCE SEARCH
-  ----------------------------------------------------- */
+  /* debounce search */
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(search);
@@ -39,9 +35,7 @@ const StudentLeaderboard = () => {
     return () => clearTimeout(timer);
   }, [search]);
 
-  /* -----------------------------------------------------
-      FETCH LEADERBOARD
-  ----------------------------------------------------- */
+  /* fetch leaderboard */
   useEffect(() => {
     dispatch(
       fetchStudentLeaderboard({
@@ -71,9 +65,7 @@ const StudentLeaderboard = () => {
   const openStudent = (student) =>
     navigate(`/admin/students/${student.studentId || student._id}`);
 
-  /* -----------------------------------------------------
-      PODIUM — top 3 (only on first page without filters)
-  ----------------------------------------------------- */
+  /* podium — top 3 (only on first page without filters) */
 
   const showPodium = !hasFilters && page === 1 && leaderboard.length > 0;
   const podium = leaderboard.slice(0, 3);
@@ -81,9 +73,7 @@ const StudentLeaderboard = () => {
 
   return (
     <div className={styles.container}>
-      {/* =========================================
-          HERO BANNER
-      ========================================= */}
+      {/* hero banner */}
 
       <section className={styles.heroBanner}>
         <div className={styles.heroTrophy}>🏆</div>
@@ -121,9 +111,7 @@ const StudentLeaderboard = () => {
         </div>
       </section>
 
-      {/* =========================================
-          FILTERS BAR
-      ========================================= */}
+      {/* filters bar */}
 
       <div className={styles.filtersCard}>
         <div className={styles.searchBox}>
@@ -184,9 +172,7 @@ const StudentLeaderboard = () => {
         </select>
       </div>
 
-      {/* =========================================
-          PODIUM — TOP 3
-      ========================================= */}
+      {/* podium — top 3 */}
 
       {showPodium && (
         <div className={styles.podiumGrid}>
@@ -227,9 +213,7 @@ const StudentLeaderboard = () => {
         </div>
       )}
 
-      {/* =========================================
-          LEADERBOARD CARDS GRID
-      ========================================= */}
+      {/* leaderboard cards grid */}
 
       {leaderboardLoading ? (
         <CardGridSkeleton count={6} />
@@ -347,9 +331,7 @@ const StudentLeaderboard = () => {
         </div>
       )}
 
-      {/* =========================================
-          PAGINATION
-      ========================================= */}
+      {/* pagination */}
 
       {leaderboard.length > 0 && !leaderboardLoading && (
         <div className={styles.paginationCard}>

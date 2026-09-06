@@ -1,9 +1,5 @@
 import api from "../../services/axios";
 
-/* =========================================================
-   STUDENT PROFILE API
-========================================================= */
-
 export const getStudentProfileApi = async () => {
   const response = await api.get("/student/profile/me");
   return response.data;
@@ -15,10 +11,6 @@ export const updateStudentProfileApi = async (formData) => {
   });
   return response.data;
 };
-
-/* =========================================================
-   STUDENT DASHBOARD API
-========================================================= */
 
 export const getStudentDashboardApi = async () => {
   const response = await api.get("/student/dashboard");

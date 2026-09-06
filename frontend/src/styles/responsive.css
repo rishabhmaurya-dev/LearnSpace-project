@@ -1,14 +1,4 @@
-/* =========================================
-   RESPONSIVE DESIGN SYSTEM
-   BOLD TYPOGRAPHY
-========================================= */
-
-
-/* =========================================
-   TABLET
-   <= 1024px
-========================================= */
-
+/* tablet: <= 1024px */
 @media (max-width: 1024px) {
   :root {
     --sidebar-width: 240px;
@@ -24,12 +14,7 @@
   }
 }
 
-
-/* =========================================
-   MOBILE
-   <= 768px
-========================================= */
-
+/* mobile: <= 768px */
 @media (max-width: 768px) {
   :root {
     --sidebar-width: 0px;
@@ -68,12 +53,7 @@
   }
 }
 
-
-/* =========================================
-   SMALL MOBILE
-   <= 480px
-========================================= */
-
+/* small mobile: <= 480px */
 @media (max-width: 480px) {
   :root {
     --page-padding: 20px;
@@ -92,11 +72,7 @@
   }
 }
 
-
-/* =========================================
-   VERY SMALL DEVICES
-========================================= */
-
+/* very small devices */
 @media (max-width: 360px) {
   :root {
     --page-padding: 16px;
@@ -107,22 +83,14 @@
   }
 }
 
-
-/* =========================================
-   LARGE DESKTOP
-========================================= */
-
+/* large desktop */
 @media (min-width: 1280px) {
   :root {
     --page-padding: 64px;
   }
 }
 
-
-/* =========================================
-   TOUCH DEVICES
-========================================= */
-
+/* touch devices */
 @media (hover: none) {
   button,
   a {
@@ -130,11 +98,7 @@
   }
 }
 
-
-/* =========================================
-   REDUCED MOTION
-========================================= */
-
+/* reduced motion */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

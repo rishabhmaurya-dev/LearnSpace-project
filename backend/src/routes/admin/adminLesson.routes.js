@@ -20,20 +20,12 @@ const router = express.Router();
 
 const adminOnly = [protect, authorize("ADMIN")];
 
-/* ==============================
-   SINGLE LESSON
-============================== */
-
 router.post(
   "/course/:courseId/markdown",
   ...adminOnly,
   uploadMarkdownFile,
   uploadLessonMarkdown,
 );
-
-/* ==============================
-   SINGLE LESSON + MCQ CSV (combined)
-============================== */
 
 router.post(
   "/course/:courseId/markdown-with-mcq",
@@ -42,10 +34,6 @@ router.post(
   uploadLessonWithMcq,
 );
 
-/* ==============================
-   MULTIPLE LESSONS
-============================== */
-
 router.post(
   "/course/:courseId/markdown/bulk",
   ...adminOnly,
@@ -53,15 +41,7 @@ router.post(
   uploadMultipleLessonMarkdown,
 );
 
-/* ==============================
-   GET LESSONS
-============================== */
-
 router.get("/course/:courseId", ...adminOnly, getCourseLessons);
-
-/* ==============================
-   DELETE LESSON
-============================== */
 
 router.delete("/:lessonId", ...adminOnly, deleteLesson);
 

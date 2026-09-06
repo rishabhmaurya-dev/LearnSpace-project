@@ -14,10 +14,6 @@ const router = express.Router();
 
 const adminOnly = [protect, authorize("ADMIN")];
 
-/* ==============================
-   UPLOAD CSV
-============================== */
-
 router.post(
   "/lesson/:lessonId/csv",
   ...adminOnly,
@@ -25,15 +21,7 @@ router.post(
   uploadLessonMcqCsv,
 );
 
-/* ==============================
-   GET MCQs
-============================== */
-
 router.get("/lesson/:lessonId", ...adminOnly, getLessonMcqs);
-
-/* ==============================
-   DELETE MCQs
-============================== */
 
 router.delete("/lesson/:lessonId", ...adminOnly, deleteLessonMcqs);
 

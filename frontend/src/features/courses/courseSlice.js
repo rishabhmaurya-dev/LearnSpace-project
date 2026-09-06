@@ -21,10 +21,6 @@ import {
 } from "./courseThunks";
 
 const initialState = {
-  /* =====================================================
-     DATA
-     ===================================================== */
-
   courses: [],
 
   selectedCourse: null,
@@ -40,10 +36,6 @@ const initialState = {
     totalPages: 1,
   },
 
-  /* =====================================================
-     LOADING STATES
-     ===================================================== */
-
   loading: false,
 
   detailsLoading: false,
@@ -53,10 +45,6 @@ const initialState = {
   operationLoading: false,
 
   uploadLoading: false,
-
-  /* =====================================================
-     ERROR / SUCCESS
-     ===================================================== */
 
   error: null,
 
@@ -107,10 +95,6 @@ const courseSlice = createSlice({
   },
 
   extraReducers: (builder) => {
-    /* =====================================================
-       FETCH ALL COURSES
-       ===================================================== */
-
     builder
       .addCase(fetchAdminCourses.pending, (state) => {
         state.loading = true;
@@ -133,10 +117,6 @@ const courseSlice = createSlice({
 
         state.error = action.payload || "Failed to fetch courses";
       });
-
-    /* =====================================================
-       FETCH COURSE DETAILS
-       ===================================================== */
 
     builder
       .addCase(fetchAdminCourseDetails.pending, (state) => {
@@ -162,10 +142,6 @@ const courseSlice = createSlice({
 
         state.error = action.payload || "Failed to fetch course details";
       });
-
-    /* =====================================================
-       CREATE COURSE
-       ===================================================== */
 
     builder
       .addCase(createAdminCourse.pending, (state) => {
@@ -194,10 +170,6 @@ const courseSlice = createSlice({
         state.error = action.payload || "Failed to create course";
       });
 
-    /* =====================================================
-       UPDATE COURSE
-       ===================================================== */
-
     builder
       .addCase(updateAdminCourse.pending, (state) => {
         state.operationLoading = true;
@@ -224,10 +196,6 @@ const courseSlice = createSlice({
 
         state.error = action.payload || "Failed to update course";
       });
-
-    /* =====================================================
-       UPDATE CAPSTONE
-       ===================================================== */
 
     builder
       .addCase(updateCourseCapstone.pending, (state) => {
@@ -259,10 +227,6 @@ const courseSlice = createSlice({
         state.error = action.payload || "Failed to update capstone";
       });
 
-    /* =====================================================
-       DELETE COURSE
-       ===================================================== */
-
     builder
       .addCase(deleteAdminCourse.pending, (state) => {
         state.operationLoading = true;
@@ -287,10 +251,6 @@ const courseSlice = createSlice({
 
         state.error = action.payload || "Failed to delete course";
       });
-
-    /* =====================================================
-       PUBLISH COURSE
-       ===================================================== */
 
     builder
       .addCase(publishAdminCourse.pending, (state) => {
@@ -328,10 +288,6 @@ const courseSlice = createSlice({
         state.error = action.payload || "Failed to publish course";
       });
 
-    /* =====================================================
-       UNPUBLISH COURSE
-       ===================================================== */
-
     builder
       .addCase(unpublishAdminCourse.pending, (state) => {
         state.operationLoading = true;
@@ -368,10 +324,6 @@ const courseSlice = createSlice({
         state.error = action.payload || "Failed to unpublish course";
       });
 
-    /* =====================================================
-       FETCH LESSONS
-       ===================================================== */
-
     builder
       .addCase(fetchCourseLessons.pending, (state) => {
         state.lessonsLoading = true;
@@ -392,10 +344,6 @@ const courseSlice = createSlice({
 
         state.error = action.payload || "Failed to fetch lessons";
       });
-
-    /* =====================================================
-       UPLOAD SINGLE LESSON MARKDOWN
-       ===================================================== */
 
     builder
       .addCase(uploadLessonMarkdown.pending, (state) => {
@@ -426,10 +374,6 @@ const courseSlice = createSlice({
 
         state.error = action.payload || "Failed to upload lesson";
       });
-
-    /* =====================================================
-       UPLOAD LESSON MARKDOWN + MCQ CSV (combined)
-       ===================================================== */
 
     builder
       .addCase(uploadLessonWithMcq.pending, (state) => {
@@ -464,10 +408,6 @@ const courseSlice = createSlice({
         state.error = action.payload || "Failed to upload lesson with MCQs";
       });
 
-    /* =====================================================
-       UPLOAD MULTIPLE LESSON MARKDOWN FILES
-       ===================================================== */
-
     builder
       .addCase(uploadMultipleLessons.pending, (state) => {
         state.uploadLoading = true;
@@ -500,10 +440,6 @@ const courseSlice = createSlice({
         state.error = action.payload || "Failed to upload lessons";
       });
 
-    /* =====================================================
-       DELETE LESSON
-       ===================================================== */
-
     builder
       .addCase(deleteLesson.pending, (state) => {
         state.operationLoading = true;
@@ -535,10 +471,6 @@ const courseSlice = createSlice({
 
         state.error = action.payload || "Failed to delete lesson";
       });
-
-    /* =====================================================
-       UPLOAD LESSON MCQ CSV
-       ===================================================== */
 
     builder
       .addCase(uploadLessonMcqCsv.pending, (state) => {
@@ -574,10 +506,6 @@ const courseSlice = createSlice({
         state.error = action.payload || "Failed to upload lesson MCQs";
       });
 
-    /* =====================================================
-       FETCH LESSON MCQs
-       ===================================================== */
-
     builder
       .addCase(fetchLessonMcqs.pending, (state) => {
         state.lessonsLoading = true;
@@ -598,10 +526,6 @@ const courseSlice = createSlice({
 
         state.error = action.payload || "Failed to fetch lesson MCQs";
       });
-
-    /* =====================================================
-       DELETE LESSON MCQs
-       ===================================================== */
 
     builder
       .addCase(deleteLessonMcqs.pending, (state) => {
@@ -636,10 +560,6 @@ const courseSlice = createSlice({
 
         state.error = action.payload || "Failed to delete lesson MCQs";
       });
-
-    /* =====================================================
-       UPLOAD FINAL QUIZ CSV
-       ===================================================== */
 
     builder
       .addCase(uploadFinalQuizCsv.pending, (state) => {

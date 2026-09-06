@@ -46,13 +46,13 @@ export const refreshUser = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const data = await refreshApi();
-      console.log("✅ REFRESH RESPONSE:", data);
 
       return data;
     } catch (error) {
-      return rejectWithValue(
-        error.response?.data?.message || "Session expired",
-      );
+      return rejectWithValue({
+        message: error.response?.data?.message || "Session expired",
+        status: error.response?.status || 0,
+      });
     }
   },
 );

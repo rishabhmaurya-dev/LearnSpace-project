@@ -19,10 +19,6 @@ const router = express.Router();
 
 const adminOnly = [protect, authorize("ADMIN")];
 
-/* ==============================
-   COURSE
-============================== */
-
 router.post("/", ...adminOnly, uploadCourseImages, createCourse);
 
 router.get("/", ...adminOnly, getAdminCourses);

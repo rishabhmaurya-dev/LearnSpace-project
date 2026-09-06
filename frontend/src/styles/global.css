@@ -1,7 +1,4 @@
-/* =========================================
-   GLOBAL BASE STYLES
-   BOLD TYPOGRAPHY DESIGN SYSTEM
-========================================= */
+/* global base styles */
 
 *,
 *::before,
@@ -19,7 +16,6 @@ body {
   min-height: 100vh;
 
   margin: 0;
-
   font-family: var(--font-family);
   font-size: 16px;
   font-weight: 400;
@@ -36,9 +32,7 @@ body {
   overflow-x: hidden;
 }
 
-/* =========================================
-   TYPOGRAPHY RESET
-========================================= */
+/* typography reset */
 
 h1,
 h2,
@@ -67,9 +61,7 @@ p {
   max-width: 70ch;
 }
 
-/* =========================================
-   FORM ELEMENTS
-========================================= */
+/* form elements */
 
 button,
 input,
@@ -83,6 +75,25 @@ button {
   border-radius: 0;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast),
+    background-color var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast),
+    opacity var(--transition-fast);
+}
+
+button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+button:active:not(:disabled) {
+  transform: translateY(1px) scale(0.98);
+}
+
+button:disabled {
+  cursor: not-allowed;
 }
 
 input,
@@ -91,9 +102,7 @@ select {
   border-radius: 0;
 }
 
-/* =========================================
-   LINKS
-========================================= */
+/* links */
 
 a {
   color: inherit;
@@ -101,9 +110,7 @@ a {
   transition: color 150ms cubic-bezier(0.25, 0, 0, 1);
 }
 
-/* =========================================
-   MEDIA
-========================================= */
+/* media */
 
 img,
 svg,
@@ -117,9 +124,7 @@ img {
   height: auto;
 }
 
-/* =========================================
-   LIST RESET
-========================================= */
+/* list reset */
 
 ul,
 ol {
@@ -128,27 +133,21 @@ ol {
   padding: 0;
 }
 
-/* =========================================
-   SELECTION
-========================================= */
+/* selection */
 
 ::selection {
   background: var(--accent);
   color: var(--accent-foreground);
 }
 
-/* =========================================
-   ACCESSIBLE FOCUS STATES
-========================================= */
+/* accessible focus states */
 
 :focus-visible {
   outline: 2px solid var(--ring, var(--accent));
   outline-offset: 2px;
 }
 
-/* =========================================
-   SCROLLBAR
-========================================= */
+/* scrollbar */
 
 ::-webkit-scrollbar {
   width: 8px;
@@ -173,9 +172,7 @@ ol {
   scrollbar-color: var(--border-strong) var(--background);
 }
 
-/* =========================================
-   PAGE LOADER
-========================================= */
+/* page loader */
 
 .page-loader {
   min-height: 100vh;
@@ -198,9 +195,7 @@ ol {
   color: var(--accent);
 }
 
-/* =========================================
-   SHARED KEYFRAMES
-========================================= */
+/* shared keyframes */
 
 @keyframes fadeIn {
   from {
@@ -260,9 +255,7 @@ ol {
   }
 }
 
-/* =========================================
-   ANIMATION HELPERS
-========================================= */
+/* animation helpers */
 
 .animate-fade-in {
   animation: fadeIn 300ms var(--ease-standard) both;
@@ -285,10 +278,7 @@ ol {
   animation: slideInRight 500ms var(--ease-standard) both;
 }
 
-/* =========================================
-   WEB3 — AURORA / GRADIENT MESH
-   Ambient color washes behind page content
-   ========================================= */
+/* aurora / gradient mesh */
 
 .aurora-grid::before {
   content: "";
@@ -308,15 +298,12 @@ ol {
   pointer-events: none;
   background: radial-gradient(
     1400px 700px at 50% -20%,
-    rgba(247, 147, 26, 0.06),
+    rgba(35, 122, 75, 0.06),
     transparent 60%
   );
 }
 
-/* =========================================
-   WEB3 — GLASS PANELS
-   Frosted, depth-filled surfaces
-   ========================================= */
+/* glass panels */
 
 .glass {
   background: var(--glass-bg);
@@ -341,7 +328,7 @@ ol {
   border-radius: var(--radius-md);
 }
 
-/* Gold glow text */
+/* green glow text */
 .text-glow {
   color: var(--accent);
   text-shadow: var(--text-glow);
@@ -355,9 +342,7 @@ ol {
   color: transparent;
 }
 
-/* =========================================
-   WEB3 — CTA GLOW
-   ========================================= */
+/* cta glow */
 
 .btn-glow {
   background: var(--brand-gradient);
@@ -377,9 +362,7 @@ ol {
   filter: brightness(1.05);
 }
 
-/* =========================================
-   REDUCED MOTION
-   ========================================= */
+/* reduced motion */
 
 @media (prefers-reduced-motion: reduce) {
   *,

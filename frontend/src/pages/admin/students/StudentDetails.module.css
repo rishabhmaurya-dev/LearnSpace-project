@@ -1,7 +1,4 @@
-/* ==========================================================================
-   STUDENT DETAILS — ULTRA-3D HYBRID SKEUOMORPHIC SYSTEM
-   Zero Pure White • Mid-Tone Slate Canvas • Inset Wells • Raised 3D Badges
-   ========================================================================== */
+/* student details */
 
 .pageWrapper {
   width: 100%;
@@ -21,9 +18,7 @@
   gap: 24px;
 }
 
-/* =========================================================
-   1. TOP NAVIGATION & BREADCRUMB
-   ========================================================= */
+/* 1. top navigation & breadcrumb */
 .topNavigation {
   display: flex;
   align-items: center;
@@ -79,9 +74,7 @@
   font-weight: var(--font-weight-bold);
 }
 
-/* =========================================================
-   2. HERO PROFILE CARD (RAISED SKEUOMORPHIC PRISM)
-   ========================================================= */
+/* 2. hero profile card */
 .heroCard {
   background-color: var(--bg-card);
   border: 1px solid var(--border);
@@ -400,9 +393,7 @@
   box-shadow: var(--shadow-inset-xs);
 }
 
-/* =========================================================
-   3. HERO STATS 4-GRID (3D TACTILE WELLS)
-   ========================================================= */
+/* 3. hero stats grid */
 .heroStatsGrid {
   display: grid;
   grid-template-columns: repeat(1, 1fr);
@@ -481,9 +472,7 @@
   color: var(--warning);
 }
 
-/* =========================================================
-   4. SHOWCASE GRID (VERIFIED SKILLS & BADGES)
-   ========================================================= */
+/* 4. showcase grid (skills & badges) */
 .profileShowcaseGrid {
   display: grid;
   grid-template-columns: 1fr;
@@ -551,9 +540,7 @@
   font-style: italic;
 }
 
-/* =========================================================
-   5. PERFORMANCE KPI SUMMARY 6-GRID
-   ========================================================= */
+/* 5. performance kpi summary */
 .summarySection {
   display: flex;
   flex-direction: column;
@@ -644,9 +631,7 @@
   color: var(--warning);
 }
 
-/* =========================================================
-   6. CONTENT TABS SECTION
-   ========================================================= */
+/* 6. content tabs section */
 .tabsSection {
   background-color: var(--bg-card);
   border: 1px solid var(--border);
@@ -721,9 +706,7 @@
   color: var(--primary);
 }
 
-/* =========================================================
-   7. TAB CONTENT PANES (OVERVIEW, PROGRESS, QUIZ, CAPSTONE)
-   ========================================================= */
+/* 7. tab content panes */
 .overviewGrid {
   display: grid;
   grid-template-columns: 1fr;
@@ -1081,9 +1064,7 @@
   margin: 0;
 }
 
-/* =========================================================
-   8. SKEUOMORPHIC 3D MODAL
-   ========================================================= */
+/* 8. modal */
 .modalOverlay {
   position: fixed;
   inset: 0;
@@ -1247,9 +1228,7 @@ textarea.inputField {
   text-decoration: underline;
 }
 
-/* =========================================================
-   9. STATE PAGES (LOADER & ERROR)
-   ========================================================= */
+/* 9. state pages (loader & error) */
 .statePage {
   display: flex;
   align-items: center;
@@ -1302,9 +1281,7 @@ textarea.inputField {
   margin: 0;
 }
 
-/* =========================================================
-   10. KEYFRAME ANIMATIONS
-   ========================================================= */
+/* 10. keyframe animations */
 .animateFadeIn {
   animation: fadeIn 0.4s var(--ease-standard);
 }

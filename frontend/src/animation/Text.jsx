@@ -61,11 +61,11 @@ export function GradualSpacing({ text = "Gradual Spacing" }) {
               delay: i * 0.1,
             }}
             style={{
-                color: "#ff3d00",
+                color: "#237a4b",
                 textShadow: `
-    0 0 5px rgba(255, 61, 0, 0.8),
-    0 0 0px rgba(255, 61, 0, 0.6),
-    0 0 0px rgba(255, 61, 0, 0.4)
+    0 0 5px rgba(35, 122, 75, 0.8),
+    0 0 0px rgba(35, 122, 75, 0.6),
+    0 0 0px rgba(35, 122, 75, 0.4)
   `,
             }}
             className={`inline-block `}

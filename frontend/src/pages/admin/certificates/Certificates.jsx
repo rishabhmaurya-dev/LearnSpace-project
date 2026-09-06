@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 
-import { fetchCertificates } from "../../../features/admin/certificate/adminCertificateThunks";
-
-import { deleteCertificate } from "../../../features/admin/certificate/adminCertificateThunks";
+import {
+  fetchCertificates,
+  deleteCertificate,
+} from "../../../features/admin/certificate/adminCertificateThunks";
 
 import {
   clearCertificateError,
@@ -14,6 +15,7 @@ import {
 
 import styles from "./certificates.module.css";
 import { GradualSpacing } from "../../../animation/Text";
+
 const Certificates = () => {
   const dispatch = useDispatch();
 
@@ -27,10 +29,9 @@ const Certificates = () => {
   } = useSelector((state) => state.adminCertificate);
 
   const [deleteTarget, setDeleteTarget] = useState(null);
+  const [search, setSearch] = useState("");
 
-  /* =====================================================
-     FETCH COURSE COMPLETION CERTIFICATES
-  ===================================================== */
+  /* fetch course completion certificates */
 
   useEffect(() => {
     dispatch(
@@ -40,9 +41,7 @@ const Certificates = () => {
     );
   }, [dispatch]);
 
-  /* =====================================================
-     SUCCESS
-  ===================================================== */
+  /* success */
 
   useEffect(() => {
     if (!success) return;
@@ -56,9 +55,7 @@ const Certificates = () => {
     return () => clearTimeout(timer);
   }, [success, message, dispatch]);
 
-  /* =====================================================
-     ERROR
-  ===================================================== */
+  /* error */
 
   useEffect(() => {
     if (!error) return;
@@ -72,16 +69,12 @@ const Certificates = () => {
     return () => clearTimeout(timer);
   }, [error, dispatch]);
 
-  /* =====================================================
-     DELETE HANDLER
-  ===================================================== */
+  /* delete handler */
 
   const handleDelete = async () => {
     if (!deleteTarget) return;
 
-    const result = await dispatch(
-      deleteCertificate(deleteTarget._id),
-    );
+    const result = await dispatch(deleteCertificate(deleteTarget._id));
 
     if (deleteCertificate.fulfilled.match(result)) {
       toast.success(result.payload.message || "Certificate deleted");
@@ -91,53 +84,188 @@ const Certificates = () => {
     }
   };
 
+  const uniqueStudents = certificates.filter(
+    (cert, idx, arr) =>
+      arr.findIndex(
+        (c) =>
+          (c.studentEmail || c.studentId || c.studentName || "") ===
+          (cert.studentEmail || cert.studentId || cert.studentName || ""),
+      ) === idx,
+  ).length;
+
+  const pdfsReady = certificates.filter((cert) => cert.pdfUrl).length;
+
+  const filteredCertificates = useMemo(() => {
+    const query = search.trim().toLowerCase();
+
+    if (!query) return certificates;
+
+    return certificates.filter((cert) => {
+      const studentName = (cert.studentName || "").toLowerCase();
+      const courseTitle = (
+        cert.courseId?.title ||
+        cert.metadata?.entityName ||
+        ""
+      ).toLowerCase();
+
+      return studentName.includes(query) || courseTitle.includes(query);
+    });
+  }, [certificates, search]);
+
+  const handleSearchChange = (e) => {
+    setSearch(e.target.value);
+  };
+
   return (
     <div className={styles.container}>
+      {/* hero header (static) */}
 
-      {/* =================================================
-          HEADER
-      ======================================================= */}
+      <section className={styles.hero}>
+        <div className={styles.heroContent}>
+          <span className={styles.eyebrow}>CERTIFICATE MANAGEMENT</span>
 
-      <div className={styles.pageHeader}>
-        <div>
-          <h1>
+          <h1 className={styles.heroTitle}>
             <GradualSpacing text="Course Certificates" />
           </h1>
 
-          <p>
-            All course completion certificates issued to students
+          <p className={styles.heroSubtitle}>
+            All course completion certificates issued to students — review,
+            preview, and manage every credential from one place.
           </p>
         </div>
 
-        <div className={styles.totalBadge}>
-          <span>🏅</span>
-          <strong>{certificates.length}</strong>
-          <small>Certificates</small>
-        </div>
-      </div>
+        <div className={styles.heroStats}>
+          <div className={styles.heroStat}>
+            <span className={styles.statIcon}>🏅</span>
+            <div className={styles.statMeta}>
+              <strong>{certificates.length}</strong>
+              <span>Total Issued</span>
+            </div>
+          </div>
 
-      {/* =================================================
-          CONTENT
-      ======================================================= */}
+          <div className={styles.heroStat}>
+            <span className={styles.statIcon}>🎓</span>
+            <div className={styles.statMeta}>
+              <strong>{uniqueStudents}</strong>
+              <span>Students</span>
+            </div>
+          </div>
+
+          <div className={styles.heroStat}>
+            <span
+              className={`${styles.statIcon} ${styles.statIconVerified}`}
+            >
+              ✓
+            </span>
+            <div className={styles.statMeta}>
+              <strong>{pdfsReady}</strong>
+              <span>PDFs Ready</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* how it works (static) */}
+
+      <section className={styles.howItWorks}>
+        <div className={styles.step}>
+          <span className={styles.stepIcon}>📝</span>
+          <div className={styles.stepText}>
+            <strong>Approve the Capstone</strong>
+            <p>
+              Certificate issuance starts the moment a capstone submission is
+              approved by an admin.
+            </p>
+          </div>
+        </div>
+
+        <div className={styles.step}>
+          <span className={styles.stepIcon}>📜</span>
+          <div className={styles.stepText}>
+            <strong>Generate the Credential</strong>
+            <p>
+              An official PDF with a unique credential code is created
+              instantly from the platform template.
+            </p>
+          </div>
+        </div>
+
+        <div className={styles.step}>
+          <span className={styles.stepIcon}>🛡️</span>
+          <div className={styles.stepText}>
+            <strong>Manage & Verify</strong>
+            <p>
+              Preview, share, or revoke any certificate — every credential
+              stays verifiable by code.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* toolbar (search + result count) */}
+
+      {!loading && certificates.length > 0 && (
+        <div className={styles.toolbar}>
+          <div className={styles.resultsBar}>
+            <strong>{filteredCertificates.length}</strong>
+            <span>of {certificates.length} certificates</span>
+          </div>
+
+          <div className={styles.searchBox}>
+            <span className={styles.searchIcon}>⌕</span>
+            <input
+              type="text"
+              placeholder="Search by student name or course..."
+              value={search}
+              onChange={handleSearchChange}
+              className={styles.searchInput}
+              aria-label="Search certificates by student name or course"
+            />
+            {search && (
+              <button
+                type="button"
+                className={styles.searchClear}
+                onClick={() => setSearch("")}
+              >
+                ×
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* content */}
 
       {loading ? (
-        <div className={styles.stateBox}>
-          <div className={styles.loadingIcon}>🏅</div>
-          <span>Loading certificates...</span>
-        </div>
+        <CertificateSkeleton />
       ) : certificates.length === 0 ? (
-        <div className={styles.stateBox}>
+        <div className={styles.emptyCard}>
           <div className={styles.emptyIcon}>📜</div>
-
-          <strong>No certificates found</strong>
-
-          <span>
-            Course completion certificates will appear here.
-          </span>
+          <h3>No certificates found</h3>
+          <p>
+            Course completion certificates issued by you will appear here.
+            Approve a student capstone to generate the first credential.
+          </p>
+        </div>
+      ) : filteredCertificates.length === 0 ? (
+        <div className={styles.emptyCard}>
+          <div className={styles.emptyIcon}>🔍</div>
+          <h3>No matching certificates</h3>
+          <p>
+            No certificates match your search. Try a different student name
+            or course.
+          </p>
+          <button
+            type="button"
+            className={styles.clearSearchBtn}
+            onClick={() => setSearch("")}
+          >
+            Clear Search
+          </button>
         </div>
       ) : (
         <div className={styles.certGrid}>
-          {certificates.map((cert, index) => (
+          {filteredCertificates.map((cert, index) => (
             <CertificateCard
               key={cert._id}
               cert={cert}
@@ -149,9 +277,7 @@ const Certificates = () => {
         </div>
       )}
 
-      {/* =================================================
-          DELETE CONFIRM MODAL
-      ======================================================= */}
+      {/* delete confirm modal */}
 
       {deleteTarget && (
         <div
@@ -200,9 +326,28 @@ const Certificates = () => {
   );
 };
 
-/* =========================================================
-   CERTIFICATE CARD
-========================================================= */
+/* certificate skeleton */
+
+const CertificateSkeleton = () => {
+  return (
+    <div className={styles.certGrid}>
+      {[1, 2, 3].map((item) => (
+        <div key={item} className={`${styles.certCard} ${styles.skeletonCard}`}>
+          <div className={styles.certTop}>
+            <div className={styles.skeletonBadge} />
+            <div className={styles.skeletonStretch} />
+          </div>
+          <div className={styles.skeletonStudent} />
+          <div className={styles.skeletonTitle} />
+          <div className={styles.skeletonMeta} />
+          <div className={styles.skeletonActions} />
+        </div>
+      ))}
+    </div>
+  );
+};
+
+/* certificate card */
 
 const CertificateCard = ({ cert, index, deleting = false, onDelete }) => {
   const courseTitle =
@@ -211,22 +356,16 @@ const CertificateCard = ({ cert, index, deleting = false, onDelete }) => {
     "Course";
 
   return (
-    <article
-      className={styles.certCard}
-      style={{
-        "--delay": `${index * 0.06}s`,
-      }}
-    >
-      {/* TOP GLOW */}
-
-      <div className={styles.cardGlow} />
+    <article className={styles.certCard} style={{ "--card-index": index }}>
+      {/* ACCENT GRADIENT BAND */}
+      <div className={styles.cardCover}>
+        <div className={styles.cardCoverGlow} />
+      </div>
 
       {/* HEADER */}
-
-      <div className={styles.cardTop}>
-
-        <div className={styles.certificateIcon}>
-          🏅
+      <div className={styles.certTop}>
+        <div className={styles.certBadgeWrap}>
+          <span className={styles.certBadgeEmoji}>🏅</span>
         </div>
 
         <div className={styles.typeInfo}>
@@ -235,82 +374,48 @@ const CertificateCard = ({ cert, index, deleting = false, onDelete }) => {
           </span>
 
           <span className={styles.typeBadge}>
+            <span className={styles.statusDot} />
             Verified
           </span>
         </div>
-
       </div>
 
       {/* STUDENT */}
-
       <div className={styles.studentSection}>
-
         <div className={styles.avatar}>
-          {cert.studentName
-            ?.charAt(0)
-            ?.toUpperCase() || "S"}
+          {cert.studentName?.charAt(0)?.toUpperCase() || "S"}
         </div>
 
         <div className={styles.studentInfo}>
-          <h3>
-            {cert.studentName || "Unknown Student"}
-          </h3>
-
-          <p>
-            {cert.studentEmail || "No email available"}
-          </p>
+          <h3>{cert.studentName || "Unknown Student"}</h3>
+          <p>{cert.studentEmail || "No email available"}</p>
         </div>
-
       </div>
 
       {/* COURSE */}
-
       <div className={styles.titleSection}>
-
         <span>COURSE COMPLETED</span>
-
-        <h2>
-          {courseTitle}
-        </h2>
-
-        <p>
-          Successfully completed the course
-        </p>
-
+        <h2>{courseTitle}</h2>
       </div>
 
       {/* META */}
-
       <div className={styles.metaGrid}>
-
         <div className={styles.metaItem}>
           <span>Certificate Code</span>
-
-          <strong>
-            {cert.certificateCode || "—"}
-          </strong>
+          <code>{cert.certificateCode || "—"}</code>
         </div>
 
         <div className={styles.metaItem}>
           <span>Issued Date</span>
-
-          <strong>
-            {formatDate(cert.issueDate)}
-          </strong>
+          <strong>{formatDate(cert.issueDate)}</strong>
         </div>
-
       </div>
 
       {/* FOOTER */}
-
       <div className={styles.cardFooter}>
-
         <div className={styles.status}>
           <span className={styles.statusDot} />
-
-          <span>
-            {cert.status || "SENT"}
-          </span>
+          <span>{cert.status || "SENT"}</span>
         </div>
 
         <div className={styles.cardActions}>
@@ -325,35 +430,33 @@ const CertificateCard = ({ cert, index, deleting = false, onDelete }) => {
               <span>↗</span>
             </a>
           ) : (
-            <span className={styles.noPdf}>
-              PDF unavailable
-            </span>
+            <span className={styles.noPdf}>PDF unavailable</span>
           )}
 
           <button
             type="button"
-            className={styles.deleteBtn}
+            className={styles.cardDeleteBtn}
             onClick={onDelete}
             disabled={deleting}
             title="Delete certificate"
           >
-            {deleting ? "..." : "🗑️ Delete"}
+            <span>🗑️</span>
+            {deleting ? "Deleting..." : "Delete"}
           </button>
         </div>
-
       </div>
     </article>
   );
 };
 
-/* =========================================================
-   DATE FORMAT
-========================================================= */
+/* date format */
 
 const formatDate = (dateString) => {
   if (!dateString) return "—";
 
   const date = new Date(dateString);
+
+  if (Number.isNaN(date.getTime())) return "—";
 
   return date.toLocaleDateString("en-US", {
     year: "numeric",

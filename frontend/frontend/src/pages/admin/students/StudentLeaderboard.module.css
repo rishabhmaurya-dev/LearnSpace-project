@@ -1,0 +1,710 @@
+/* ==========================================================================
+   STUDENT LEADERBOARD — ULTRA-3D HYBRID SKEUOMORPHIC SYSTEM
+   Zero Pure White • 3D Podium Stepped Elevation • Inset Wells • Fully Responsive
+   ========================================================================== */
+
+.container {
+  width: 100%;
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: 24px var(--page-padding) 64px var(--page-padding);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* =========================================================
+   1. HERO BANNER WITH 3D SPECULAR SHEEN
+   ========================================================= */
+.heroBanner {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 24px 28px;
+  box-shadow: var(--shadow-convex-md);
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.heroBanner::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--brand-gradient);
+}
+
+@media (min-width: 900px) {
+  .heroBanner {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.heroTrophy {
+  font-size: 38px;
+  width: 60px;
+  height: 60px;
+  border-radius: var(--radius-md);
+  background-color: var(--bg-surface-sunken);
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-inset-xs);
+  flex-shrink: 0;
+}
+
+.heroText {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.heroEyebrow {
+  font-size: 11px;
+  font-weight: var(--font-weight-extrabold);
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.heroText h1 {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-extrabold);
+  color: var(--text-primary);
+  margin: 0;
+  letter-spacing: -0.02em;
+  text-shadow: var(--text-engraved);
+  line-height: 1.15;
+}
+
+.heroText p {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.heroStats {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.heroStat {
+  background-color: var(--bg-surface-sunken);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 8px 14px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-inset-xs);
+}
+
+.heroStat strong {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-extrabold);
+  color: var(--text-primary);
+  line-height: 1.1;
+  text-shadow: var(--text-engraved);
+}
+
+.heroStat small {
+  font-size: 10.5px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-muted);
+}
+
+.backBtn {
+  height: var(--button-height);
+  padding: 0 16px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  box-shadow: var(--shadow-convex-xs);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+}
+
+.backBtn:hover {
+  color: var(--primary);
+  border-color: var(--border-hover);
+  transform: var(--hover-lift-sm);
+  box-shadow: var(--shadow-convex-sm);
+}
+
+.backBtn:active {
+  transform: var(--active-press);
+  box-shadow: var(--shadow-inset-xs);
+}
+
+/* =========================================================
+   2. FILTERS CONTROL BAR (3D SUNKEN WELLS)
+   ========================================================= */
+.filtersCard {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 14px 18px;
+  box-shadow: var(--shadow-convex-sm);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+}
+
+.searchBox {
+  flex: 1;
+  min-width: 220px;
+  height: var(--input-height);
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 14px;
+  font-size: 13px;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.searchBox input {
+  width: 100%;
+  height: 100%;
+  padding: 0 36px 0 38px;
+  background-color: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  box-shadow: var(--shadow-inset-xs);
+  outline: none;
+  box-sizing: border-box;
+  transition: all var(--transition-fast);
+}
+
+.searchBox input::placeholder {
+  color: var(--input-placeholder);
+}
+
+.searchBox input:focus {
+  border-color: var(--border-focus);
+  box-shadow: var(--shadow-inset-xs), var(--focus-ring);
+  background-color: var(--bg-card);
+}
+
+.searchClear {
+  position: absolute;
+  right: 10px;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--radius-full);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--shadow-convex-xs);
+}
+
+.searchClear:hover {
+  color: var(--danger);
+  border-color: var(--danger-border);
+}
+
+.select {
+  height: var(--input-height);
+  padding: 0 14px;
+  background-color: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  box-shadow: var(--shadow-inset-xs);
+  outline: none;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: all var(--transition-fast);
+}
+
+.select:focus {
+  border-color: var(--border-focus);
+  box-shadow: var(--shadow-inset-xs), var(--focus-ring);
+}
+
+.limitSelect {
+  min-width: 105px;
+}
+
+/* =========================================================
+   3. PODIUM (TOP 3 OLYMPIC STEPPED ELEVATION)
+   ========================================================= */
+.podiumGrid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 16px;
+  align-items: end;
+  margin-top: 8px;
+}
+
+@media (min-width: 640px) {
+  .podiumGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+}
+
+.podiumCard {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-convex-md);
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.podiumCard:hover {
+  transform: var(--hover-lift);
+  box-shadow: var(--shadow-convex-lg);
+  border-color: var(--border-hover);
+}
+
+.podiumMedal {
+  font-size: 28px;
+  margin-bottom: 6px;
+  filter: none;
+}
+
+.podiumAvatar {
+  width: 58px;
+  height: 58px;
+  border-radius: var(--radius-full);
+  background: var(--brand-gradient);
+  color: var(--primary-contrast);
+  font-size: 22px;
+  font-weight: var(--font-weight-extrabold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--border);
+  box-shadow: var(--shadow-primary);
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.podiumAvatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.podiumName {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-extrabold);
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  line-height: 1.2;
+}
+
+.podiumEmail {
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  margin: 2px 0 10px 0;
+}
+
+.podiumPoints {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--accent-amber);
+  background-color: var(--bg-surface-sunken);
+  border: 1px solid var(--border-subtle);
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-inset-xs);
+}
+
+/* 1st Place Champion Highlight */
+@media (min-width: 640px) {
+  .podium1 {
+    transform: translateY(-12px);
+    border-color: rgba(217, 119, 6, 0.45);
+    background: linear-gradient(
+      180deg,
+      rgba(217, 119, 6, 0.08) 0%,
+      var(--bg-card) 60%
+    );
+  }
+
+  .podium1:hover {
+    transform: translateY(-16px);
+  }
+
+  .podium1 .podiumAvatar {
+    width: 68px;
+    height: 68px;
+    font-size: 26px;
+    border-color: var(--accent-amber);
+  }
+}
+
+/* =========================================================
+   4. LEADERBOARD CARDS 3-GRID (3D SKEUOMORPHIC PRISMS)
+   ========================================================= */
+.leaderboardGrid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 16px;
+}
+
+@media (min-width: 680px) {
+  .leaderboardGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .leaderboardGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.studentCard {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  box-shadow: var(--shadow-convex-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  contain: content;
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal), border-color var(--transition-fast);
+}
+
+.studentCard:hover {
+  transform: var(--hover-lift-sm);
+  box-shadow: var(--shadow-convex-md);
+  border-color: var(--border-hover);
+}
+
+/* Card Header (Rank & Reputation) */
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.rankBadge {
+  font-size: 11px;
+  font-weight: var(--font-weight-extrabold);
+  color: var(--text-secondary);
+  background-color: var(--bg-surface-sunken);
+  border: 1px solid var(--border-subtle);
+  padding: 3px 10px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-inset-xs);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.medalBadge {
+  color: var(--accent-amber);
+  border-color: rgba(217, 119, 6, 0.35);
+}
+
+.medalIcon {
+  font-size: 13px;
+}
+
+.reputationBadge {
+  font-size: 11.5px;
+  font-weight: var(--font-weight-bold);
+  color: var(--accent-amber);
+  background-color: var(--bg-surface-sunken);
+  border: 1px solid var(--border-subtle);
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-inset-xs);
+}
+
+/* Profile Section */
+.profileSection {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.avatarWrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.avatarImg,
+.avatarFallback {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  border: 1.5px solid var(--border);
+  box-shadow: var(--shadow-primary);
+}
+
+.avatarFallback {
+  background: var(--brand-gradient);
+  color: var(--primary-contrast);
+  font-size: 17px;
+  font-weight: var(--font-weight-extrabold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-shadow: var(--text-embossed);
+}
+
+.statusDot {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 9px;
+  height: 9px;
+  border-radius: var(--radius-full);
+  border: 2px solid var(--bg-card);
+}
+
+.statusOnline {
+  background-color: var(--success);
+}
+
+.statusBlockedDot {
+  background-color: var(--danger);
+}
+
+.identityDetails {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.studentName {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.studentEmail {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin: 2px 0 0 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Stats 3-Grid (Sunken Wells) */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  background-color: var(--bg-surface-sunken);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 8px;
+  box-shadow: var(--shadow-inset-xs);
+  text-align: center;
+}
+
+.statBox {
+  display: flex;
+  flex-direction: column;
+}
+
+.statBox strong {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-extrabold);
+  color: var(--text-primary);
+  line-height: 1.1;
+}
+
+.statBox span {
+  font-size: 10px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-muted);
+}
+
+/* =========================================================
+   5. PAGINATION CONTROLS (3D CONVEX / SUNKEN WELL)
+   ========================================================= */
+.paginationCard {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 12px 20px;
+  box-shadow: var(--shadow-convex-sm);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+.pageBtn {
+  height: 36px;
+  padding: 0 16px;
+  background-color: var(--bg-surface-sunken);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  box-shadow: var(--shadow-convex-xs);
+  transition: all var(--transition-fast);
+}
+
+.pageBtn:hover:not(:disabled) {
+  color: var(--primary);
+  border-color: var(--border-hover);
+  background-color: var(--bg-card-hover);
+  transform: var(--hover-lift-sm);
+}
+
+.pageBtn:active:not(:disabled) {
+  transform: var(--active-press);
+  box-shadow: var(--shadow-inset-xs);
+}
+
+.pageBtn:disabled {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.pageIndicator {
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+  font-weight: var(--font-weight-medium);
+}
+
+.pageIndicator strong {
+  color: var(--text-primary);
+  font-weight: var(--font-weight-extrabold);
+}
+
+/* =========================================================
+   6. EMPTY & ERROR STATES
+   ========================================================= */
+.stateCard,
+.stateCardError {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 44px 20px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-convex-md);
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.stateIcon {
+  font-size: 32px;
+}
+
+.stateCard h3 {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.stateCard p {
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.stateCard button {
+  height: 36px;
+  padding: 0 16px;
+  background-color: var(--bg-surface-sunken);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--primary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  box-shadow: var(--shadow-convex-xs);
+  transition: all var(--transition-fast);
+  margin-top: 6px;
+}
+
+.stateCard button:hover {
+  background-color: var(--bg-card-hover);
+  border-color: var(--border-hover);
+  transform: var(--hover-lift-sm);
+}
+
+.stateCardError {
+  color: var(--danger);
+  border-color: var(--danger-border);
+  background-color: var(--danger-soft);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+}

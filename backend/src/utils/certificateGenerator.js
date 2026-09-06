@@ -7,11 +7,7 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-/**
- * =========================================================
- * PLATFORM BRAND
- * =========================================================
- */
+// platform brand
 
 export const CERT_ISSUER = "LearnSpace";
 
@@ -21,15 +17,7 @@ export const PLATFORM_BRAND = {
   website: process.env.FRONTEND_URL || "https://jsconceptss.netlify.app",
 };
 
-/**
- * =========================================================
- * COLORS
- *
- * Palette taken from the official certificate template
- * (backend/src/utils/certificate.png): cream paper, deep
- * forest green + antique gold.
- * =========================================================
- */
+// Palette: cream paper, deep forest green + antique gold.
 
 const COLORS = {
   background: "#F9F7F3",
@@ -47,15 +35,7 @@ const COLORS = {
   sage: "#7A8A7C",
 };
 
-/**
- * =========================================================
- * DECORATIVE CORNER RIBBON
- *
- * Folded ribbon in the top-left and bottom-right corners:
- * deep green wedge with an antique-gold rim + gold band
- * running along the diagonal. Mirrored for the bottom-right.
- * =========================================================
- */
+// Decorative corner ribbon: deep green wedge with gold rim.
 
 function drawCornerRibbon(doc, pageWidth, pageHeight) {
   const size = 312;
@@ -101,11 +81,7 @@ function drawCornerRibbon(doc, pageWidth, pageHeight) {
     .stroke(COLORS.greenLight);
 }
 
-/**
- * =========================================================
- * GOLD OFFICIAL SEAL (deep-green center)
- * =========================================================
- */
+// gold official seal (deep-green center)
 
 function drawGoldSeal(doc, x, y, radius = 56) {
   doc.save();
@@ -168,16 +144,7 @@ function drawGoldSeal(doc, x, y, radius = 56) {
   doc.restore();
 }
 
-/**
- * =========================================================
- * SIGNATURE (written by hand, not typed)
- *
- * PDFKit has no true handwriting font, so we draw the name
- * in Times-Italic at a larger size with a slight rotation
- * and a hand-drawn gold underline so it reads as a real
- * signature, with the role printed beneath.
- * =========================================================
- */
+// signature drawn by hand (italic name + gold underline)
 
 function drawSignature(
   doc,
@@ -238,11 +205,7 @@ function drawSignature(
     });
 }
 
-/**
- * =========================================================
- * CERTIFICATE PDF GENERATOR
- * =========================================================
- */
+// certificate pdf generator
 
 export async function generateCertificatePdf({
   studentName,
@@ -282,27 +245,9 @@ export async function generateCertificatePdf({
   const pageWidth = doc.page.width;
   const pageHeight = doc.page.height;
 
-  /**
-   * =======================================================
-   * BACKGROUND
-   * =======================================================
-   */
-
   doc.rect(0, 0, pageWidth, pageHeight).fill(COLORS.background);
 
-  /**
-   * =======================================================
-   * CORNER RIBBONS (no full border)
-   * =======================================================
-   */
-
   drawCornerRibbon(doc, pageWidth, pageHeight);
-
-  /**
-   * =======================================================
-   * TOP BRAND
-   * =======================================================
-   */
 
   let y = 44;
 
@@ -328,12 +273,6 @@ export async function generateCertificatePdf({
       characterSpacing: 0.8,
     });
 
-  /**
-   * =======================================================
-   * MAIN TITLE
-   * =======================================================
-   */
-
   y += 36;
 
   doc
@@ -345,10 +284,6 @@ export async function generateCertificatePdf({
       align: "center",
       characterSpacing: 3,
     });
-
-  /**
-   * Gold divider
-   */
 
   y += 44;
 
@@ -375,12 +310,6 @@ export async function generateCertificatePdf({
     .lineWidth(2)
     .stroke(COLORS.goldDark);
 
-  /**
-   * =======================================================
-   * CERTIFICATION TEXT
-   * =======================================================
-   */
-
   y += 23;
 
   doc
@@ -391,12 +320,6 @@ export async function generateCertificatePdf({
       width: pageWidth,
       align: "center",
     });
-
-  /**
-   * =======================================================
-   * STUDENT NAME
-   * =======================================================
-   */
 
   y += 28;
 
@@ -430,12 +353,6 @@ export async function generateCertificatePdf({
     .lineWidth(0.9)
     .stroke(COLORS.goldDark);
 
-  /**
-   * =======================================================
-   * COMPLETION SENTENCE
-   * =======================================================
-   */
-
   y += 13;
 
   doc
@@ -447,12 +364,6 @@ export async function generateCertificatePdf({
       align: "center",
     });
 
-  /**
-   * =======================================================
-   * COURSE TITLE
-   * =======================================================
-   */
-
   y += 20;
 
   doc
@@ -463,12 +374,6 @@ export async function generateCertificatePdf({
       width: pageWidth - 140,
       align: "center",
     });
-
-  /**
-   * =======================================================
-   * COURSE DESCRIPTION
-   * =======================================================
-   */
 
   y += 29;
 
@@ -494,12 +399,6 @@ export async function generateCertificatePdf({
       }) + 6;
   }
 
-  /**
-   * =======================================================
-   * APPRECIATION
-   * =======================================================
-   */
-
   if (appreciationSentence) {
     const appreciation =
       appreciationSentence.length > 180
@@ -516,17 +415,7 @@ export async function generateCertificatePdf({
       });
   }
 
-  /**
-   * =======================================================
-   * BOTTOM SECTION
-   * =======================================================
-   */
-
   const footerY = 440;
-
-  /**
-   * LEFT - CERTIFICATE DETAILS
-   */
 
   const detailsX = 55;
 
@@ -572,19 +461,7 @@ export async function generateCertificatePdf({
       });
   }
 
-  /**
-   * =======================================================
-   * CENTER - GOLD SEAL
-   * =======================================================
-   */
-
   drawGoldSeal(doc, pageWidth / 2, footerY + 8, 56);
-
-  /**
-   * =======================================================
-   * RIGHT - QR CODE (verify link)
-   * =======================================================
-   */
 
   if (verificationUrl) {
     try {
@@ -627,12 +504,6 @@ export async function generateCertificatePdf({
     }
   }
 
-  /**
-   * =======================================================
-   * ADMINISTRATOR SIGNATURES
-   * =======================================================
-   */
-
   const administrators = [
     {
       name: "Anish",
@@ -665,12 +536,6 @@ export async function generateCertificatePdf({
     );
   });
 
-  /**
-   * =======================================================
-   * WEBSITE / SECURITY FOOTER
-   * =======================================================
-   */
-
   doc
     .font("Helvetica")
     .fontSize(7)
@@ -685,12 +550,6 @@ export async function generateCertificatePdf({
       },
     );
 
-  /**
-   * =======================================================
-   * FINALIZE PDF
-   * =======================================================
-   */
-
   doc.end();
 
   return new Promise((resolve, reject) => {
@@ -702,11 +561,7 @@ export async function generateCertificatePdf({
   });
 }
 
-/**
- * =========================================================
- * CERTIFICATE PREVIEW DATA
- * =========================================================
- */
+// certificate preview data
 
 export function buildCertificatePreviewData({
   studentName,
@@ -754,32 +609,21 @@ export function buildCertificatePreviewData({
   };
 }
 
-/**
- * =========================================================
- * TEMPLATE-BASED CERTIFICATE PDF GENERATOR
- *
- * Uses the official certificate template image
- * (backend/src/utils/certificate.png) as the full-page
- * background, stamps the dynamic fields into the blank
- * areas of the design and replaces the template QR code
- * with a fresh QR that opens the platform website when
- * scanned. Nothing overlaps the design.
- *
- * All positions below are measured against the 1492x1054
- * template image and converted to PDF points via
- * IMG_TO_PT = PAGE_W / TEMPLATE_W.
- * =========================================================
- */
-
+// Template-based certificate generator: stamps the dynamic
+// fields onto the template image and replaces the QR code.
+// Positions measured against the 1492x1054 template image.
 const TEMPLATE_IMAGE_PATH = path.join(__dirname, "certificate.png");
 
-// Handwritten signature font (SIL Open Font License) used to render
-// the administrator names so they look like real signatures instead
-// of typed text.
+// Handwritten signature font (SIL Open Font License).
 const SIGNATURE_FONT_PATH = path.join(
   __dirname,
   "fonts",
-  "GreatVibes-Regular.ttf",
+  "MomoSignature-Regular.ttf",
+);
+const STUDENTNAME_FONT_PATH = path.join(
+  __dirname,
+  "fonts",
+  "AlexBrush-Regular.ttf",
 );
 
 const PAGE_W = 841.89;
@@ -797,7 +641,7 @@ const T = {
   nameLineY: 504,
 
   // Blank line below "has successfully completed the course".
-  courseLineY: 626,
+  courseLineY: 622,
 
   // Blank lines in the left details block.
   issueDateLineY: 456,
@@ -841,10 +685,7 @@ const TPL_COLORS = {
 
 const px = (value) => value * IMG_TO_PT;
 
-/**
- * Shrink the font size (largest first, in the given steps) until
- * the text fits inside `maxWidth`. Returns { size, width }.
- */
+// Shrink the font size until the text fits inside maxWidth.
 function fitText(doc, text, font, startSize, maxWidth, step = 2) {
   let size = startSize;
 
@@ -870,13 +711,8 @@ function fitText(doc, text, font, startSize, maxWidth, step = 2) {
   };
 }
 
-/**
- * Generate a certificate PDF directly from the official
- * certificate template image (certificate.png). Dynamic data
- * is written into the blank slots of the design, the template's
- * QR is erased and replaced by `/verificationUrl`, and the
- * result is returned as a PDF buffer.
- */
+// Generate a certificate PDF from the template image, stamping
+// the dynamic data into the design and replacing the QR.
 export async function generateCertificateFromTemplate({
   studentName,
   courseTitle,
@@ -910,6 +746,7 @@ export async function generateCertificateFromTemplate({
 
   // Handwritten font for the administrator signature names.
   doc.registerFont("Signature", SIGNATURE_FONT_PATH);
+  doc.registerFont("studentName", STUDENTNAME_FONT_PATH);
 
   // ---- Full-page background from the template image.
   doc.image(templateBuffer, 0, 0, {
@@ -917,21 +754,18 @@ export async function generateCertificateFromTemplate({
     height: PAGE_H,
   });
 
-  /* =======================================================
-   * STUDENT NAME (blank line under "THIS IS TO CERTIFY THAT")
-   * ======================================================= */
-
+  // student name (blank line under "THIS IS TO CERTIFY THAT")
   if (studentName) {
     const { size } = fitText(
       doc,
       studentName,
-      "Helvetica-Bold",
-      30,
+      "studentName",
+      40,
       px(1096) - px(436),
     );
 
     doc
-      .font("Helvetica-Bold")
+      .font("studentName")
       .fontSize(size)
       .fillColor(TPL_COLORS.greenDark)
       .text(studentName, 0, px(T.nameLineY) - size * 0.8, {
@@ -940,21 +774,18 @@ export async function generateCertificateFromTemplate({
       });
   }
 
-  /* =======================================================
-   * COURSE TITLE (blank line below the completion sentence)
-   * ======================================================= */
-
+  // course title (blank line below the completion sentence)
   if (courseTitle) {
     const { size } = fitText(
       doc,
       courseTitle,
-      "Helvetica-Bold",
-      20,
+      "studentName",
+      30,
       px(1098) - px(438),
     );
 
     doc
-      .font("Helvetica-Bold")
+      .font("studentName")
       .fontSize(size)
       .fillColor(TPL_COLORS.green)
       .text(courseTitle, 0, px(T.courseLineY) - size * 0.8, {
@@ -963,10 +794,7 @@ export async function generateCertificateFromTemplate({
       });
   }
 
-  /* =======================================================
-   * LEFT DETAILS BLOCK (ISSUE DATE / ISSUED BY / CODE / SCORE)
-   * ======================================================= */
-
+  // left details block (issue date / issued by / code / score)
   const valueColumnWidth = px(T.valueColumnRight) - px(T.valueColumnLeft);
 
   const valueLeft = px(T.valueColumnLeft);
@@ -1001,10 +829,7 @@ export async function generateCertificateFromTemplate({
     });
   }
 
-  /* =======================================================
-   * QR CODE (erase the template QR, stamp our own)
-   * ======================================================= */
-
+  // qr code (erase the template QR, stamp our own)
   if (verificationUrl) {
     const qrDataUrl = await QRCode.toDataURL(verificationUrl, {
       errorCorrectionLevel: "M",
@@ -1043,15 +868,7 @@ export async function generateCertificateFromTemplate({
     });
   }
 
-  /* =======================================================
-   * ADMINISTRATOR SIGNATURES (Anish / Rishabh / Raj)
-   *
-   * Each name is written just above the template's signature
-   * line in Times-Italic with a slight tilt, like a real
-   * signature. The "ADMINISTRATOR" role labels are already
-   * printed on the template below each line.
-   * ======================================================= */
-
+  // administrator signatures written just above each template line
   const signatureMaxWidth = px(240);
 
   T.signatureBlocks.forEach((block, index) => {
@@ -1076,10 +893,6 @@ export async function generateCertificateFromTemplate({
 
     doc.restore();
   });
-
-  /* =======================================================
-   * FINALIZE
-   * ======================================================= */
 
   doc.end();
 

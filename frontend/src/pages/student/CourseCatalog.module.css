@@ -1,17 +1,8 @@
-/* =========================================================
-   COURSE CATALOG PAGE
-   Uses global design tokens from :root
-========================================================= */
-
-/* =========================================================
-   PAGE CONTAINER
-========================================================= */
-
 .catalogWrapper {
   position: relative;
 
   width: 100%;
-  max-width: 1000px;
+  max-width: 1680px;
 
   min-height: 100vh;
 
@@ -28,10 +19,6 @@
   font-family: var(--font-family);
 }
 
-
-/* =========================================================
-   BACKGROUND AMBIENCE
-========================================================= */
 
 .glowTopLeft,
 .glowBottomRight {
@@ -75,10 +62,6 @@
 }
 
 
-/* =========================================================
-   HERO SECTION
-========================================================= */
-
 .heroSection {
   position: relative;
 
@@ -103,10 +86,6 @@
   max-width: 700px;
 }
 
-
-/* =========================================================
-   HERO BADGE
-========================================================= */
 
 .heroBadge {
   display: inline-flex;
@@ -134,10 +113,6 @@
 }
 
 
-/* =========================================================
-   HERO TITLE
-========================================================= */
-
 .heroTitle {
   margin: 0 0 8px;
 
@@ -162,10 +137,6 @@
 }
 
 
-/* =========================================================
-   HERO SUBTITLE
-========================================================= */
-
 .heroSubtitle {
   max-width: 620px;
 
@@ -178,10 +149,6 @@
   line-height: 1.65;
 }
 
-
-/* =========================================================
-   FILTER CONTROLS
-========================================================= */
 
 .filterControls {
   display: flex;
@@ -197,10 +164,6 @@
   margin-top: 22px;
 }
 
-
-/* =========================================================
-   SEARCH BAR
-========================================================= */
 
 .searchBar {
   position: relative;
@@ -270,10 +233,6 @@
 }
 
 
-/* =========================================================
-   CLEAR SEARCH BUTTON
-========================================================= */
-
 .clearSearchBtn {
   position: absolute;
 
@@ -315,10 +274,6 @@
   background: var(--danger-soft);
 }
 
-
-/* =========================================================
-   CATEGORY PILLS
-========================================================= */
 
 .categoryPills {
   display: flex;
@@ -388,10 +343,6 @@
 }
 
 
-/* =========================================================
-   CATALOG CONTAINER
-========================================================= */
-
 .catalogContainer {
   position: relative;
 
@@ -401,12 +352,7 @@
 }
 
 
-/* =========================================================
-   COURSE GRID
-
-   Desktop par cards compact rahenge.
-   4 column only wide screens par.
-========================================================= */
+/* compact grid; 4 columns on wide screens */
 
 .courseGrid {
   display: grid;
@@ -421,7 +367,7 @@
 
 /* Small Tablet */
 
-@media (min-width: 600px) {
+@media (min-width: 560px) {
   .courseGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
 
@@ -432,7 +378,7 @@
 
 /* Desktop */
 
-@media (min-width: 900px) {
+@media (min-width: 960px) {
   .courseGrid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
 
@@ -452,10 +398,6 @@
 }
 
 
-/* =========================================================
-   COURSE CARD
-========================================================= */
-
 .courseCard {
   position: relative;
 
@@ -471,7 +413,7 @@
 
   border: 1px solid var(--border);
 
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
 
   box-shadow: var(--card-shadow);
 
@@ -487,10 +429,6 @@
   box-shadow: var(--card-shadow-hover);
 }
 
-
-/* =========================================================
-   IMAGE CONTAINER
-========================================================= */
 
 .imageContainer {
   position: relative;
@@ -520,10 +458,6 @@
   transform: scale(1.04);
 }
 
-
-/* =========================================================
-   FALLBACK THUMB
-========================================================= */
 
 .fallbackThumb {
   display: flex;
@@ -559,10 +493,6 @@
 }
 
 
-/* =========================================================
-   IMAGE OVERLAY
-========================================================= */
-
 .imageOverlay {
   position: absolute;
 
@@ -579,10 +509,6 @@
 }
 
 
-/* =========================================================
-   CATEGORY BADGE
-========================================================= */
-
 .categoryBadge {
   position: absolute;
 
@@ -595,13 +521,16 @@
 
   overflow: hidden;
 
-  color: var(--text-primary);
+  color: #ffffff;
 
-  background: rgba(20, 20, 25, 0.85);
+  background: rgba(23, 34, 28, 0.82);
 
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.16);
 
   border-radius: var(--radius-full);
+
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
 
   font-size: 10px;
 
@@ -612,10 +541,6 @@
   text-overflow: ellipsis;
 }
 
-
-/* =========================================================
-   LEVEL BADGE
-========================================================= */
 
 .levelBadge {
   position: absolute;
@@ -668,10 +593,6 @@
 }
 
 
-/* =========================================================
-   CARD BODY
-========================================================= */
-
 .cardBody {
   display: flex;
   flex-direction: column;
@@ -683,10 +604,6 @@
   padding: 14px;
 }
 
-
-/* =========================================================
-   FEATURE TAGS
-========================================================= */
 
 .featureHighlights {
   display: flex;
@@ -715,17 +632,13 @@
 
   border-radius: var(--radius-xs);
 
-  font-size: 9px;
+  font-size: 10px;
 
   font-weight: var(--font-weight-semibold);
 
   white-space: nowrap;
 }
 
-
-/* =========================================================
-   COURSE TITLE
-========================================================= */
 
 .courseTitle {
   display: -webkit-box;
@@ -736,7 +649,7 @@
 
   color: var(--text-primary);
 
-  font-size: 16px;
+  font-size: 17px;
 
   font-weight: var(--font-weight-bold);
 
@@ -749,11 +662,7 @@
 }
 
 
-/* =========================================================
-   COURSE DESCRIPTION
-
-   Only 2 lines so card lamba nahi hoga.
-========================================================= */
+/* 2-line clamp so card stays compact */
 
 .courseDescription {
   display: -webkit-box;
@@ -767,7 +676,7 @@
 
   color: var(--text-secondary);
 
-  font-size: 11px;
+  font-size: 12px;
 
   line-height: 1.7;
 
@@ -775,10 +684,6 @@
   -webkit-line-clamp: 2;
 }
 
-
-/* =========================================================
-   META ROW
-========================================================= */
 
 .metaRow {
   display: grid;
@@ -805,7 +710,7 @@
 
   color: var(--text-muted);
 
-  font-size: 9px;
+  font-size: 10px;
 
   font-weight: var(--font-weight-semibold);
 
@@ -829,20 +734,12 @@
 }
 
 
-/* =========================================================
-   CARD FOOTER
-========================================================= */
-
 .cardFooter {
   margin-top: auto;
 
   padding-top: 12px;
 }
 
-
-/* =========================================================
-   ACTION BUTTON
-========================================================= */
 
 .actionBtn {
   display: inline-flex;
@@ -865,7 +762,7 @@
 
   font-family: var(--font-family);
 
-  font-size: 12px;
+  font-size: 13px;
 
   font-weight: var(--font-weight-semibold);
 
@@ -899,10 +796,6 @@
 }
 
 
-/* =========================================================
-   ENROLL BUTTON
-========================================================= */
-
 .enrollBtn {
   color: var(--primary-contrast);
 
@@ -917,10 +810,6 @@
   box-shadow: var(--shadow-primary-hover);
 }
 
-
-/* =========================================================
-   CONTINUE BUTTON
-========================================================= */
 
 .continueBtn {
   color: var(--success);
@@ -939,10 +828,6 @@
 }
 
 
-/* =========================================================
-   BUTTON ARROW
-========================================================= */
-
 .btnArrow {
   display: inline-flex;
 
@@ -955,10 +840,6 @@
   transform: translateX(3px);
 }
 
-
-/* =========================================================
-   LOADING
-========================================================= */
 
 .btnLoading {
   display: flex;
@@ -986,10 +867,6 @@
   }
 }
 
-
-/* =========================================================
-   EMPTY STATE
-========================================================= */
 
 .emptyState {
   display: flex;
@@ -1039,10 +916,6 @@
 }
 
 
-/* =========================================================
-   RESET BUTTON
-========================================================= */
-
 .resetBtn {
   min-height: 36px;
 
@@ -1078,9 +951,7 @@
 }
 
 
-/* =========================================================
-   TABLET
-========================================================= */
+/* Tablet */
 
 @media (max-width: 899px) {
 
@@ -1094,9 +965,7 @@
 }
 
 
-/* =========================================================
-   MOBILE
-========================================================= */
+/* Mobile */
 
 @media (max-width: 599px) {
 
@@ -1145,7 +1014,7 @@
   }
 
   .courseTitle {
-    font-size: 16px;
+    font-size: 17px;
   }
 
   .featureHighlights {
@@ -1153,7 +1022,7 @@
   }
 
   .metaItem {
-    font-size: 9px;
+    font-size: 10px;
   }
 
   .actionBtn {
@@ -1162,9 +1031,7 @@
 }
 
 
-/* =========================================================
-   VERY SMALL MOBILE
-========================================================= */
+/* Very small mobile */
 
 @media (max-width: 380px) {
 
@@ -1194,9 +1061,7 @@
 }
 
 
-/* =========================================================
-   TOUCH DEVICES
-========================================================= */
+/* Touch devices */
 
 @media (hover: none) {
 
@@ -1219,9 +1084,7 @@
 }
 
 
-/* =========================================================
-   REDUCED MOTION
-========================================================= */
+/* Reduced motion */
 
 @media (prefers-reduced-motion: reduce) {
 

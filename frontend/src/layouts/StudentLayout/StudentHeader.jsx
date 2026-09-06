@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 
 import styles from "./StudentHeader.module.css";
 
-const StudentHeader = ({ onToggleSidebar }) => {
+const StudentHeader = ({ onToggleSidebar, isOpen = false }) => {
   const user = useSelector((state) => state.auth.user);
   const profile = useSelector((state) => state.studentProfile.profile);
 
@@ -18,8 +18,13 @@ const StudentHeader = ({ onToggleSidebar }) => {
           className={styles.menuToggleBtn}
           onClick={onToggleSidebar}
           aria-label="Toggle navigation menu"
+          aria-expanded={isOpen}
         >
-          ☰
+          <span className={`${styles.burger} ${isOpen ? styles.burgerOpen : ""}`}>
+            <span className={styles.burgerBar} />
+            <span className={styles.burgerBar} />
+            <span className={styles.burgerBar} />
+          </span>
         </button>
 
         <div>

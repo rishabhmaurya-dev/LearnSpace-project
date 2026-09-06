@@ -10,10 +10,6 @@ import {
 } from "./adminCapstoneThunks";
 
 const initialState = {
-  /* =====================================================
-     DATA
-     ===================================================== */
-
   submissions: [],
 
   pendingSubmissions: [],
@@ -34,10 +30,6 @@ const initialState = {
     perPage: 10,
   },
 
-  /* =====================================================
-     LOADING STATES
-     ===================================================== */
-
   loading: false,
 
   statsLoading: false,
@@ -45,10 +37,6 @@ const initialState = {
   detailsLoading: false,
 
   operationLoading: false,
-
-  /* =====================================================
-     ERROR / SUCCESS
-     ===================================================== */
 
   error: null,
 
@@ -78,12 +66,7 @@ const capstoneSlice = createSlice({
   },
 
   extraReducers: (builder) => {
-    /* =====================================================
-       STATISTICS
-       ===================================================== */
-
     builder
-
       .addCase(fetchCapstoneStats.pending, (state) => {
         state.statsLoading = true;
         state.error = null;
@@ -101,12 +84,7 @@ const capstoneSlice = createSlice({
         state.error = action.payload || "Failed to fetch capstone statistics";
       });
 
-    /* =====================================================
-       ALL SUBMISSIONS
-       ===================================================== */
-
     builder
-
       .addCase(fetchCapstoneSubmissions.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -128,12 +106,7 @@ const capstoneSlice = createSlice({
         state.error = action.payload || "Failed to fetch capstone submissions";
       });
 
-    /* =====================================================
-       PENDING SUBMISSIONS
-       ===================================================== */
-
     builder
-
       .addCase(fetchPendingCapstones.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -153,12 +126,7 @@ const capstoneSlice = createSlice({
         state.error = action.payload || "Failed to fetch pending capstones";
       });
 
-    /* =====================================================
-       SINGLE SUBMISSION DETAILS
-       ===================================================== */
-
     builder
-
       .addCase(fetchCapstoneDetails.pending, (state) => {
         state.detailsLoading = true;
         state.error = null;
@@ -176,12 +144,7 @@ const capstoneSlice = createSlice({
         state.error = action.payload || "Failed to fetch capstone details";
       });
 
-    /* =====================================================
-       APPROVE
-       ===================================================== */
-
     builder
-
       .addCase(approveCapstone.pending, (state) => {
         state.operationLoading = true;
         state.success = false;
@@ -205,12 +168,7 @@ const capstoneSlice = createSlice({
         state.error = action.payload || "Failed to approve capstone";
       });
 
-    /* =====================================================
-       REJECT
-       ===================================================== */
-
     builder
-
       .addCase(rejectCapstone.pending, (state) => {
         state.operationLoading = true;
         state.success = false;

@@ -42,9 +42,7 @@ export const router = createBrowserRouter([
     element: <RootRedirect />,
   },
 
-  // =========================
-  // PUBLIC
-  // =========================
+  // public
 
   {
     path: "/login",
@@ -66,27 +64,13 @@ export const router = createBrowserRouter([
     element: <ResetPassword />,
   },
 
-  // =========================
-  // PROTECTED
-  // =========================
+  // protected
 
   {
     element: <ProtectedRoute />,
 
     children: [
-      /*
-    ================================================
-    AI
-    ================================================
-    */
-
-      {
-        path: "/ai",
-        element: <AIChat />,
-      },
-      // =========================
-      // ADMIN
-      // =========================
+      // admin
 
       {
         element: <RoleRoute allowedRoles={["ADMIN"]} />,
@@ -107,7 +91,7 @@ export const router = createBrowserRouter([
                 element: <AdminDashboard />,
               },
 
-              // STUDENTS
+              // students
               {
                 path: "students",
                 element: <StudentList />,
@@ -123,7 +107,7 @@ export const router = createBrowserRouter([
                 element: <StudentDetails />,
               },
 
-              // COURSES
+              // courses
               {
                 path: "courses",
                 element: <CourseList />,
@@ -144,13 +128,13 @@ export const router = createBrowserRouter([
                 element: <CourseDetails />,
               },
 
-              // CAPSTONES
+              // capstones
               {
                 path: "capstones",
                 element: <CapstoneReview />,
               },
 
-              // CERTIFICATES
+              // certificates
               {
                 path: "certificates",
                 element: <AdminCertificates />,
@@ -160,14 +144,18 @@ export const router = createBrowserRouter([
         ],
       },
 
-      // =========================
-      // STUDENT
-      // =========================
+      // student
 
       {
         element: <RoleRoute allowedRoles={["STUDENT"]} />,
 
         children: [
+          // AI Chat — student-only
+          {
+            path: "/ai",
+            element: <AIChat />,
+          },
+
           {
             path: "/student",
             element: <StudentLayout />,
@@ -223,9 +211,7 @@ export const router = createBrowserRouter([
     ],
   },
 
-  // =========================
-  // ERRORS
-  // =========================
+  // errors
 
   {
     path: "/unauthorized",

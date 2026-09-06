@@ -1,0 +1,886 @@
+/* ==========================================================================
+   STUDENT LIST DIRECTORY — ULTRA-3D HYBRID SKEUOMORPHIC SYSTEM
+   Zero Pure White • Mid-Tone Slate Canvas • Inset Search/Filters • 3D Cards
+   GPU Optimized Compositing • Fluid Responsive Breakpoints
+   ========================================================================== */
+
+.container {
+  width: 100%;
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: 24px var(--page-padding) 64px var(--page-padding);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* =========================================================
+   1. PAGE HEADER & STATS PODS
+   ========================================================= */
+.pageHeader {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 24px 28px;
+  box-shadow: var(--shadow-convex-md);
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.pageHeader::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--brand-gradient);
+}
+
+@media (min-width: 860px) {
+  .pageHeader {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.headerContent {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.eyebrow {
+  font-size: 11px;
+  font-weight: var(--font-weight-extrabold);
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.title {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-extrabold);
+  color: var(--text-primary);
+  margin: 0;
+  letter-spacing: -0.02em;
+  text-shadow: var(--text-engraved);
+  line-height: 1.15;
+}
+
+.subtitle {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.headerStats {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.headerStat {
+  background-color: var(--bg-surface-sunken);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: var(--shadow-inset-xs);
+  min-width: 140px;
+}
+
+.headerStatIcon {
+  font-size: 20px;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-convex-xs);
+  flex-shrink: 0;
+}
+
+.activeIndicator {
+  color: var(--success);
+  font-size: 14px;
+  box-shadow: none;
+}
+
+.statMeta {
+  display: flex;
+  flex-direction: column;
+}
+
+.statMeta strong {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-extrabold);
+  color: var(--text-primary);
+  line-height: 1.1;
+  text-shadow: var(--text-engraved);
+}
+
+.statMeta span {
+  font-size: 10.5px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-muted);
+}
+
+/* =========================================================
+   2. SYSTEM ALERTS (3D TOAST BARS)
+   ========================================================= */
+.alert {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  box-shadow: var(--shadow-convex-xs);
+  animation: alertPop var(--transition-normal);
+}
+
+.alertIcon {
+  font-weight: var(--font-weight-extrabold);
+  width: 22px;
+  height: 22px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+}
+
+.successAlert {
+  background-color: var(--success-soft);
+  color: var(--success);
+  border: 1px solid var(--success-border);
+}
+
+.successAlert .alertIcon {
+  background-color: var(--success);
+  color: var(--primary-contrast);
+}
+
+.errorAlert {
+  background-color: var(--danger-soft);
+  color: var(--danger);
+  border: 1px solid var(--danger-border);
+}
+
+.errorAlert .alertIcon {
+  background-color: var(--danger);
+  color: var(--primary-contrast);
+}
+
+/* =========================================================
+   3. FILTERS CARD (3D SUNKEN WELLS & INPUTS)
+   ========================================================= */
+.filterCard {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+  box-shadow: var(--shadow-convex-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.filterHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.filterTitle {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-extrabold);
+  color: var(--text-primary);
+  margin: 0;
+  text-shadow: var(--text-engraved);
+}
+
+.filterSubtitle {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  margin: 2px 0 0 0;
+}
+
+.clearBtn {
+  font-size: 11px;
+  font-weight: var(--font-weight-bold);
+  color: var(--primary);
+  background-color: var(--bg-surface-sunken);
+  border: 1px solid var(--border-subtle);
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-inset-xs);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.clearBtn:hover {
+  background-color: var(--bg-card-hover);
+  border-color: var(--border-hover);
+  transform: var(--hover-lift-sm);
+}
+
+.filters {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+@media (min-width: 768px) {
+  .filters {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.searchBox {
+  flex: 1;
+  min-width: 0;
+  height: var(--input-height);
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 14px;
+  font-size: 14px;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.searchInput {
+  width: 100%;
+  height: var(--input-height);
+  padding: 0 36px 0 38px;
+  background-color: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  box-shadow: var(--shadow-inset-xs);
+  outline: none;
+  box-sizing: border-box;
+  transition: all var(--transition-fast);
+}
+
+.searchInput::placeholder {
+  color: var(--input-placeholder);
+}
+
+.searchInput:focus {
+  border-color: var(--border-focus);
+  box-shadow: var(--shadow-inset-xs), var(--focus-ring);
+  background-color: var(--bg-card);
+}
+
+.searchClear {
+  position: absolute;
+  right: 10px;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--radius-full);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--shadow-convex-xs);
+}
+
+.searchClear:hover {
+  color: var(--danger);
+  border-color: var(--danger-border);
+}
+
+.selectGroup {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+@media (min-width: 768px) {
+  .selectGroup {
+    flex-wrap: nowrap;
+  }
+}
+
+.select {
+  flex: 1;
+  min-width: 130px;
+  height: var(--input-height);
+  padding: 0 14px;
+  background-color: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  box-shadow: var(--shadow-inset-xs);
+  outline: none;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: all var(--transition-fast);
+}
+
+.select:focus {
+  border-color: var(--border-focus);
+  box-shadow: var(--shadow-inset-xs), var(--focus-ring);
+}
+
+/* =========================================================
+   4. RESULTS COUNT BAR
+   ========================================================= */
+.resultsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4px;
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+}
+
+.resultsCount strong {
+  color: var(--text-primary);
+  font-weight: var(--font-weight-bold);
+}
+
+.resultsPage {
+  font-weight: var(--font-weight-semibold);
+}
+
+/* =========================================================
+   5. STUDENT CARDS GRID (3D SKEUOMORPHIC PRISMS)
+   ========================================================= */
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 18px;
+}
+
+@media (min-width: 680px) {
+  .cardGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1080px) {
+  .cardGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.studentCard {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-convex-sm);
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  contain: content;
+  display: flex;
+  flex-direction: column;
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal), border-color var(--transition-fast);
+}
+
+.studentCard:hover {
+  transform: var(--hover-lift-sm);
+  box-shadow: var(--shadow-convex-md);
+  border-color: var(--border-hover);
+}
+
+/* Top Accent Bevel Band */
+.cardCover {
+  height: 4px;
+  width: 100%;
+  background: var(--brand-gradient);
+}
+
+.cardBody {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  flex: 1;
+}
+
+/* Card Top Row */
+.cardTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.studentIdentity {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.avatarWrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  background: var(--brand-gradient);
+  color: var(--primary-contrast);
+  font-size: 18px;
+  font-weight: var(--font-weight-extrabold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid var(--border);
+  box-shadow: var(--shadow-primary);
+  overflow: hidden;
+  text-shadow: var(--text-embossed);
+}
+
+.avatarImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.onlineDot {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-full);
+  border: 2px solid var(--bg-card);
+  box-shadow: none;
+}
+
+.onlineDot.online {
+  background-color: var(--success);
+}
+
+.onlineDot.offline {
+  background-color: var(--danger);
+}
+
+.studentName {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.studentName h3 {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.studentName p {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin: 2px 0 0 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Status Badges */
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10.5px;
+  font-weight: var(--font-weight-bold);
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.statusDot {
+  width: 5px;
+  height: 5px;
+  border-radius: var(--radius-full);
+}
+
+.statusActive {
+  background-color: var(--success-soft);
+  color: var(--success);
+  border: 1px solid var(--success-border);
+}
+
+.statusActive .statusDot {
+  background-color: var(--success);
+}
+
+.statusBlocked {
+  background-color: var(--danger-soft);
+  color: var(--danger);
+  border: 1px solid var(--danger-border);
+}
+
+.statusBlocked .statusDot {
+  background-color: var(--danger);
+}
+
+/* Skills Section */
+.skillsSection {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sectionLabel {
+  font-size: 10px;
+  font-weight: var(--font-weight-extrabold);
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.skillTags {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  min-height: 24px;
+}
+
+.skillTag {
+  font-size: 10px;
+  font-weight: var(--font-weight-bold);
+  color: var(--primary);
+  background-color: var(--bg-surface-sunken);
+  border: 1px solid var(--border-subtle);
+  padding: 3px 8px;
+  border-radius: var(--radius-xs);
+  box-shadow: var(--shadow-inset-xs);
+}
+
+.moreSkills {
+  color: var(--text-muted);
+}
+
+.muted {
+  font-size: 11px;
+  color: var(--text-disabled);
+  font-style: italic;
+}
+
+/* KPI Stats Section (3D Sunken Wells) */
+.studentStats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  background-color: var(--bg-surface-sunken);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 8px;
+  box-shadow: var(--shadow-inset-xs);
+}
+
+.studentStat {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.statIcon {
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.statDetails {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.statDetails strong {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-extrabold);
+  color: var(--text-primary);
+  line-height: 1.1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.statDetails small {
+  font-size: 9.5px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+/* Card Footer & Action Buttons */
+.cardFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 1px solid var(--divider);
+  margin-top: auto;
+}
+
+.joinedDate {
+  display: flex;
+  flex-direction: column;
+}
+
+.joinedDate span {
+  font-size: 9.5px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.joinedDate strong {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.viewBtn {
+  height: 32px;
+  padding: 0 10px;
+  background-color: var(--bg-surface-sunken);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xs);
+  color: var(--primary);
+  font-size: 11px;
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  box-shadow: var(--shadow-convex-xs);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all var(--transition-fast);
+}
+
+.viewBtn:hover {
+  background-color: var(--bg-card-hover);
+  border-color: var(--border-hover);
+  transform: var(--hover-lift-sm);
+}
+
+.viewBtn .arrow {
+  transition: transform var(--transition-fast);
+}
+
+.viewBtn:hover .arrow {
+  transform: translateX(2px);
+}
+
+.blockBtn,
+.activateBtn {
+  height: 32px;
+  padding: 0 10px;
+  border-radius: var(--radius-xs);
+  font-size: 11px;
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  box-shadow: var(--shadow-convex-xs);
+  transition: all var(--transition-fast);
+}
+
+.blockBtn {
+  background-color: var(--danger-soft);
+  color: var(--danger);
+  border: 1px solid var(--danger-border);
+}
+
+.blockBtn:hover:not(:disabled) {
+  background-color: var(--danger);
+  color: var(--primary-contrast);
+  transform: var(--hover-lift-sm);
+}
+
+.activateBtn {
+  background-color: var(--success-soft);
+  color: var(--success);
+  border: 1px solid var(--success-border);
+}
+
+.activateBtn:hover:not(:disabled) {
+  background-color: var(--success);
+  color: var(--primary-contrast);
+  transform: var(--hover-lift-sm);
+}
+
+.viewBtn:active,
+.blockBtn:active,
+.activateBtn:active {
+  transform: var(--active-press);
+  box-shadow: var(--shadow-inset-xs);
+}
+
+/* =========================================================
+   6. PAGINATION CONTROLS (3D CONVEX BAR)
+   ========================================================= */
+.pagination {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 12px 20px;
+  box-shadow: var(--shadow-convex-sm);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+.pageBtn {
+  height: 36px;
+  padding: 0 16px;
+  background-color: var(--bg-surface-sunken);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  box-shadow: var(--shadow-convex-xs);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all var(--transition-fast);
+}
+
+.pageBtn:hover:not(:disabled) {
+  color: var(--primary);
+  border-color: var(--border-hover);
+  background-color: var(--bg-card-hover);
+  transform: var(--hover-lift-sm);
+}
+
+.pageBtn:active:not(:disabled) {
+  transform: var(--active-press);
+  box-shadow: var(--shadow-inset-xs);
+}
+
+.pageBtn:disabled {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.pageInfo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+}
+
+.pageInfo strong {
+  color: var(--text-primary);
+  font-weight: var(--font-weight-extrabold);
+}
+
+/* =========================================================
+   7. EMPTY STATES & ANIMATIONS
+   ========================================================= */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 48px 20px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-convex-md);
+  text-align: center;
+}
+
+.emptyIcon {
+  font-size: 36px;
+}
+
+.emptyState h3 {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.emptyState p {
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.emptyClearBtn {
+  height: 36px;
+  padding: 0 16px;
+  background-color: var(--bg-surface-sunken);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--primary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  box-shadow: var(--shadow-convex-xs);
+  transition: all var(--transition-fast);
+}
+
+.emptyClearBtn:hover {
+  background-color: var(--bg-card-hover);
+  border-color: var(--border-hover);
+  transform: var(--hover-lift-sm);
+}
+
+@keyframes alertPop {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -23,10 +23,6 @@ const router = express.Router();
 
 const studentOnly = [protect, authorize("STUDENT")];
 
-// ============================================================
-// STUDENT PROFILE
-// ============================================================
-
 // Get my student profile
 router.get("/profile/me", ...studentOnly, getMyStudentProfile);
 
@@ -38,15 +34,7 @@ router.put(
   updateMyStudentProfile,
 );
 
-// ============================================================
-// DASHBOARD
-// ============================================================
-
 router.get("/dashboard", ...studentOnly, getStudentDashboard);
-
-// ============================================================
-// COURSES
-// ============================================================
 
 // Published course catalog (with enrollment status)
 router.get("/courses", ...studentOnly, getPublishedCourses);

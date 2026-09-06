@@ -11,9 +11,7 @@ import { uploadToCloudinary } from "../utils/uploadToCloudinary.js";
 
 const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
 
-/* =========================================================
-   PROFILE HELPERS
-========================================================= */
+// profile helpers
 
 export const createOrGetStudentProfile = async (studentId) => {
   let profile = await StudentProfile.findOne({
@@ -31,9 +29,7 @@ export const createOrGetStudentProfile = async (studentId) => {
   return profile;
 };
 
-/* =========================================================
-   1. GET MY STUDENT PROFILE
-========================================================= */
+// 1. get my student profile
 
 export const getMyStudentProfile = async (req, res) => {
   try {
@@ -54,9 +50,7 @@ export const getMyStudentProfile = async (req, res) => {
   }
 };
 
-/* =========================================================
-   2. UPDATE MY STUDENT PROFILE
-========================================================= */
+// 2. update my student profile
 
 export const updateMyStudentProfile = async (req, res) => {
   try {
@@ -97,9 +91,7 @@ export const updateMyStudentProfile = async (req, res) => {
   }
 };
 
-/* =========================================================
-   3. GET DASHBOARD OVERVIEW
-========================================================= */
+// 3. get dashboard overview
 
 export const getStudentDashboard = async (req, res) => {
   try {
@@ -122,8 +114,6 @@ export const getStudentDashboard = async (req, res) => {
         { $group: { _id: "$status", count: { $sum: 1 } } },
       ]),
     ]);
-
-    /* ---------------- CORE STATS ---------------- */
 
     const enrolledCourses = progresses.length;
 
@@ -162,8 +152,6 @@ export const getStudentDashboard = async (req, res) => {
       }
     });
 
-    /* ---------------- RECENT COURSES (ENRICHED) ---------------- */
-
     const recentCourses = [...progresses]
       .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
       .slice(0, 6)
@@ -182,8 +170,6 @@ export const getStudentDashboard = async (req, res) => {
 
         lastAccessedAt: p.updatedAt,
       }));
-
-    /* ---------------- PROGRESS DISTRIBUTION (DOUGHNUT) ---------------- */
 
     const buckets = [
       { label: "Not Started", min: 0, max: 0 },
@@ -208,8 +194,6 @@ export const getStudentDashboard = async (req, res) => {
         return pct >= bucket.min && pct <= bucket.max;
       }).length,
     }));
-
-    /* ---------------- LEARNING ACTIVITY (LAST 6 MONTHS LINE) ---------------- */
 
     const now = new Date();
 
@@ -248,8 +232,6 @@ export const getStudentDashboard = async (req, res) => {
 
       lessons,
     }));
-
-    /* ---------------- RECENT CERTIFICATES ---------------- */
 
     const recentCertificates = certificates.slice(0, 4).map((certificate) => ({
       title: certificate.metadata?.entityName || certificate.title,
@@ -293,9 +275,7 @@ export const getStudentDashboard = async (req, res) => {
   }
 };
 
-/* =========================================================
-   4. GET PUBLISHED COURSES (CATALOG)
-========================================================= */
+// 4. get published courses (catalog)
 
 export const getPublishedCourses = async (req, res) => {
   try {
@@ -345,9 +325,7 @@ export const getPublishedCourses = async (req, res) => {
   }
 };
 
-/* =========================================================
-   5. ENROLL IN COURSE
-========================================================= */
+// 5. enroll in course
 
 export const enrollInCourse = async (req, res) => {
   try {
@@ -401,9 +379,7 @@ export const enrollInCourse = async (req, res) => {
   }
 };
 
-/* =========================================================
-   6. GET MY ENROLLED COURSES
-========================================================= */
+// 6. get my enrolled courses
 
 export const getMyEnrolledCourses = async (req, res) => {
   try {
@@ -434,9 +410,7 @@ export const getMyEnrolledCourses = async (req, res) => {
   }
 };
 
-/* =========================================================
-   7. GET COURSE LEARNING DATA (WITH LOCK STATE)
-========================================================= */
+// 7. get course learning data (with lock state)
 
 export const getCourseLearningData = async (req, res) => {
   try {
@@ -518,6 +492,7 @@ export const getCourseLearningData = async (req, res) => {
         detailedMeaning: lesson.detailedMeaning,
         example: lesson.example,
         codeExample: lesson.codeExample,
+        codeLanguage: lesson.codeLanguage || "",
         codeExampleExplanation: lesson.codeExampleExplanation,
         videoUrl: lesson.videoUrl,
         notesPdfUrl: lesson.notesPdfUrl,
@@ -566,9 +541,7 @@ export const getCourseLearningData = async (req, res) => {
   }
 };
 
-/* =========================================================
-   8. GET LESSON QUIZ QUESTIONS
-========================================================= */
+// 8. get lesson quiz questions
 
 export const getLessonQuiz = async (req, res) => {
   try {
@@ -625,9 +598,7 @@ export const getLessonQuiz = async (req, res) => {
   }
 };
 
-/* =========================================================
-   9. SUBMIT LESSON QUIZ
-========================================================= */
+// 9. submit lesson quiz
 
 export const submitLessonQuiz = async (req, res) => {
   try {
@@ -671,6 +642,26 @@ export const submitLessonQuiz = async (req, res) => {
       return res
         .status(403)
         .json({ success: false, message: "Enroll in course first" });
+    }
+
+    const lessonProgress = progress.lessonProgress?.find(
+      (item) => item.lessonId?.toString() === lessonId,
+    );
+
+    const hasCompletedLesson = (progress.completedLessons || []).some(
+      (id) => id?.toString() === lessonId,
+    );
+
+    if (lessonProgress?.isQuizPassed || hasCompletedLesson) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "This lesson quiz has already been passed. Move to the next lesson.",
+        result: {
+          percentage: lessonProgress?.quizScore ?? 0,
+          passed: true,
+        },
+      });
     }
 
     const questions = await LessonQuizQuestion.find({ lessonId }).lean();
@@ -743,7 +734,11 @@ export const submitLessonQuiz = async (req, res) => {
 
     // If passed, mark lesson complete and update progress
     if (passed) {
-      if (!progress.completedLessons.includes(lessonId)) {
+      const alreadyCompleted = (progress.completedLessons || []).some(
+        (id) => id?.toString() === lessonId,
+      );
+
+      if (!alreadyCompleted) {
         progress.completedLessons.push(lessonId);
       }
 
@@ -786,9 +781,7 @@ export const submitLessonQuiz = async (req, res) => {
   }
 };
 
-/* =========================================================
-   10. GET FINAL COURSE QUIZ
-========================================================= */
+// 10. get final course quiz
 
 export const getFinalQuiz = async (req, res) => {
   try {
@@ -817,6 +810,17 @@ export const getFinalQuiz = async (req, res) => {
       return res
         .status(403)
         .json({ success: false, message: "Enroll in course first" });
+    }
+
+    if (progress.isQuizPassed) {
+      return res.status(400).json({
+        success: false,
+        message: "Final quiz already passed. The capstone is already unlocked.",
+        result: {
+          percentage: progress.quizScore ?? 0,
+          passed: true,
+        },
+      });
     }
 
     if (progress.progressPercentage < 100) {
@@ -853,9 +857,7 @@ export const getFinalQuiz = async (req, res) => {
   }
 };
 
-/* =========================================================
-   11. SUBMIT FINAL COURSE QUIZ
-========================================================= */
+// 11. submit final course quiz
 
 export const submitFinalQuiz = async (req, res) => {
   try {
@@ -891,6 +893,17 @@ export const submitFinalQuiz = async (req, res) => {
       return res
         .status(403)
         .json({ success: false, message: "Enroll in course first" });
+    }
+
+    if (progress.isQuizPassed) {
+      return res.status(400).json({
+        success: false,
+        message: "Final quiz already passed. The capstone is already unlocked.",
+        result: {
+          percentage: progress.quizScore ?? 0,
+          passed: true,
+        },
+      });
     }
 
     if (progress.progressPercentage < 100) {
@@ -980,9 +993,7 @@ export const submitFinalQuiz = async (req, res) => {
   }
 };
 
-/* =========================================================
-   12. SUBMIT CAPSTONE PROJECT
-========================================================= */
+// 12. submit capstone project
 
 export const submitCapstone = async (req, res) => {
   try {
@@ -1073,9 +1084,7 @@ export const submitCapstone = async (req, res) => {
   }
 };
 
-/* =========================================================
-   13. GET MY CAPSTONE SUBMISSION FOR A COURSE
-========================================================= */
+// 13. get my capstone submission for a course
 
 export const getMyCapstoneSubmission = async (req, res) => {
   try {

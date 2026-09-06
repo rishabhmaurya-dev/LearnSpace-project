@@ -151,7 +151,6 @@ const MyCourses = () => {
 
   return (
     <div className={styles.container}>
-      {/* ================= PAGE HEADER ================= */}
       <div className={styles.pageHeader}>
         <h1>My Enrolled Courses</h1>
         <p>
@@ -160,7 +159,7 @@ const MyCourses = () => {
         </p>
       </div>
 
-      {/* ================= STATS SUMMARY ================= */}
+      {/* stats summary */}
       <div className={styles.metricsStrip}>
         <div className={styles.metricItem}>
           <span className={styles.metricLabel}>Total Enrolled</span>
@@ -186,7 +185,7 @@ const MyCourses = () => {
         </div>
       </div>
 
-      {/* ================= SEARCH & CONTROLS ================= */}
+      {/* search & filters */}
       <div className={styles.controlsBar}>
         <div className={styles.searchWrap}>
           <span className={styles.searchIcon}>🔍</span>
@@ -244,7 +243,7 @@ const MyCourses = () => {
         </div>
       </div>
 
-      {/* ================= RESPONSIVE COURSES CONTAINER ================= */}
+      {/* responsive course container */}
       {filteredCourses.length === 0 ? (
         <div className={styles.emptyFilterState}>
           <p>No enrolled courses matched your search criteria.</p>
@@ -299,7 +298,7 @@ const MyCourses = () => {
                 variants={cardVariants}
                 whileHover={{ y: -3 }}
               >
-                {/* 1. THUMBNAIL (Laptop / Desktop ONLY) */}
+                {/* thumbnail (laptop/desktop only) */}
                 <div className={styles.thumbWrap}>
                   {course.thumbnailUrl ? (
                     <img
@@ -325,9 +324,9 @@ const MyCourses = () => {
                   </span>
                 </div>
 
-                {/* 2. COURSE DETAILS BODY */}
+                {/* course details body */}
                 <div className={styles.courseBody}>
-                  {/* Top Mobile/Tablet Header Bar (When thumb is hidden) */}
+                  {/* mobile top bar (hidden on laptop) */}
                   <div className={styles.mobileTopBar}>
                     {course.category && (
                       <span className={styles.mobileCategoryTag}>
@@ -349,7 +348,7 @@ const MyCourses = () => {
                     {course.description || "Keep up your learning momentum."}
                   </p>
 
-                  {/* PROGRESS SECTION */}
+                  {/* progress section */}
                   <div className={styles.progressSection}>
                     <div className={styles.progressHead}>
                       <strong className={styles.percentLabel}>
@@ -368,7 +367,7 @@ const MyCourses = () => {
                     </div>
                   </div>
 
-                  {/* STATS CHIPS & ACTION FOOTER */}
+                  {/* stats & action footer */}
                   <div className={styles.bottomRow}>
                     <div className={styles.statRow}>
                       <span className={styles.statChip}>
@@ -390,7 +389,7 @@ const MyCourses = () => {
                       )}
                     </div>
 
-                    {/* ACTION CTA */}
+                    {/* action cta */}
                     <Link
                       to={`/student/courses/${course._id}/learn`}
                       className={`${styles.btn} ${styles.btnPrimary} ${styles.ctaBtn}`}

@@ -8,11 +8,6 @@ const isValidObjectId = (id) => {
   return mongoose.Types.ObjectId.isValid(id);
 };
 
-/* =========================================================
-   UPLOAD LESSON MCQs CSV
-   STEP 3
-========================================================= */
-
 export const uploadLessonMcqCsv = async (req, res) => {
   try {
     const { lessonId } = req.params;
@@ -139,9 +134,7 @@ export const uploadLessonMcqCsv = async (req, res) => {
       });
     }
 
-    /* --------------------------------
-       Replace old questions
-    -------------------------------- */
+    // replace old questions with the freshly uploaded ones
 
     await LessonQuizQuestion.deleteMany({
       lessonId: lesson._id,
@@ -165,10 +158,6 @@ export const uploadLessonMcqCsv = async (req, res) => {
     });
   }
 };
-
-/* =========================================================
-   GET LESSON MCQs
-========================================================= */
 
 export const getLessonMcqs = async (req, res) => {
   try {
@@ -214,10 +203,6 @@ export const getLessonMcqs = async (req, res) => {
     });
   }
 };
-
-/* =========================================================
-   DELETE ALL LESSON MCQs
-========================================================= */
 
 export const deleteLessonMcqs = async (req, res) => {
   try {
@@ -267,13 +252,3 @@ export const deleteLessonMcqs = async (req, res) => {
     });
   }
 };
-
-// (question, optionA, optionB, optionC, optionD, correctOptionIndex);
-// ("What is React?", "Library", "Database", "OS", "Language", 0);
-// ("What is JSX?", "Syntax", "Database", "Server", "Compiler", 0);
-// ("Which hook manages state?",
-//   "useState",
-//   "useEffect",
-//   "useMemo",
-//   "useCallback",
-//   0);

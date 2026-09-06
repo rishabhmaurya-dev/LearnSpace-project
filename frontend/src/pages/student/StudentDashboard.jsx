@@ -100,7 +100,7 @@ const StudentDashboard = () => {
 
   return (
     <div className={styles.container}>
-      {/* HEADER */}
+      {/* header */}
       <div className={styles.pageHeader}>
         <div>
           <span className={styles.headerBadge}>STUDENT DASHBOARD</span>
@@ -114,7 +114,7 @@ const StudentDashboard = () => {
           Browse Catalog →
         </Link>
       </div>
-      {/* TOP 4 STATS */}
+      {/* primary stats */}
       <div className={styles.primaryStatGrid}>
         {primaryStats.map((card, idx) => (
           <div
@@ -132,7 +132,7 @@ const StudentDashboard = () => {
           </div>
         ))}
       </div>
-      {/* SECONDARY MICRO-STATS STRIP */}
+      {/* secondary stats strip */}
       <div className={styles.microStatsStrip}>
         {secondaryStats.map((item) => (
           <div className={styles.microStatItem} key={item.label}>
@@ -145,8 +145,8 @@ const StudentDashboard = () => {
         ))}
       </div>
       <StudentActivityChart />
-      {/* ================= LOWER SECTIONS (STRUCTURED BENTO GRID) ================= */}
-      {/* 1. RECENT COURSES (FULL WIDTH HERO SECTION) */}
+      {/* lower sections: bento grid */}
+      {/* recent courses (full width) */}
 
       <ScrollReveal>
         <section className={styles.panelCard}>
@@ -216,10 +216,10 @@ const StudentDashboard = () => {
         </section>
       </ScrollReveal>
 
-      {/* 2. THREE-COLUMN BALANCED FOOTER ROW */}
+      {/* footer 3-column row */}
       <ScrollReveal>
         <div className={styles.footerThreeCol}>
-          {/* Col 1: Progress Distribution */}
+          {/* col 1: progress distribution */}
           <div className={styles.panelCard}>
             <div className={styles.panelHeader}>
               <div>
@@ -244,7 +244,7 @@ const StudentDashboard = () => {
             </div>
           </div>
 
-          {/* Col 2: Activity & Capstone Summary */}
+          {/* col 2: activity & capstone summary */}
           <div className={styles.panelCard}>
             <div className={styles.panelHeader}>
               <div>
@@ -284,7 +284,7 @@ const StudentDashboard = () => {
             </div>
           </div>
 
-          {/* Col 3: Earned Certificates */}
+          {/* col 3: earned certificates */}
           <div className={styles.panelCard}>
             <div className={styles.panelHeader}>
               <div>

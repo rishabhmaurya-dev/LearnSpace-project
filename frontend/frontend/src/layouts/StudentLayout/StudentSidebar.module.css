@@ -1,0 +1,276 @@
+/* ==========================================================================
+   STUDENT SIDEBAR — Bold Typography Design System
+   Sharp edges. No shadows. Accent underlines. Editorial.
+   ========================================================================== */
+
+/* =========================================================
+   1. FIXED MOBILE TOGGLE TRIGGER (HAMBURGER)
+   ========================================================= */
+.hamburgerBtn {
+  display: none;
+}
+
+/* =========================================================
+   2. MOBILE BACKDROP OVERLAY
+   ========================================================= */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 10, 10, 0.8);
+  z-index: 9998;
+}
+
+@media (min-width: 1024px) {
+  .overlay {
+    display: none;
+  }
+}
+
+/* =========================================================
+   3. SIDEBAR STRUCTURE
+   ========================================================= */
+.sidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 260px;
+  background: var(--muted);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  padding: 24px 0;
+  box-sizing: border-box;
+  z-index: 9999;
+  transform: translateX(-100%);
+  transition: transform 200ms cubic-bezier(0.25, 0, 0, 1);
+}
+
+.sidebar.open {
+  transform: translateX(0);
+}
+
+@media (min-width: 1024px) {
+  .sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    min-height: 100vh;
+    flex-shrink: 0;
+    transform: translateX(0);
+    z-index: 50;
+  }
+}
+
+/* =========================================================
+   4. BRAND LOGO HEADER
+   ========================================================= */
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.logoBrand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  text-decoration: none;
+}
+
+.logoMark {
+  width: 36px;
+  height: 36px;
+  background: var(--accent);
+  color: var(--accent-foreground);
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.logoText {
+  font-family: var(--font-heading);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--foreground);
+  letter-spacing: -0.04em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.closeBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted-foreground);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 150ms cubic-bezier(0.25, 0, 0, 1);
+}
+
+.closeBtn:hover {
+  color: var(--danger);
+  border-color: var(--danger);
+}
+
+.closeBtn:active {
+  transform: translateY(1px);
+}
+
+@media (min-width: 1024px) {
+  .closeBtn {
+    display: none;
+  }
+}
+
+/* =========================================================
+   5. NAVIGATION LIST & SECTION HEADERS
+   ========================================================= */
+.sectionTitle {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--muted-foreground);
+  letter-spacing: 0.15em;
+  padding: 0 20px 10px;
+  text-transform: uppercase;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0 12px;
+}
+
+.nav::-webkit-scrollbar {
+  width: 0;
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: var(--muted-foreground);
+  text-decoration: none;
+  border: 1px solid transparent;
+  background: transparent;
+  transition: all 150ms cubic-bezier(0.25, 0, 0, 1);
+  box-sizing: border-box;
+  position: relative;
+}
+
+.navItem:hover {
+  color: var(--foreground);
+  background: rgba(255, 255, 255, 0.03);
+  border-color: var(--border);
+}
+
+.icon {
+  width: 24px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Active State */
+.navItem.active {
+  color: var(--accent);
+  background: rgba(255, 61, 0, 0.08);
+  border-color: rgba(255, 61, 0, 0.2);
+  font-weight: 600;
+}
+
+.navItem.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--accent);
+}
+
+/* =========================================================
+   6. FOOTER & LOGOUT ACTION
+   ========================================================= */
+.bottom {
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+.logout {
+  width: 100%;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: transparent;
+  color: var(--muted-foreground);
+  border: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 150ms cubic-bezier(0.25, 0, 0, 1);
+}
+
+.logout:hover {
+  background: rgba(239, 68, 68, 0.08);
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.logout:active {
+  transform: translateY(1px);
+}
+
+/* =========================================================
+   7. FOCUS ACCESSIBILITY
+   ========================================================= */
+.navItem:focus-visible,
+.logout:focus-visible,
+.closeBtn:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* =========================================================
+   8. REDUCED MOTION
+   ========================================================= */
+@media (prefers-reduced-motion: reduce) {
+  .sidebar,
+  .navItem,
+  .logout,
+  .closeBtn {
+    transition: none !important;
+  }
+}

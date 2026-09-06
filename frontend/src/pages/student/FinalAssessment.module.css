@@ -1,9 +1,6 @@
-/* =========================================================
-   CONTAINER & CANVAS
-   ========================================================= */
 .finalAssessmentPage {
   width: 100%;
-  max-width: 1000px;
+  max-width: 1320px;
   margin: 0 auto;
   padding: 32px var(--page-padding) 80px var(--page-padding);
   background: var(--bg-primary-radial);
@@ -15,9 +12,6 @@
   gap: 28px;
 }
 
-/* =========================================================
-   HERO HEADER CARD (GLASS-ELEVATED)
-   ========================================================= */
 .assessmentHeader {
   display: flex;
   flex-direction: column;
@@ -107,7 +101,6 @@
   object-fit: contain;
 }
 
-/* Header Progress */
 .headerProgress {
   display: flex;
   align-items: center;
@@ -164,9 +157,6 @@
   transform: translateY(-1px);
 }
 
-/* =========================================================
-   TOP 4-METRIC STATS STRIP
-   ========================================================= */
 .statsStrip {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -234,9 +224,6 @@
 .statRejected { color: var(--danger); }
 .statPending { color: var(--warning); }
 
-/* =========================================================
-   CORE ASSESSMENT CARDS
-   ========================================================= */
 .assessmentCard {
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -300,9 +287,6 @@
   white-space: nowrap;
 }
 
-/* =========================================================
-   CHECKLIST (CERTIFICATION PATH)
-   ========================================================= */
 .checklist {
   list-style: none;
   padding: 0;
@@ -366,7 +350,6 @@
   margin: 0;
 }
 
-/* Status Badges */
 .statusBadge {
   font-size: 11px;
   font-weight: 800;
@@ -424,9 +407,6 @@
   box-shadow: none;
 }
 
-/* =========================================================
-   QUIZ COMPONENT (MODERN & FOCUSED)
-   ========================================================= */
 .quizArea {
   display: flex;
   flex-direction: column;
@@ -541,7 +521,6 @@
   height: 16px;
 }
 
-/* Quiz Result Box */
 .quizResult {
   display: flex;
   flex-direction: column;
@@ -583,9 +562,6 @@
   opacity: 0.9;
 }
 
-/* =========================================================
-   CAPSTONE PROJECT FORM & BRIEFS
-   ========================================================= */
 .projectBrief {
   background-color: var(--bg-surface-sunken);
   border: 1px solid var(--border);
@@ -682,7 +658,6 @@
   cursor: not-allowed;
 }
 
-/* Submission Summary Grid */
 .submissionSummary {
   margin-top: 4px;
   background-color: var(--bg-surface-sunken);
@@ -773,9 +748,6 @@
   margin: 0;
 }
 
-/* =========================================================
-   LESSON PERFORMANCE RECAP LIST
-   ========================================================= */
 .recapList {
   display: flex;
   flex-direction: column;
@@ -844,9 +816,6 @@
   font-weight: 600;
 }
 
-/* =========================================================
-   ELEVATED BUTTONS
-   ========================================================= */
 .primaryButton,
 .secondaryButton,
 .successButton {
@@ -909,9 +878,6 @@
   box-shadow: none !important;
 }
 
-/* =========================================================
-   LOCKED & STATE SCREENS
-   ========================================================= */
 .lockedCard {
   text-align: center;
   padding: 64px 24px;

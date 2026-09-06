@@ -17,15 +17,11 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { oneLight } from "react-syntax-highlighter/dist/esm/styles/prism";
 
-import { sendAIMessage } from "../../services/ai.service";
+import { streamAIMessage } from "../../services/ai.service";
 
 import "./LearnSpaceAi.css";
-
-/* =========================================================
-   HELPERS
-========================================================= */
 
 const createMessage = (role, content) => ({
   id: crypto.randomUUID(),
@@ -37,10 +33,6 @@ const INITIAL_MESSAGE = createMessage(
   "assistant",
   "Hello 👋 I'm **LearnSpace AI**.\n\nHow can I help you today?",
 );
-
-/* =========================================================
-   COPY BUTTON
-========================================================= */
 
 const CopyButton = ({
   text,
@@ -87,10 +79,6 @@ const CopyButton = ({
   );
 };
 
-/* =========================================================
-   CODE BLOCK
-========================================================= */
-
 const CodeBlock = ({ language, code }) => {
   return (
     <div className="sf-ai-code-block">
@@ -108,7 +96,7 @@ const CodeBlock = ({ language, code }) => {
       <div className="sf-ai-code-content">
         <SyntaxHighlighter
           language={language || "text"}
-          style={oneDark}
+          style={oneLight}
           PreTag="div"
           customStyle={{
             margin: 0,
@@ -128,10 +116,6 @@ const CodeBlock = ({ language, code }) => {
     </div>
   );
 };
-
-/* =========================================================
-   AI MARKDOWN MESSAGE
-========================================================= */
 
 const AIMessageContent = ({ content }) => {
   return (
@@ -198,37 +182,13 @@ const AIMessageContent = ({ content }) => {
 
           const code = String(children).replace(/\n$/, "");
 
-          /*
-          =================================================
-          CODE BLOCK
-
-          Markdown:
-
-          ```js
-          code
-          ```
-          =================================================
-          */
-
           if (!inline && match) {
             return <CodeBlock language={match[1]} code={code} />;
           }
 
-          /*
-          =================================================
-          CODE BLOCK WITHOUT LANGUAGE
-          =================================================
-          */
-
           if (!inline && code.includes("\n")) {
             return <CodeBlock language="text" code={code} />;
           }
-
-          /*
-          =================================================
-          INLINE CODE
-          =================================================
-          */
 
           return <code className="sf-ai-inline-code">{children}</code>;
         },
@@ -239,18 +199,8 @@ const AIMessageContent = ({ content }) => {
   );
 };
 
-/* =========================================================
-   MAIN COMPONENT
-========================================================= */
-
 const LearnSpace = () => {
   const navigate = useNavigate();
-
-  /*
-  ========================================================
-  STATE
-  ========================================================
-  */
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -260,21 +210,9 @@ const LearnSpace = () => {
 
   const [conversation, setConversation] = useState([INITIAL_MESSAGE]);
 
-  /*
-  ========================================================
-  REFS
-  ========================================================
-  */
-
   const messagesEndRef = useRef(null);
 
   const textareaRef = useRef(null);
-
-  /*
-  ========================================================
-  AUTO SCROLL
-  ========================================================
-  */
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({
@@ -282,12 +220,6 @@ const LearnSpace = () => {
       block: "end",
     });
   }, [conversation, loading]);
-
-  /*
-  ========================================================
-  TEXTAREA AUTO RESIZE
-  ========================================================
-  */
 
   useEffect(() => {
     const textarea = textareaRef.current;
@@ -299,12 +231,6 @@ const LearnSpace = () => {
     textarea.style.height = `${Math.min(textarea.scrollHeight, 140)}px`;
   }, [message]);
 
-  /*
-  ========================================================
-  SEND MESSAGE
-  ========================================================
-  */
-
   const handleSend = async (customMessage) => {
     const text = (customMessage || message).trim();
 
@@ -312,39 +238,21 @@ const LearnSpace = () => {
       return;
     }
 
-    /*
-    ======================================================
-    USER MESSAGE
-    ======================================================
-    */
-
     const userMessage = createMessage("user", text);
 
-    /*
-    ======================================================
-    PREVIOUS CONVERSATION
-
-    Initial welcome message API ko send nahi karenge.
-    ======================================================
-    */
-
+    // exclude initial welcome message from API conversation
     const previousConversation = conversation
       .filter(
         (item) =>
           item.id !== INITIAL_MESSAGE.id &&
-          (item.role === "user" || item.role === "assistant"),
+          (item.role === "user" || item.role === "assistant") &&
+          item.content.trim(),
       )
       .slice(-4)
       .map((item) => ({
         role: item.role,
         content: item.content.slice(0, 500),
       }));
-
-    /*
-    ======================================================
-    ADD USER MESSAGE
-    ======================================================
-    */
 
     setConversation((prev) => [...prev, userMessage]);
 
@@ -353,36 +261,59 @@ const LearnSpace = () => {
     setLoading(true);
 
     try {
-      /*
-      ====================================================
-      API CALL
-      ====================================================
-      */
-
-      const data = await sendAIMessage({
-        message: text,
-        conversation: previousConversation,
-      });
-
-      /*
-      ====================================================
-      AI RESPONSE
-      ====================================================
-      */
-
-      const reply = data?.reply || "Sorry, I couldn't generate a response.";
-
-      setConversation((prev) => [...prev, createMessage("assistant", reply)]);
-    } catch (error) {
-      console.error("LearnSpace AI Error:", error);
+      const assistantMessageId = crypto.randomUUID();
 
       setConversation((prev) => [
         ...prev,
-        createMessage(
-          "assistant",
-          "⚠️ **AI service is currently unavailable.**\n\nPlease try again.",
-        ),
+        { id: assistantMessageId, role: "assistant", content: "" },
       ]);
+
+      const updateAssistant = (partial) =>
+        setConversation((prev) =>
+          prev.map((item) =>
+            item.id === assistantMessageId
+              ? { ...item, content: item.content + partial }
+              : item,
+          ),
+        );
+
+      const patchErrorMessage = (text) =>
+        setConversation((prev) =>
+          prev.map((item) =>
+            item.id === assistantMessageId ? { ...item, content: text } : item,
+          ),
+        );
+
+      try {
+        await streamAIMessage(
+          {
+            message: text,
+            conversation: previousConversation,
+          },
+          {
+            onDelta: (delta) => updateAssistant(delta),
+            onError: (errorMsg) => {
+              patchErrorMessage(`⚠️ **${errorMsg}**`);
+            },
+          },
+        );
+
+        setConversation((prev) =>
+          prev.map((item) =>
+            item.id === assistantMessageId && !item.content.trim()
+              ? { ...item, content: "Sorry, I couldn't generate a response." }
+              : item,
+          ),
+        );
+      } catch (error) {
+        console.error("LearnSpace AI Stream Error:", error);
+
+        patchErrorMessage(
+          "⚠️ **AI service is currently unavailable.**\n\nPlease try again.",
+        );
+      }
+    } catch (error) {
+      console.error("LearnSpace AI Error:", error);
     } finally {
       setLoading(false);
 
@@ -391,12 +322,6 @@ const LearnSpace = () => {
       }, 50);
     }
   };
-
-  /*
-  ========================================================
-  ENTER KEY
-  ========================================================
-  */
 
   const handleKeyDown = (event) => {
     if (
@@ -409,12 +334,6 @@ const LearnSpace = () => {
       handleSend();
     }
   };
-
-  /*
-  ========================================================
-  CLEAR CHAT
-  ========================================================
-  */
 
   const clearChat = () => {
     if (loading) return;
@@ -433,23 +352,11 @@ const LearnSpace = () => {
     }, 50);
   };
 
-  /*
-  ========================================================
-  OPEN FULL PAGE
-  ========================================================
-  */
-
   const openFullAI = () => {
     setIsOpen(false);
 
     navigate("/ai");
   };
-
-  /*
-  ========================================================
-  QUICK QUESTIONS
-  ========================================================
-  */
 
   const quickQuestions = [
     "Explain React useState",
@@ -463,18 +370,8 @@ const LearnSpace = () => {
     handleSend(question);
   };
 
-  /*
-  ========================================================
-  RENDER
-  ========================================================
-  */
-
   return (
     <>
-      {/* ==================================================
-          FLOATING BUTTON
-      ================================================== */}
-
       {!isOpen && (
         <button
           type="button"
@@ -488,16 +385,8 @@ const LearnSpace = () => {
         </button>
       )}
 
-      {/* ==================================================
-          CHAT WINDOW
-      ================================================== */}
-
       {isOpen && (
         <div className="sf-ai-container">
-          {/* =============================================
-              HEADER
-          ============================================= */}
-
           <div className="sf-ai-header">
             <div className="sf-ai-header-info">
               <div className="sf-ai-logo">
@@ -542,15 +431,7 @@ const LearnSpace = () => {
             </div>
           </div>
 
-          {/* =============================================
-              BODY
-          ============================================= */}
-
           <div className="sf-ai-body">
-            {/* ===========================================
-                WELCOME
-            =========================================== */}
-
             {conversation.length === 1 && !loading && (
               <div className="sf-ai-welcome">
                 <div className="sf-ai-welcome-icon">
@@ -577,12 +458,12 @@ const LearnSpace = () => {
               </div>
             )}
 
-            {/* ===========================================
-                MESSAGES
-            =========================================== */}
-
             <div className="sf-ai-messages">
-              {conversation.map((item) => (
+              {conversation
+                .filter(
+                  (item) => item.role === "user" || item.content.trim(),
+                )
+                .map((item) => (
                 <div
                   key={item.id}
                   className={`sf-ai-message-row ${
@@ -591,15 +472,11 @@ const LearnSpace = () => {
                       : "sf-ai-assistant-row"
                   }`}
                 >
-                  {/* AI AVATAR */}
-
                   {item.role === "assistant" && (
                     <div className="sf-ai-avatar">
                       <Bot size={16} />
                     </div>
                   )}
-
-                  {/* MESSAGE */}
 
                   <div
                     className={`sf-ai-message ${
@@ -628,10 +505,6 @@ const LearnSpace = () => {
                 </div>
               ))}
 
-              {/* =========================================
-                  LOADING
-              ========================================= */}
-
               {loading && (
                 <div className="sf-ai-message-row sf-ai-assistant-row">
                   <div className="sf-ai-avatar">
@@ -651,10 +524,6 @@ const LearnSpace = () => {
               <div ref={messagesEndRef} />
             </div>
           </div>
-
-          {/* =============================================
-              INPUT
-          ============================================= */}
 
           <div className="sf-ai-input-wrapper">
             <div className="sf-ai-input-box">
@@ -690,4 +559,3 @@ const LearnSpace = () => {
 };
 
 export default LearnSpace;
-  

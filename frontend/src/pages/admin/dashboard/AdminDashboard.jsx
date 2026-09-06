@@ -14,9 +14,7 @@ import StatisticsChart from "../../../layouts/AdminLayout/Chart";
 import CategoryDonut from "./CategoryDonut";
 import styles from "./AdminDashboard.module.css";
 
-/* =========================================================
-   HELPERS
-======================================================== */
+/* helpers */
 const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
 
 const useCountUp = (target, duration = 900) => {
@@ -87,9 +85,7 @@ const ACTIVITY_META = {
   CAPSTONE_REJECTED: { icon: "⛔", tone: "danger", label: "Capstone rejected" },
 };
 
-/* =========================================================
-   MAIN COMPONENT
-======================================================== */
+/* main component */
 const AdminDashboard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -135,8 +131,6 @@ const AdminDashboard = () => {
       refreshAll();
     }
   }, [rehydrating, isAuthenticated, refreshAll]);
-
-
 
   if (loading && !statistics) {
     return (
@@ -245,38 +239,24 @@ const AdminDashboard = () => {
           value={statistics?.students?.total || 0}
           icon="🎓"
           type="students"
-          delta={statistics?.students?.newThisMonth}
-          deltaLabel="new this month"
-          note={
-            statistics?.students?.newThisWeek > 0
-              ? `+${statistics.students.newThisWeek} this week`
-              : "—"
-          }
         />
         <StatCard
           title="Courses"
           value={statistics?.courses?.total || 0}
           icon="📖"
           type="courses"
-          delta={statistics?.courses?.newThisMonth}
-          deltaLabel="added this month"
-          note={`${statistics?.courses?.active || 0} published`}
         />
         <StatCard
           title="Lessons"
           value={statistics?.lessons?.total || 0}
           icon="📄"
           type="lessons"
-          note={`${statistics?.lessons?.published || 0} published`}
         />
         <StatCard
           title="Certificates"
           value={statistics?.certificates?.total || 0}
           icon="🏅"
           type="certificates"
-          delta={statistics?.certificates?.newThisMonth}
-          deltaLabel="issued this month"
-          note={`${statistics?.capstones?.pending || 0} capstones awaiting review`}
         />
       </section>
 
@@ -312,7 +292,7 @@ const AdminDashboard = () => {
         />
       </section>
 
-      {/* ================= SCROLL REVEAL SECTIONS ================= */}
+      {/* scroll reveal sections */}
 
       {/* CHARTS */}
       <section className={styles.chartsGrid}>
@@ -504,33 +484,21 @@ const AdminDashboard = () => {
   );
 };
 
-/* =========================================================
-   SUB-COMPONENTS
-======================================================== */
-const StatCard = ({ title, value, icon, type, delta, deltaLabel, note }) => {
+/* sub-components */
+const StatCard = ({ title, value, icon, type }) => {
   const animatedValue = useCountUp(value || 0);
 
   return (
     <div className={`${styles.statCard} ${styles[type]}`}>
       <div className={styles.statIcon}>{icon}</div>
+
       <div className={styles.statInfo}>
         <strong>{animatedValue}</strong>
         <span>{title}</span>
-        {(delta !== undefined && delta !== null) || note ? (
-          <div className={styles.statFootnote}>
-            {delta !== undefined && delta !== null && delta > 0 && (
-              <em className={styles.deltaChip}>
-                ▲ {delta} {deltaLabel}
-              </em>
-            )}
-            {note && <em className={styles.statNote}>{note}</em>}
-          </div>
-        ) : null}
       </div>
     </div>
   );
 };
-
 const ActionTile = ({ icon, title, hint, onClick, tone }) => (
   <button
     type="button"
@@ -650,4 +618,3 @@ const StudentCard = ({ student, onView }) => {
 };
 
 export default AdminDashboard;
-  

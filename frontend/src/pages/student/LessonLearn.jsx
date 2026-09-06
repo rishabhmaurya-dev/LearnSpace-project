@@ -4,7 +4,18 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
 
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
+
+import ReactMarkdown from "react-markdown";
+
+import remarkGfm from "remark-gfm";
+
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+
+import {
+  oneLight,
+  oneDark,
+} from "react-syntax-highlighter/dist/esm/styles/prism";
 
 import {
   fetchCourseLearningData,
@@ -19,6 +30,151 @@ import {
 } from "../../features/student/studentCourseSlice";
 
 import styles from "./LessonLearn.module.css";
+
+const normalizeCodeExample = (content) => {
+  if (!content) return "";
+
+  const lines = content.split("\n");
+
+  if (lines[0] && /^[xX]$/.test(lines[0].trim())) {
+    lines.shift();
+  }
+
+  return lines.join("\n").trim();
+};
+
+const resolveNotesUrl = (notesPdfUrl) => {
+  if (!notesPdfUrl) return "";
+
+  const trimmed = String(notesPdfUrl).trim();
+
+  if (/^https?:\/\//i.test(trimmed)) {
+    return trimmed;
+  }
+
+  const filename = trimmed.split(/[\\/]/).pop();
+
+  return `/uploads/notes/${encodeURIComponent(filename)}`;
+};
+
+/* markdown renderer: headings, code, lists, tables, highlighted fenced blocks */
+const CodeBlock = ({ language, children }) => {
+  const code = String(children).replace(/\n$/, "");
+
+  return (
+    <div className={styles.codeBlock}>
+      <div className={styles.codeBlockHeader}>
+        <span className={styles.codeBlockLabel}>
+          {language ? `💻 ${language}` : "💻 Code"}
+        </span>
+
+        <button
+          type="button"
+          className={styles.copyBtn}
+          onClick={() => {
+            navigator.clipboard.writeText(code);
+          }}
+        >
+          📋 Copy
+        </button>
+      </div>
+
+      <SyntaxHighlighter
+        style={oneLight}
+        language={language || "plaintext"}
+        customStyle={{
+          margin: 0,
+          borderRadius: 0,
+          background: "transparent",
+          fontSize: "13.5px",
+          lineHeight: "1.8",
+        }}
+      >
+        {code}
+      </SyntaxHighlighter>
+    </div>
+  );
+};
+
+const MarkdownContent = ({ text, className }) => {
+  if (!text) return null;
+
+  const trimmed = String(text).trim();
+
+  if (!trimmed) return null;
+
+  return (
+    <div className={className}>
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        components={{
+          code({ inline, className: codeClassName, children, ...props }) {
+            if (!inline && (codeClassName || String(children).includes("\n"))) {
+              const match = /language-(\w+)/.exec(codeClassName || "");
+
+              return (
+                <CodeBlock language={match ? match[1] : ""}>
+                  {children}
+                </CodeBlock>
+              );
+            }
+
+            return (
+              <code className={styles.richInlineCode} {...props}>
+                {children}
+              </code>
+            );
+          },
+          p({ children }) {
+            return <p>{children}</p>;
+          },
+          ul({ children }) {
+            return <ul className={styles.pointList}>{children}</ul>;
+          },
+          ol({ children }) {
+            return <ol className={styles.pointList}>{children}</ol>;
+          },
+          li({ children }) {
+            return (
+              <li>
+                <span className={styles.pointBullet}>▹</span>
+                <span>{children}</span>
+              </li>
+            );
+          },
+          strong({ children }) {
+            return <strong className={styles.richBold}>{children}</strong>;
+          },
+          h1({ children }) {
+            return <h3>{children}</h3>;
+          },
+          h2({ children }) {
+            return <h3>{children}</h3>;
+          },
+          h3({ children }) {
+            return <h3>{children}</h3>;
+          },
+          blockquote({ children }) {
+            return (
+              <blockquote className={styles.richBlockquote}>
+                {children}
+              </blockquote>
+            );
+          },
+          table({ children }) {
+            return (
+              <div className={styles.tableWrapper}>
+                <table>{children}</table>
+              </div>
+            );
+          },
+        }}
+      >
+        {trimmed}
+      </ReactMarkdown>
+    </div>
+  );
+};
 
 const LessonLearn = () => {
   const dispatch = useDispatch();
@@ -39,23 +195,22 @@ const LessonLearn = () => {
   } = useSelector((state) => state.studentCourse);
 
   const [quizAnswers, setQuizAnswers] = useState({});
+  const [codeCopied, setCodeCopied] = useState(false);
 
-  /* ============================================
-     LOAD COURSE
-  ============================================ */
-
+  // load course
   useEffect(() => {
     dispatch(fetchCourseLearningData(courseId));
+  }, [dispatch, courseId]);
 
+  // Reset quiz state whenever lesson changes (component stays mounted on
+  // in-course navigation), so the previous lesson's result isn't shown.
+  useEffect(() => {
     return () => {
       dispatch(clearLessonQuiz());
     };
-  }, [dispatch, courseId]);
+  }, [dispatch, lessonId]);
 
-  /* ============================================
-     SUCCESS
-  ============================================ */
-
+  // success toast
   useEffect(() => {
     if (!success) return;
 
@@ -64,10 +219,7 @@ const LessonLearn = () => {
     dispatch(clearStudentCourseSuccess());
   }, [success, message, dispatch]);
 
-  /* ============================================
-     ERROR
-  ============================================ */
-
+  // error toast
   useEffect(() => {
     if (!error) return;
 
@@ -88,15 +240,6 @@ const LessonLearn = () => {
 
   const lesson = lessons.find((item) => item._id === lessonId);
 
-  /*
-  ==============================================
-  SECURITY
-
-  USER URL manually change karke
-  locked lesson access nahi kar sakta
-  ==============================================
-  */
-
   if (!lesson?.isUnlocked) {
     return (
       <div className={styles.lockedPage}>
@@ -109,36 +252,25 @@ const LessonLearn = () => {
     );
   }
 
-  /*
-  ==============================================
-  FIND NEXT LESSON
-  ==============================================
-  */
-
   const currentIndex = lessons.findIndex((item) => item._id === lessonId);
 
   const nextLesson = lessons[currentIndex + 1];
 
-  /* ============================================
-     QUIZ
-  ============================================ */
-
+  // quiz
   const openQuiz = () => {
     setQuizAnswers({});
 
     dispatch(fetchLessonQuiz(lesson._id));
   };
 
-  const handleAnswer = (questionId, selectedIndex) => {
-    setQuizAnswers((prev) => ({
-      ...prev,
-
-      [questionId]: selectedIndex,
-    }));
+  const handleRetryQuiz = () => {
+    setQuizAnswers({});
+    dispatch(clearLessonQuiz());
+    dispatch(fetchLessonQuiz(lesson._id));
   };
 
   const submitQuiz = () => {
-    if (!lessonQuiz) return;
+    if (!lessonQuiz || submitting || lesson?.isQuizPassed) return;
 
     const answers = Object.entries(quizAnswers).map(
       ([questionId, selectedIndex]) => ({
@@ -157,22 +289,21 @@ const LessonLearn = () => {
     );
   };
 
-  /*
-  ============================================
-  NEXT LESSON
+  const handleAnswer = (questionId, selectedIndex) => {
+    setQuizAnswers((prev) => ({ ...prev, [questionId]: selectedIndex }));
+  };
 
-  Quiz pass hone ke baad hi
-  button active hoga
-  ============================================
-  */
+  const handleCopyCode = () => {
+    if (!lesson?.codeExample) return;
+
+    navigator.clipboard.writeText(normalizeCodeExample(lesson.codeExample));
+
+    setCodeCopied(true);
+
+    setTimeout(() => setCodeCopied(false), 2000);
+  };
 
   const handleNextLesson = async () => {
-    /*
-    Fresh course data fetch karo
-    taki backend se updated unlock
-    status aa jaye
-    */
-
     const result = await dispatch(fetchCourseLearningData(courseId)).unwrap();
 
     const updatedLessons = result.lessons || [];
@@ -192,20 +323,12 @@ const LessonLearn = () => {
 
   return (
     <div className={styles.lessonPage}>
-      {/* ======================================
-          BACK
-      ====================================== */}
-
       <Link
         to={`/student/courses/${courseId}/learn`}
         className={styles.backButton}
       >
         ← Back to Lessons
       </Link>
-
-      {/* ======================================
-          LESSON TITLE
-      ====================================== */}
 
       <header className={styles.lessonHeader}>
         <span>LESSON {lesson.lessonNumber}</span>
@@ -225,7 +348,9 @@ const LessonLearn = () => {
 
         <div className={styles.headerMeta}>
           {learningData.course?.title && (
-            <span className={styles.metaChip}>📚 {learningData.course.title}</span>
+            <span className={styles.metaChip}>
+              📚 {learningData.course.title}
+            </span>
           )}
 
           <span className={styles.metaChip}>
@@ -267,10 +392,6 @@ const LessonLearn = () => {
         </div>
       </header>
 
-      {/* ======================================
-          VIDEO
-      ====================================== */}
-
       {lesson.videoUrl && (
         <section className={styles.contentCard}>
           <h2>🎥 Video Lesson</h2>
@@ -285,77 +406,93 @@ const LessonLearn = () => {
         </section>
       )}
 
-      {/* ======================================
-          THEORY
-      ====================================== */}
-
-      <section className={styles.contentCard}>
+      <section className={styles.theorySection}>
         {lesson.topicHeading && <h2>{lesson.topicHeading}</h2>}
 
-        {lesson.definition && (
-          <div>
-            <h3>📖 Definition</h3>
+        <div className={styles.theoryBlocks}>
+          {lesson.definition && (
+            <div className={styles.definitionBlock}>
+              <h3>📖 Definition</h3>
 
-            <RichText text={lesson.definition} />
-          </div>
-        )}
+              <MarkdownContent text={lesson.definition} />
+            </div>
+          )}
 
-        {lesson.detailedMeaning && (
-          <div>
-            <h3>🧠 Detailed Meaning</h3>
+          {lesson.detailedMeaning && (
+            <div className={styles.meaningBlock}>
+              <h3>🧠 Detailed Meaning</h3>
 
-            <RichText text={lesson.detailedMeaning} />
-          </div>
-        )}
+              <MarkdownContent text={lesson.detailedMeaning} />
+            </div>
+          )}
+        </div>
       </section>
 
-      {/* ======================================
-          EXAMPLE
-      ====================================== */}
-
       {lesson.example && (
-        <section className={styles.contentCard}>
+        <section className={styles.exampleBlock}>
           <h2>💡 Example</h2>
 
-          <p>{lesson.example}</p>
+          <MarkdownContent text={lesson.example} />
         </section>
       )}
-
-      {/* ======================================
-          CODE
-      ====================================== */}
 
       {lesson.codeExample && (
         <section className={styles.contentCard}>
-          <h2>💻 Code Example</h2>
+          <div className={styles.codeBlock}>
+            <div className={styles.codeBlockHeader}>
+              <span className={styles.codeBlockLabel}>
+                {lesson.codeLanguage
+                  ? `💻 Code Example (${lesson.codeLanguage})`
+                  : "💻 Code Example"}
+              </span>
 
-          <pre>
-            <code>{lesson.codeExample}</code>
-          </pre>
+              <button
+                type="button"
+                className={styles.copyBtn}
+                onClick={handleCopyCode}
+              >
+                {codeCopied ? "✓ Copied!" : "📋 Copy"}
+              </button>
+            </div>
+
+            <SyntaxHighlighter
+              style={oneDark}
+              language={lesson.codeLanguage || "plaintext"}
+              customStyle={{
+                margin: 0,
+                borderRadius: 0,
+                background: "transparent",
+                fontSize: "13.5px",
+                lineHeight: "1.8",
+              }}
+            >
+              {normalizeCodeExample(lesson.codeExample)}
+            </SyntaxHighlighter>
+          </div>
 
           {lesson.codeExampleExplanation && (
-            <p>{lesson.codeExampleExplanation}</p>
+            <div className={styles.codeExplanation}>
+              <h3>📝 Explanation</h3>
+
+              <MarkdownContent text={lesson.codeExampleExplanation} />
+            </div>
           )}
         </section>
       )}
-
-      {/* ======================================
-          NOTES
-      ====================================== */}
 
       {lesson.notesPdfUrl && (
         <section className={styles.contentCard}>
           <h2>📄 Lesson Notes</h2>
 
-          <a href={lesson.notesPdfUrl} target="_blank" rel="noreferrer">
+          <a
+            href={resolveNotesUrl(lesson.notesPdfUrl)}
+            target="_blank"
+            rel="noreferrer"
+          >
             View Notes
           </a>
         </section>
       )}
-
-      {/* ======================================
-          QUIZ
-      ====================================== */}
 
       <section className={styles.quizCard}>
         <h2>📝 Lesson Quiz</h2>
@@ -378,12 +515,9 @@ const LessonLearn = () => {
             submitting={submitting}
             onAnswer={handleAnswer}
             onSubmit={submitQuiz}
+            onRetry={handleRetryQuiz}
           />
         )}
-
-        {/* ==================================
-            NEXT LESSON
-        ================================== */}
 
         {lesson.isQuizPassed &&
           (nextLesson ? (
@@ -407,75 +541,7 @@ const LessonLearn = () => {
   );
 };
 
-/* ==============================================
-   RICH TEXT
-
-   Bade paragraphs ko "." (sentence) pe split karta
-   hai — shuru ke sentences <p> me aur baaki points
-   <li> bullets me render hote hain
-================================================ */
-
-const RichText = ({ text }) => {
-  if (!text) return null;
-
-  const trimmed = String(text).trim();
-
-  if (!trimmed) return null;
-
-  const sentences = trimmed
-    .split(/\.\s+|\.$/)
-    .map((part) => part.trim())
-    .filter(Boolean);
-
-  if (sentences.length === 0) {
-    return <p>{trimmed}</p>;
-  }
-
-  /* Chhota text -> single paragraph jaisa pehle tha */
-
-  if (sentences.length <= 2) {
-    return (
-      <>
-        {sentences.map((sentence, index) => (
-          <p key={`p-${index}`}>{sentence}.</p>
-        ))}
-      </>
-    );
-  }
-
-  /* Bada text -> pehle 1-2 sentences <p>, baaki <li> bullets */
-
-  const paragraphCount = sentences.length >= 4 ? 2 : 1;
-
-  const paragraphs = sentences.slice(0, paragraphCount);
-
-  const bulletPoints = sentences.slice(paragraphCount);
-
-  return (
-    <>
-      {paragraphs.map((sentence, index) => (
-        <p key={`p-${index}`}>{sentence}.</p>
-      ))}
-
-      {bulletPoints.length > 0 && (
-        <ul className={styles.pointList}>
-          {bulletPoints.map((point, index) => (
-            <li key={`li-${index}`}>
-              <span className={styles.pointBullet}>▹</span>
-
-              <span>{point}.</span>
-            </li>
-          ))}
-        </ul>
-      )}
-    </>
-  );
-};
-
-/* ==============================================
-   QUIZ COMPONENT
-================================================ */
-
+/* quiz view */
 const QuizView = ({
   quiz,
   answers,
@@ -483,6 +549,7 @@ const QuizView = ({
   submitting,
   onAnswer,
   onSubmit,
+  onRetry,
 }) => {
   const questions = quiz.questions || [];
 
@@ -494,7 +561,7 @@ const QuizView = ({
         <h3>{passed ? "🎉 Quiz Passed" : "❌ Quiz Failed"}</h3>
 
         {!passed && (
-          <button type="button" onClick={() => window.location.reload()}>
+          <button type="button" onClick={onRetry}>
             Try Again
           </button>
         )}
@@ -532,10 +599,7 @@ const QuizView = ({
   );
 };
 
-/* ==============================================
-   YOUTUBE URL
-================================================ */
-
+/* youtube url helper */
 const getYouTubeEmbedUrl = (url) => {
   if (!url) return null;
 

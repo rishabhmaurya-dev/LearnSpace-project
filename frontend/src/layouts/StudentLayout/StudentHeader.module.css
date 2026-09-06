@@ -1,33 +1,34 @@
-/* ==========================================================================
-   STUDENT HEADER — Bold Typography Design System
-   Clean. Minimal. Sharp edges.
-   ========================================================================== */
-
+/* left: hamburger + title */
 .header {
   position: sticky;
   top: 0;
-  z-index: 50;
+  z-index: var(--z-header);
   flex-shrink: 0;
   height: 72px;
   width: 100%;
   padding: 0 24px;
-  background: var(--background);
-  border-bottom: 1px solid var(--border);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.86),
+    rgba(255, 255, 255, 0.72)
+  );
+  border-bottom: 1px solid var(--border-subtle);
+  backdrop-filter: var(--glass-blur-md);
+  -webkit-backdrop-filter: var(--glass-blur-md);
   box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
+  box-shadow: var(--shadow-convex-xs);
 }
 
-/* =========================================================
-   LEFT: HAMBURGER + TITLE
-   ========================================================= */
 .leftContainer {
   display: flex;
   align-items: center;
   gap: 12px;
   min-width: 0;
+  flex: 1;
 }
 
 .menuToggleBtn {
@@ -36,23 +37,65 @@
   justify-content: center;
   width: 38px;
   height: 38px;
-  background: var(--muted);
-  border: 1px solid var(--border);
+  background: var(--bg-surface-glass);
+  border: 1px solid var(--border-subtle);
   color: var(--foreground);
-  font-size: 18px;
   cursor: pointer;
-  transition: all 150ms cubic-bezier(0.25, 0, 0, 1);
+  box-shadow: var(--shadow-convex-xs);
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast),
+    background-color var(--transition-fast);
   flex-shrink: 0;
   margin-right: 4px;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
 }
 
 .menuToggleBtn:hover {
   color: var(--accent);
   border-color: var(--accent);
+  background: var(--bg-card);
+  box-shadow: var(--shadow-convex-sm);
 }
 
 .menuToggleBtn:active {
   transform: translateY(1px);
+}
+
+/* Animated hamburger icon */
+.burger {
+  position: relative;
+  width: 18px;
+  height: 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.burgerBar {
+  width: 100%;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  transform-origin: center;
+  transition:
+    transform 260ms cubic-bezier(0.32, 0.72, 0, 1),
+    opacity 200ms ease;
+}
+
+.burgerOpen .burgerBar:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.burgerOpen .burgerBar:nth-child(2) {
+  opacity: 0;
+}
+
+.burgerOpen .burgerBar:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
 }
 
 @media (min-width: 1024px) {
@@ -85,28 +128,35 @@
   text-overflow: ellipsis;
 }
 
-/* =========================================================
-   RIGHT: USER PROFILE
-   ========================================================= */
+/* right: user profile */
 .profile {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 6px 16px 6px 8px;
-  border: 1px solid var(--border);
+  padding: 6px 14px 6px 8px;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-surface-glass);
+  backdrop-filter: var(--glass-blur-sm);
   cursor: default;
-  transition: border-color 150ms cubic-bezier(0.25, 0, 0, 1);
+  box-shadow: var(--shadow-convex-xs);
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast),
+    border-color var(--transition-fast),
+    background-color var(--transition-fast);
   flex-shrink: 0;
 }
 
 .profile:hover {
   border-color: var(--accent);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-convex-sm);
 }
 
 .avatar {
   width: 32px;
   height: 32px;
-  background: var(--accent);
+  background: var(--brand-gradient);
   color: var(--accent-foreground);
   font-family: var(--font-heading);
   font-size: 13px;
@@ -153,12 +203,11 @@
   max-width: 140px;
 }
 
-/* =========================================================
-   RESPONSIVE
-   ========================================================= */
-@media (max-width: 768px) {
+/* responsive */
+@media (max-width: 1023px) {
   .header {
     padding: 0 16px;
+    height: 64px;
   }
 
   .userInfo span {
@@ -167,6 +216,16 @@
 }
 
 @media (max-width: 480px) {
+  .leftContainer {
+    gap: 10px;
+  }
+
+  .menuToggleBtn {
+    width: 36px;
+    height: 36px;
+    margin-right: 2px;
+  }
+
   .subtitle {
     display: none;
   }
@@ -176,10 +235,17 @@
   }
 
   .profile {
-    padding: 4px;
+    padding: 4px 8px 4px 6px;
+    gap: 8px;
   }
 
   .userInfo {
     display: none;
+  }
+
+  .avatar {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
   }
 }

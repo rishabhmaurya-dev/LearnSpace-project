@@ -9,10 +9,6 @@ import {
   rejectCapstoneApi,
 } from "./adminCapstoneApi";
 
-/* =========================================================
-   1. CAPSTONE STATISTICS
-   ========================================================= */
-
 export const fetchCapstoneStats = createAsyncThunk(
   "adminCapstone/fetchStats",
   async (_, { rejectWithValue }) => {
@@ -25,10 +21,6 @@ export const fetchCapstoneStats = createAsyncThunk(
     }
   },
 );
-
-/* =========================================================
-   2. ALL SUBMISSIONS
-   ========================================================= */
 
 export const fetchCapstoneSubmissions = createAsyncThunk(
   "adminCapstone/fetchSubmissions",
@@ -43,10 +35,6 @@ export const fetchCapstoneSubmissions = createAsyncThunk(
   },
 );
 
-/* =========================================================
-   3. PENDING SUBMISSIONS
-   ========================================================= */
-
 export const fetchPendingCapstones = createAsyncThunk(
   "adminCapstone/fetchPending",
   async (params = {}, { rejectWithValue }) => {
@@ -59,10 +47,6 @@ export const fetchPendingCapstones = createAsyncThunk(
     }
   },
 );
-
-/* =========================================================
-   4. SINGLE SUBMISSION DETAILS
-   ========================================================= */
 
 export const fetchCapstoneDetails = createAsyncThunk(
   "adminCapstone/fetchDetails",
@@ -77,10 +61,6 @@ export const fetchCapstoneDetails = createAsyncThunk(
   },
 );
 
-/* =========================================================
-   5. APPROVE CAPSTONE
-   ========================================================= */
-
 export const approveCapstone = createAsyncThunk(
   "adminCapstone/approve",
   async ({ submissionId, feedback = "" }, { rejectWithValue }) => {
@@ -93,10 +73,6 @@ export const approveCapstone = createAsyncThunk(
     }
   },
 );
-
-/* =========================================================
-   6. REJECT CAPSTONE
-   ========================================================= */
 
 export const rejectCapstone = createAsyncThunk(
   "adminCapstone/reject",

@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const certificateSchema = new mongoose.Schema(
   {
-    /* ---------------- Recipient (student) ---------------- */
+    // recipient (student)
     studentId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
@@ -23,7 +23,7 @@ const certificateSchema = new mongoose.Schema(
       lowercase: true,
     },
 
-    /* ---------------- Type & status ---------------- */
+    // type & status
     certificateType: {
       type: String,
       enum: {
@@ -44,7 +44,7 @@ const certificateSchema = new mongoose.Schema(
       index: true,
     },
 
-    /* ---------------- Issuer ---------------- */
+    // issuer
     issuerType: {
       type: String,
       enum: {
@@ -60,7 +60,7 @@ const certificateSchema = new mongoose.Schema(
       default: null,
     },
 
-    /* ---------------- References (populate from source) ---------------- */
+    // references (populate from source)
     // COURSE_COMPLETION
     courseId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -74,7 +74,7 @@ const certificateSchema = new mongoose.Schema(
       default: null,
     },
 
-    /* ---------------- Render + template text ---------------- */
+    // render + template text
     title: {
       type: String,
       required: [true, "Certificate title is required"],
@@ -107,7 +107,7 @@ const certificateSchema = new mongoose.Schema(
       score: { type: Number, default: null },
     },
 
-    /* ---------------- Rendered asset ---------------- */
+    // rendered asset
     imageUrl: {
       type: String,
       default: "",
@@ -139,7 +139,7 @@ const certificateSchema = new mongoose.Schema(
       default: null,
     },
 
-    /* ---------------- Revocation ---------------- */
+    // revocation
     revokedAt: { type: Date, default: null },
     revokedBy: {
       type: mongoose.Schema.Types.ObjectId,

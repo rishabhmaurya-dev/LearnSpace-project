@@ -1,12 +1,6 @@
-/* ==========================================================================
-   COURSE SYSTEM STYLES — ULTRA-3D HYBRID SKEUOMORPHIC SYSTEM
-   Boxed Responsive Layout (40-50px Lateral Inset) • Strictly Zero Pure White
-   Neumorphic Deep Wells • Raised Beveled Surfaces • Tactical Hardware Motion
-   ========================================================================== */
+/* course system styles */
 
-/* =========================================================
-   1. ROOT PAGE CONTAINERS (L/R CONSTRAINED GAPS)
-   ========================================================= */
+/* 1. root page containers */
 .container,
 .wizardContainer {
   width: 100%;
@@ -37,9 +31,7 @@
   gap: 22px;
 }
 
-/* =========================================================
-   2. 3D CONVEX SURFACES & HEADERS
-   ========================================================= */
+/* 2. convex surfaces & headers */
 .card,
 .courseHero,
 .detailSection,
@@ -160,9 +152,7 @@
   color: var(--text-muted);
 }
 
-/* =========================================================
-   3. STEPPER (WIZARD PROGRESS TABS)
-   ========================================================= */
+/* 3. stepper (wizard progress tabs) */
 .stepper {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -254,9 +244,7 @@
   gap: 20px;
 }
 
-/* =========================================================
-   4. FILTERS & SEARCH CONTROLS
-   ========================================================= */
+/* 4. filters & search controls */
 .filters {
   display: flex;
   align-items: center;
@@ -324,9 +312,7 @@
   box-shadow: var(--shadow-inset-xs), var(--focus-ring);
 }
 
-/* =========================================================
-   5. COMPACT COURSE LIST ROWS (COURSELIST.JSX)
-   ========================================================= */
+/* 5. compact course list rows */
 .courseList {
   display: flex;
   flex-direction: column;
@@ -519,9 +505,7 @@
   box-shadow: var(--shadow-inset-xs);
 }
 
-/* =========================================================
-   6. COURSE HERO & DETAILS VIEW (COURSEDETAILS.JSX)
-   ========================================================= */
+/* 6. course hero & details view */
 .detailHeader {
   display: flex;
   align-items: center;
@@ -606,9 +590,7 @@
   margin-top: 6px;
 }
 
-/* =========================================================
-   7. META GRIDS (SUMMARY METRIC BLOCKS)
-   ========================================================= */
+/* 7. meta grids */
 .metaGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -661,9 +643,7 @@
   margin-top: 4px;
 }
 
-/* =========================================================
-   8. FORM CONTROLS & WIZARD STEPS
-   ========================================================= */
+/* 8. form controls & wizard steps */
 .formGrid {
   display: grid;
   grid-template-columns: 1fr;
@@ -750,9 +730,7 @@
   margin-top: 2px;
 }
 
-/* =========================================================
-   9. BUTTONS & SHARED ACTIONS
-   ========================================================= */
+/* 9. buttons & shared actions */
 .primaryBtn,
 .secondaryBtn,
 .successBtn,
@@ -859,9 +837,7 @@
   margin-left: auto;
 }
 
-/* =========================================================
-   10. STATUS BADGES & MEDIA PREVIEWS
-   ========================================================= */
+/* 10. status badges & media previews */
 .statusBadge {
   display: inline-flex;
   align-items: center;
@@ -1006,9 +982,7 @@
   gap: 6px;
 }
 
-/* =========================================================
-   11. LESSONS, QUIZZES & CAPSTONE SECTIONS
-   ========================================================= */
+/* 11. lessons, quizzes & capstone sections */
 .detailSection h3 {
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-extrabold);
@@ -1351,9 +1325,7 @@
   gap: 10px;
 }
 
-/* =========================================================
-   12. 3D MODAL & STATE OVERLAYS
-   ========================================================= */
+/* 12. modal & state overlays */
 .modalOverlay {
   position: fixed;
   inset: 0;
@@ -1451,7 +1423,7 @@
 .spinner {
   width: 14px;
   height: 14px;
-  border: 2px solid rgba(228, 238, 248, 0.4);
+  border: 2px solid rgba(223, 232, 226, 0.4);
   border-top-color: currentColor;
   border-radius: var(--radius-full);
   animation: spin 0.7s linear infinite;

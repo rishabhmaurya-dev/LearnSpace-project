@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 import ScrollReveal from "../../animation/Scroll";
 
@@ -24,6 +25,8 @@ const Login = () => {
     email: "",
     password: "",
   });
+
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     dispatch(clearAuthError());
@@ -73,7 +76,11 @@ const Login = () => {
       <div className={styles.page}>
         <div className={styles.content}>
           <div className={styles.brand}>
-            <div className={styles.brandIcon}>L</div>
+            <img
+              src="/learnspace-logo-1024x1024.png"
+              alt="LearnSpace"
+              className={styles.brandIcon}
+            />
 
             <div>
               <span className={styles.brandName}>Learn</span>
@@ -113,13 +120,20 @@ const Login = () => {
                 <div className={styles.inputWrapper}>
                   <input
                     id="password"
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     name="password"
                     placeholder="Enter your password"
                     value={formData.password}
                     onChange={handleChange}
                     required
                   />
+                  <button
+                    type="button"
+                    className={styles.passwordToggle}
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                  </button>
                 </div>
               </div>
 

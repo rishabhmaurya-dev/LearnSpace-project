@@ -1,0 +1,614 @@
+/* =========================================================
+   FLOATING BUTTON
+========================================================= */
+
+.sf-ai-floating-button {
+  position: fixed;
+
+  right: 28px;
+  bottom: 28px;
+
+  width: 62px;
+  height: 62px;
+
+  border: none;
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #fff;
+
+  cursor: pointer;
+
+  background:
+    linear-gradient(
+      135deg,
+      #38bdf8,
+      #6366f1
+    );
+
+  box-shadow:
+    0 12px 35px
+    rgba(56, 189, 248, 0.35);
+
+  z-index: 99999;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+
+.sf-ai-floating-button:hover {
+  transform: scale(1.08);
+
+  box-shadow:
+    0 16px 45px
+    rgba(99, 102, 241, 0.45);
+}
+
+
+/* =========================================================
+   ONLINE DOT
+========================================================= */
+
+.sf-ai-online-dot {
+  position: absolute;
+
+  top: 3px;
+  right: 3px;
+
+  width: 11px;
+  height: 11px;
+
+  border-radius: 50%;
+
+  background: #22c55e;
+
+  border: 2px solid #fff;
+}
+
+
+/* =========================================================
+   CONTAINER
+========================================================= */
+
+.sf-ai-container {
+  position: fixed;
+
+  right: 28px;
+  bottom: 28px;
+
+  width: 400px;
+  height: 620px;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+
+  border-radius: 22px;
+
+  background:
+    rgba(15, 23, 42, 0.98);
+
+  border:
+    1px solid
+    rgba(148, 163, 184, 0.18);
+
+  box-shadow:
+    0 25px 80px
+    rgba(0, 0, 0, 0.5);
+
+  backdrop-filter: blur(20px);
+
+  z-index: 100000;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.sf-ai-header {
+  min-height: 72px;
+
+  padding: 12px 15px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  border-bottom:
+    1px solid
+    rgba(148, 163, 184, 0.12);
+}
+
+
+.sf-ai-header-info {
+  display: flex;
+  align-items: center;
+
+  gap: 11px;
+}
+
+
+.sf-ai-logo {
+  width: 40px;
+  height: 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  color: #fff;
+
+  background:
+    linear-gradient(
+      135deg,
+      #38bdf8,
+      #6366f1
+    );
+}
+
+
+.sf-ai-header h3 {
+  margin: 0;
+
+  color: #f8fafc;
+
+  font-size: 15px;
+}
+
+
+.sf-ai-header p {
+  margin: 3px 0 0;
+
+  color: #94a3b8;
+
+  font-size: 11px;
+}
+
+
+.sf-ai-header-actions {
+  display: flex;
+
+  gap: 3px;
+}
+
+
+.sf-ai-header-actions button {
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  border-radius: 8px;
+
+  color: #94a3b8;
+
+  background: transparent;
+
+  cursor: pointer;
+}
+
+
+.sf-ai-header-actions button:hover {
+  color: #fff;
+
+  background:
+    rgba(255, 255, 255, 0.08);
+}
+
+
+/* =========================================================
+   BODY
+========================================================= */
+
+.sf-ai-body {
+  flex: 1;
+
+  min-height: 0;
+
+  overflow-y: auto;
+
+  scrollbar-width: thin;
+}
+
+
+.sf-ai-body::-webkit-scrollbar {
+  width: 5px;
+}
+
+
+.sf-ai-body::-webkit-scrollbar-thumb {
+  background: #334155;
+
+  border-radius: 10px;
+}
+
+
+/* =========================================================
+   WELCOME
+========================================================= */
+
+.sf-ai-welcome {
+  padding: 28px 18px 10px;
+
+  text-align: center;
+}
+
+
+.sf-ai-welcome-icon {
+  width: 58px;
+  height: 58px;
+
+  margin: 0 auto 13px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 17px;
+
+  color: #fff;
+
+  background:
+    linear-gradient(
+      135deg,
+      #38bdf8,
+      #6366f1
+    );
+}
+
+
+.sf-ai-welcome h2 {
+  margin: 0 0 7px;
+
+  color: #f8fafc;
+
+  font-size: 20px;
+}
+
+
+.sf-ai-welcome p {
+  max-width: 290px;
+
+  margin: 0 auto;
+
+  color: #94a3b8;
+
+  font-size: 12px;
+
+  line-height: 1.6;
+}
+
+
+/* =========================================================
+   QUICK QUESTIONS
+========================================================= */
+
+.sf-ai-quick-questions {
+  display: flex;
+  flex-direction: column;
+
+  gap: 7px;
+
+  margin-top: 20px;
+}
+
+
+.sf-ai-quick-questions button {
+  padding: 10px 12px;
+
+  border:
+    1px solid
+    rgba(148, 163, 184, 0.14);
+
+  border-radius: 10px;
+
+  color: #cbd5e1;
+
+  background:
+    rgba(30, 41, 59, 0.7);
+
+  cursor: pointer;
+
+  text-align: left;
+
+  font-size: 12px;
+}
+
+
+.sf-ai-quick-questions button:hover {
+  border-color:
+    rgba(56, 189, 248, 0.4);
+
+  background:
+    rgba(56, 189, 248, 0.08);
+}
+
+
+/* =========================================================
+   MESSAGES
+========================================================= */
+
+.sf-ai-messages {
+  padding: 14px 16px 18px;
+}
+
+
+.sf-ai-message-row {
+  display: flex;
+
+  gap: 8px;
+
+  margin-bottom: 14px;
+}
+
+
+.sf-ai-user-row {
+  justify-content: flex-end;
+}
+
+
+.sf-ai-avatar {
+  width: 28px;
+  height: 28px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+
+  color: #fff;
+
+  background:
+    linear-gradient(
+      135deg,
+      #38bdf8,
+      #6366f1
+    );
+}
+
+
+.sf-ai-message {
+  max-width: 78%;
+
+  padding: 10px 13px;
+
+  border-radius: 14px;
+
+  font-size: 13px;
+
+  line-height: 1.6;
+
+  white-space: pre-wrap;
+
+  word-break: break-word;
+}
+
+
+.sf-ai-user-message {
+  color: #fff;
+
+  background:
+    linear-gradient(
+      135deg,
+      #0284c7,
+      #4f46e5
+    );
+
+  border-top-right-radius: 5px;
+}
+
+
+.sf-ai-assistant-message {
+  color: #e2e8f0;
+
+  background:
+    rgba(30, 41, 59, 0.95);
+
+  border:
+    1px solid
+    rgba(148, 163, 184, 0.10);
+
+  border-top-left-radius: 5px;
+}
+
+
+/* =========================================================
+   TYPING
+========================================================= */
+
+.sf-ai-typing {
+  display: flex;
+
+  gap: 4px;
+}
+
+
+.sf-ai-typing span {
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  background: #94a3b8;
+
+  animation:
+    sf-ai-bounce 1.2s infinite;
+}
+
+
+.sf-ai-typing span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+
+.sf-ai-typing span:nth-child(3) {
+  animation-delay: 0.30s;
+}
+
+
+@keyframes sf-ai-bounce {
+
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+
+  30% {
+    transform: translateY(-5px);
+    opacity: 1;
+  }
+}
+
+
+/* =========================================================
+   INPUT
+========================================================= */
+
+.sf-ai-input-wrapper {
+  padding: 10px 12px 9px;
+
+  border-top:
+    1px solid
+    rgba(148, 163, 184, 0.12);
+
+  background:
+    rgba(15, 23, 42, 0.98);
+}
+
+
+.sf-ai-input-box {
+  display: flex;
+
+  align-items: flex-end;
+
+  gap: 8px;
+
+  padding: 5px;
+
+  border:
+    1px solid
+    rgba(148, 163, 184, 0.15);
+
+  border-radius: 14px;
+
+  background:
+    rgba(30, 41, 59, 0.8);
+}
+
+
+.sf-ai-input-box textarea {
+  flex: 1;
+
+  min-height: 38px;
+  max-height: 100px;
+
+  padding: 9px 8px;
+
+  resize: none;
+
+  border: none;
+  outline: none;
+
+  color: #f8fafc;
+
+  background: transparent;
+
+  font-family: inherit;
+
+  font-size: 13px;
+}
+
+
+.sf-ai-input-box textarea::placeholder {
+  color: #64748b;
+}
+
+
+.sf-ai-send-button {
+  width: 38px;
+  height: 38px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  border-radius: 10px;
+
+  color: #fff;
+
+  background:
+    linear-gradient(
+      135deg,
+      #38bdf8,
+      #6366f1
+    );
+
+  cursor: pointer;
+}
+
+
+.sf-ai-send-button:disabled {
+  opacity: 0.35;
+
+  cursor: not-allowed;
+}
+
+
+/* =========================================================
+   DISCLAIMER
+========================================================= */
+
+.sf-ai-disclaimer {
+  margin: 6px 0 0;
+
+  color: #475569;
+
+  text-align: center;
+
+  font-size: 9px;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+  .sf-ai-container {
+    right: 10px;
+    bottom: 10px;
+
+    width: calc(100vw - 20px);
+
+    height: calc(100vh - 85px);
+
+    border-radius: 18px;
+  }
+
+
+  .sf-ai-floating-button {
+    right: 18px;
+    bottom: 18px;
+  }
+}

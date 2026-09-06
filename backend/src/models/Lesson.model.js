@@ -51,6 +51,12 @@ const lessonSchema = new mongoose.Schema(
       default: "",
     },
 
+    codeLanguage: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+
     codeExampleExplanation: {
       type: String,
       default: "",

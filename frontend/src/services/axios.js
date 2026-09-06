@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:3000/api",
+  baseURL: import.meta.env.VITE_API_URL,
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
@@ -13,9 +13,7 @@ let storeInstance = null;
 export const setupAxiosInterceptors = (store) => {
   storeInstance = store;
 
-  // =========================================
-  // REQUEST INTERCEPTOR
-  // =========================================
+  // request interceptor
 
   api.interceptors.request.use(
     (config) => {
@@ -30,9 +28,7 @@ export const setupAxiosInterceptors = (store) => {
     (error) => Promise.reject(error),
   );
 
-  // =========================================
-  // REFRESH MANAGEMENT
-  // =========================================
+  // refresh management: keep isRefreshing true until all queued requests are retried
 
   let isRefreshing = false;
   let refreshSubscribers = [];
@@ -44,11 +40,13 @@ export const setupAxiosInterceptors = (store) => {
   const onRefreshed = (token) => {
     refreshSubscribers.forEach((callback) => callback(token));
     refreshSubscribers = [];
+
+    // Only now mark refresh as done — all queued
+    // requests have been dispatched with the new token.
+    isRefreshing = false;
   };
 
-  // =========================================
-  // RESPONSE INTERCEPTOR
-  // =========================================
+  // response interceptor
 
   api.interceptors.response.use(
     (response) => response,
@@ -68,9 +66,7 @@ export const setupAxiosInterceptors = (store) => {
 
       originalRequest._retry = true;
 
-      // =====================================
-      // REFRESH ALREADY RUNNING
-      // =====================================
+      // refresh already running — queue this request and retry after new token
 
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
@@ -82,9 +78,7 @@ export const setupAxiosInterceptors = (store) => {
         });
       }
 
-      // =====================================
-      // START REFRESH
-      // =====================================
+      // start refresh
 
       isRefreshing = true;
 
@@ -98,21 +92,23 @@ export const setupAxiosInterceptors = (store) => {
           payload: newToken,
         });
 
+        // Retry all queued requests, then clear flag
         onRefreshed(newToken);
 
+        // Retry the original request that triggered this
         originalRequest.headers.Authorization = `Bearer ${newToken}`;
 
         return api(originalRequest);
       } catch (refreshError) {
+        isRefreshing = false;
+
+        refreshSubscribers = [];
+
         storeInstance.dispatch({
           type: "auth/logoutLocal",
         });
 
-        refreshSubscribers = [];
-
         return Promise.reject(refreshError);
-      } finally {
-        isRefreshing = false;
       }
     },
   );

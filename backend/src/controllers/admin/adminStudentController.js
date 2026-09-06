@@ -12,9 +12,7 @@ const isValidObjectId = (id) => {
   return mongoose.Types.ObjectId.isValid(id);
 };
 
-/* =========================================================
-   1. GET ALL STUDENTS
-   ========================================================= */
+// 1. get all students
 
 export const getStudents = async (req, res) => {
   try {
@@ -31,10 +29,6 @@ export const getStudents = async (req, res) => {
     const currentPage = Math.max(Number(page), 1);
     const perPage = Math.min(Math.max(Number(limit), 1), 100);
     const skip = (currentPage - 1) * perPage;
-
-    /* -----------------------------------------------------
-       USER FILTER
-    ----------------------------------------------------- */
 
     const userFilter = {
       role: "STUDENT",
@@ -54,10 +48,6 @@ export const getStudents = async (req, res) => {
       userFilter.isActive = false;
     }
 
-    /* -----------------------------------------------------
-       GET STUDENT USERS
-    ----------------------------------------------------- */
-
     const students = await User.find(userFilter)
       .select("-password -resetPasswordToken -resetPasswordExpires")
       .sort({
@@ -68,10 +58,6 @@ export const getStudents = async (req, res) => {
       .lean();
 
     const studentIds = students.map((student) => student._id);
-
-    /* -----------------------------------------------------
-       STUDENT PROFILES
-    ----------------------------------------------------- */
 
     const profileFilter = {
       userId: { $in: studentIds },
@@ -89,10 +75,6 @@ export const getStudents = async (req, res) => {
       profiles.map((profile) => [profile.userId.toString(), profile]),
     );
 
-    /* -----------------------------------------------------
-       IF SKILL FILTER IS USED
-       ----------------------------------------------------- */
-
     let filteredStudents = students;
 
     if (skill.trim()) {
@@ -101,15 +83,7 @@ export const getStudents = async (req, res) => {
       );
     }
 
-    /* -----------------------------------------------------
-       TOTAL
-    ----------------------------------------------------- */
-
     const totalStudents = await User.countDocuments(userFilter);
-
-    /* -----------------------------------------------------
-       RESPONSE
-    ----------------------------------------------------- */
 
     const data = filteredStudents.map((student) => {
       const profile = profileMap.get(student._id.toString());
@@ -155,9 +129,7 @@ export const getStudents = async (req, res) => {
   }
 };
 
-/* =========================================================
-   2. GET STUDENT DETAILS
-   ========================================================= */
+// 2. get student details
 
 export const getStudentDetails = async (req, res) => {
   try {
@@ -169,10 +141,6 @@ export const getStudentDetails = async (req, res) => {
         message: "Invalid student ID",
       });
     }
-
-    /* -----------------------------------------------------
-       USER
-    ----------------------------------------------------- */
 
     const student = await User.findOne({
       _id: studentId,
@@ -188,17 +156,9 @@ export const getStudentDetails = async (req, res) => {
       });
     }
 
-    /* -----------------------------------------------------
-       PROFILE
-    ----------------------------------------------------- */
-
     const profile = await StudentProfile.findOne({
       userId: studentId,
     }).lean();
-
-    /* -----------------------------------------------------
-       COURSE PROGRESS
-    ----------------------------------------------------- */
 
     const courseProgress = await CourseProgress.find({
       studentId,
@@ -214,10 +174,6 @@ export const getStudentDetails = async (req, res) => {
       .sort({ updatedAt: -1 })
       .lean();
 
-    /* -----------------------------------------------------
-       QUIZ ATTEMPTS
-    ----------------------------------------------------- */
-
     const quizAttempts = await QuizAttempt.find({
       studentId,
     })
@@ -231,10 +187,6 @@ export const getStudentDetails = async (req, res) => {
       })
       .sort({ submittedAt: -1 })
       .lean();
-
-    /* -----------------------------------------------------
-       CAPSTONE SUBMISSIONS
-    ----------------------------------------------------- */
 
     const capstoneSubmissions = await CapstoneSubmission.find({
       studentId,
@@ -250,10 +202,6 @@ export const getStudentDetails = async (req, res) => {
       .sort({ createdAt: -1 })
       .lean();
 
-    /* -----------------------------------------------------
-       LEADERBOARD RANK
-    ----------------------------------------------------- */
-
     let leaderboardRank = null;
 
     if (profile) {
@@ -264,10 +212,6 @@ export const getStudentDetails = async (req, res) => {
           },
         })) + 1;
     }
-
-    /* -----------------------------------------------------
-       SUMMARY
-    ----------------------------------------------------- */
 
     const summary = {
       totalCourses: courseProgress.length,
@@ -329,9 +273,7 @@ export const getStudentDetails = async (req, res) => {
   }
 };
 
-/* =========================================================
-   3. UPDATE STUDENT STATUS
-   ========================================================= */
+// 3. update student status
 
 export const updateStudentStatus = async (req, res) => {
   try {
@@ -392,9 +334,7 @@ export const updateStudentStatus = async (req, res) => {
   }
 };
 
-/* =========================================================
-   4. UPDATE REPUTATION POINTS
-   ========================================================= */
+// 4. update student reputation
 
 export const updateStudentReputation = async (req, res) => {
   try {
@@ -481,11 +421,9 @@ export const updateStudentReputation = async (req, res) => {
   }
 };
 
-/* Badge-related endpoints removed */
+// badge-related endpoints removed
 
-/* =========================================================
-   7. GET STUDENT LEADERBOARD
-   ========================================================= */
+// 7. get student leaderboard
 
 export const getStudentLeaderboard = async (req, res) => {
   try {
@@ -495,10 +433,6 @@ export const getStudentLeaderboard = async (req, res) => {
     const perPage = Math.min(Math.max(Number(limit), 1), 100);
 
     const skip = (currentPage - 1) * perPage;
-
-    /* -----------------------------------------------------
-       SEARCH USER IDs
-    ----------------------------------------------------- */
 
     let userIds = null;
 
@@ -513,10 +447,6 @@ export const getStudentLeaderboard = async (req, res) => {
       userIds = users.map((user) => user._id);
     }
 
-    /* -----------------------------------------------------
-       PROFILE FILTER
-    ----------------------------------------------------- */
-
     const filter = {};
 
     if (userIds) {
@@ -530,10 +460,6 @@ export const getStudentLeaderboard = async (req, res) => {
         $regex: new RegExp(`^${skill.trim()}$`, "i"),
       };
     }
-
-    /* -----------------------------------------------------
-       LEADERBOARD
-    ----------------------------------------------------- */
 
     const profiles = await StudentProfile.find(filter)
       .populate({
@@ -556,10 +482,6 @@ export const getStudentLeaderboard = async (req, res) => {
     const validProfiles = profiles.filter((profile) => profile.userId);
 
     const total = await StudentProfile.countDocuments(filter);
-
-    /* -----------------------------------------------------
-       RANK
-    ----------------------------------------------------- */
 
     const leaderboard = validProfiles.map((profile, index) => ({
       rank: skip + index + 1,
@@ -606,9 +528,7 @@ export const getStudentLeaderboard = async (req, res) => {
   }
 };
 
-/* =========================================================
-   8. GET STUDENT COURSE PROGRESS
-   ========================================================= */
+// 8. get student course progress
 
 export const getStudentCourseProgress = async (req, res) => {
   try {
@@ -665,9 +585,7 @@ export const getStudentCourseProgress = async (req, res) => {
   }
 };
 
-/* =========================================================
-   9. GET STUDENT QUIZ HISTORY
-   ========================================================= */
+// 9. get student quiz history
 
 export const getStudentQuizHistory = async (req, res) => {
   try {

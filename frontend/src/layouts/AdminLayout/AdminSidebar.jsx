@@ -2,7 +2,6 @@ import { NavLink } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "../../features/auth/authThunks";
 import styles from "./AdminSidebar.module.css";
-import Typewriter from "../../animation/TypeWriter";
 
 const AdminSidebar = ({ isOpen, onClose }) => {
   const dispatch = useDispatch();
@@ -14,7 +13,6 @@ const AdminSidebar = ({ isOpen, onClose }) => {
     { label: "Courses", path: "/admin/courses", icon: "📚" },
     { label: "Capstones", path: "/admin/capstones", icon: "🎯" },
     { label: "Certificates", path: "/admin/certificates", icon: "🏅" },
-    { label: "Chat with AI", path: "/ai", icon: "🤖" },
   ];
 
   const handleLogout = () => {
@@ -30,10 +28,8 @@ const AdminSidebar = ({ isOpen, onClose }) => {
       <aside className={`${styles.sidebar} ${isOpen ? styles.open : ""}`}>
         <div className={styles.logo}>
           <div className={styles.logoBrand}>
-            <span className={styles.logoMark}>S</span>
-            <span className={styles.logoText}>
-              <Typewriter texts={["LearnSpace"]} />
-            </span>
+            <img src="/learnspace-logo-1024x1024.png" alt="LearnSpace" className={styles.logoMark} />
+            <span className={styles.logoText}>LearnSpace</span>
           </div>
 
           <button

@@ -11,10 +11,6 @@ import {
   getStudentProjectHistoryApi,
 } from "./adminStudentApi";
 
-/* =========================================================
-   1. GET ALL STUDENTS
-   ========================================================= */
-
 export const fetchStudents = createAsyncThunk(
   "student/fetchStudents",
   async (params = {}, { rejectWithValue }) => {
@@ -27,10 +23,6 @@ export const fetchStudents = createAsyncThunk(
     }
   },
 );
-
-/* =========================================================
-   2. GET STUDENT DETAILS
-   ========================================================= */
 
 export const fetchStudentDetails = createAsyncThunk(
   "student/fetchStudentDetails",
@@ -45,10 +37,6 @@ export const fetchStudentDetails = createAsyncThunk(
   },
 );
 
-/* =========================================================
-   3. UPDATE STUDENT STATUS
-   ========================================================= */
-
 export const updateStudentStatus = createAsyncThunk(
   "student/updateStudentStatus",
   async ({ studentId, isActive }, { rejectWithValue }) => {
@@ -61,10 +49,6 @@ export const updateStudentStatus = createAsyncThunk(
     }
   },
 );
-
-/* =========================================================
-   4. UPDATE STUDENT REPUTATION
-   ========================================================= */
 
 export const updateStudentReputation = createAsyncThunk(
   "student/updateStudentReputation",
@@ -86,15 +70,6 @@ export const updateStudentReputation = createAsyncThunk(
   },
 );
 
-/* =========================================================
-   5. GRANT BADGE
-   ========================================================= */
-/* Badge thunks removed */
-
-/* =========================================================
-   7. LEADERBOARD
-   ========================================================= */
-
 export const fetchStudentLeaderboard = createAsyncThunk(
   "student/fetchStudentLeaderboard",
   async (params = {}, { rejectWithValue }) => {
@@ -108,10 +83,6 @@ export const fetchStudentLeaderboard = createAsyncThunk(
   },
 );
 
-/* =========================================================
-   8. COURSE PROGRESS
-   ========================================================= */
-
 export const fetchStudentCourseProgress = createAsyncThunk(
   "student/fetchStudentCourseProgress",
   async (studentId, { rejectWithValue }) => {
@@ -124,10 +95,6 @@ export const fetchStudentCourseProgress = createAsyncThunk(
     }
   },
 );
-
-/* =========================================================
-   9. QUIZ HISTORY
-   ========================================================= */
 
 export const fetchStudentQuizHistory = createAsyncThunk(
   "student/fetchStudentQuizHistory",

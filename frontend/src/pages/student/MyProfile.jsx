@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 
 import {
   fetchStudentProfile,
@@ -125,7 +125,7 @@ const MyProfile = () => {
 
   return (
     <div className={styles.profilePage}>
-      {/* ================= HERO PROFILE BANNER CARD ================= */}
+      {/* hero profile banner card */}
       <div className={styles.heroCard}>
         <br />
 
@@ -173,11 +173,11 @@ const MyProfile = () => {
         </div>
       </div>
 
-      {/* ================= MAIN 2-COLUMN GRID ================= */}
+      {/* main 2-column grid */}
       <div className={styles.profileLayout}>
-        {/* LEFT COLUMN: Stats & Skills */}
+        {/* left column: stats & skills */}
         <aside className={styles.sidebarColumn}>
-          {/* Quick Metrics */}
+          {/* quick metrics */}
           <div className={styles.panelCard}>
             <h3>Learning Overview</h3>
             <div className={styles.statsList}>
@@ -226,7 +226,7 @@ const MyProfile = () => {
           </div>
         </aside>
 
-        {/* RIGHT COLUMN: Details / Edit Form */}
+        {/* right column: details / edit form */}
         <main className={styles.contentColumn}>
           {!isEditing ? (
             <div className={styles.panelCard}>

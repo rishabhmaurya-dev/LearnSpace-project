@@ -6,7 +6,8 @@ import App from "./App";
 
 import { store } from "./app/store";
 
-import { Toaster } from "react-hot-toast";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import { setupAxiosInterceptors } from "./services/axios";
 
@@ -20,6 +21,6 @@ setupAxiosInterceptors(store);
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
     <App />
-    <Toaster position="top-right" />
+    <ToastContainer position="bottom-right" />
   </Provider>,
 );

@@ -9,10 +9,6 @@ import { protect, authorize } from "../../middlewares/auth.middleware.js";
 
 const router = express.Router();
 
-// ============================================================
-// STUDENT ONLY
-// ============================================================
-
 router.use(protect);
 router.use(authorize("STUDENT"));
 

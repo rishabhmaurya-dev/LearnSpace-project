@@ -9,13 +9,13 @@ import {
   Copy,
   Check,
 } from "lucide-react";
-import { sendAIMessage } from "../../services/ai.service";
+import { streamAIMessage } from "../../services/ai.service";
 import { useNavigate } from "react-router-dom";
 
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { oneLight } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 import "./AiChat.css";
 
@@ -24,10 +24,6 @@ const INITIAL_MESSAGE = {
   content:
     "Hello 👋 I'm LearnSpace AI. I'm here to help you learn, debug code, and understand your course concepts in depth.",
 };
-
-/* =========================================================
-   COPY BUTTON
-========================================================= */
 
 const CopyButton = ({ text, className = "" }) => {
   const [copied, setCopied] = useState(false);
@@ -62,10 +58,6 @@ const CopyButton = ({ text, className = "" }) => {
   );
 };
 
-/* =========================================================
-   CODE BLOCK
-========================================================= */
-
 const CodeBlock = ({ language, code }) => {
   return (
     <div className="sf-ai-page-code-block">
@@ -76,7 +68,7 @@ const CodeBlock = ({ language, code }) => {
       <div className="sf-ai-page-code-content">
         <SyntaxHighlighter
           language={language || "text"}
-          style={oneDark}
+          style={oneLight}
           PreTag="div"
           customStyle={{
             margin: 0,
@@ -92,10 +84,6 @@ const CodeBlock = ({ language, code }) => {
     </div>
   );
 };
-
-/* =========================================================
-   AI MARKDOWN MESSAGE
-========================================================= */
 
 const AIMessageContent = ({ content }) => {
   return (
@@ -166,12 +154,6 @@ const AIMessageContent = ({ content }) => {
 
           const match = /language-([\w+-]+)/.exec(className || "");
 
-          /*
-          =================================================
-          CODE BLOCK
-          =================================================
-          */
-
           const isCodeBlock =
             match ||
             props.node?.position?.start.line !== props.node?.position?.end.line;
@@ -179,12 +161,6 @@ const AIMessageContent = ({ content }) => {
           if (isCodeBlock) {
             return <CodeBlock language={match?.[1] || "text"} code={code} />;
           }
-
-          /*
-          =================================================
-          INLINE CODE
-          =================================================
-          */
 
           return <code className="sf-ai-md-inline-code">{children}</code>;
         },
@@ -214,7 +190,11 @@ const AIChat = () => {
     if (!text || loading) return;
 
     const history = conversation
-      .filter((item) => item.role === "user" || item.role === "assistant")
+      .filter(
+        (item) =>
+          (item.role === "user" || item.role === "assistant") &&
+          item.content.trim(),
+      )
       .slice(-4)
       .map((item) => ({
         role: item.role,
@@ -226,29 +206,70 @@ const AIChat = () => {
     setMessage("");
     setLoading(true);
 
-    try {
-      const data = await sendAIMessage({
-        message: text,
-        conversation: history,
-      });
+    setConversation((prev) => [...prev, { role: "assistant", content: "" }]);
 
-      setConversation((prev) => [
-        ...prev,
+    try {
+      await streamAIMessage(
         {
-          role: "assistant",
-          content: data.reply || "No response received.",
+          message: text,
+          conversation: history,
         },
-      ]);
+        {
+          onDelta: (delta) => {
+            setConversation((prev) => {
+              const next = [...prev];
+
+              const last = next[next.length - 1];
+
+              next[next.length - 1] = {
+                role: "assistant",
+                content: last.content + delta,
+              };
+
+              return next;
+            });
+          },
+          onError: (errorMsg) => {
+            setConversation((prev) => {
+              const next = [...prev];
+              next[next.length - 1] = {
+                role: "assistant",
+                content: `⚠️ ${errorMsg}`,
+              };
+              return next;
+            });
+          },
+        },
+      );
+
+      setConversation((prev) => {
+        const next = [...prev];
+
+        const last = next[next.length - 1];
+
+        if (!last.content.trim()) {
+          next[next.length - 1] = {
+            role: "assistant",
+            content: "No response received.",
+          };
+        }
+
+        return next;
+      });
     } catch (error) {
       console.error("AI PAGE ERROR:", error);
-      setConversation((prev) => [
-        ...prev,
-        {
+
+      setConversation((prev) => {
+        const next = [...prev];
+
+        next[next.length - 1] = {
           role: "assistant",
           content:
             "⚠️ Unable to connect with AI. Please check your network and try again.",
-        },
-      ]);
+        };
+
+        return next;
+      });
     } finally {
       setLoading(false);
       textareaRef.current?.focus();
@@ -285,7 +306,6 @@ const AIChat = () => {
   return (
     <>
       <div className="sf-ai-page">
-        {/* ================= HEADER ================= */}
         <header className="sf-ai-page-header">
           <div className="sf-ai-page-title">
             <div className="sf-ai-page-icon">
@@ -323,7 +343,6 @@ const AIChat = () => {
           </div>
         </header>
 
-        {/* ================= CHAT VIEWPORT ================= */}
         <main className="sf-ai-page-chat">
           {conversation.length === 1 && (
             <section className="sf-ai-page-welcome">
@@ -352,9 +371,12 @@ const AIChat = () => {
             </section>
           )}
 
-          {/* MESSAGES STREAM */}
           <div className="sf-ai-page-messages">
-            {conversation.map((item, index) => (
+            {conversation
+              .filter(
+                (item) => item.role === "user" || item.content.trim(),
+              )
+              .map((item, index) => (
               <div
                 key={`${item.role}-${index}`}
                 className={`sf-ai-page-message-row ${item.role}`}
@@ -390,7 +412,6 @@ const AIChat = () => {
               </div>
             ))}
 
-            {/* TYPING LOADER */}
             {loading && (
               <div className="sf-ai-page-message-row assistant">
                 <div className="sf-ai-page-message-inner">
@@ -413,7 +434,6 @@ const AIChat = () => {
           </div>
         </main>
 
-        {/* ================= INPUT FOOTER ================= */}
         <footer className="sf-ai-page-input-section">
           <div className="sf-ai-input-neumorphic-box">
             <textarea

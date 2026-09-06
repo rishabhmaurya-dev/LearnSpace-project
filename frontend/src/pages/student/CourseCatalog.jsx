@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-hot-toast";
+import { toast } from "react-toastify";
 import { motion, AnimatePresence } from "framer-motion";
 
 import { CardGridSkeleton } from "../../components/AppSkeletons";
@@ -277,7 +277,7 @@ const CourseCatalog = () => {
                       </div>
                     </div>
 
-                    {/* Action CTA */}
+                    {/* action cta */}
                     <div className={styles.cardFooter}>
                       <AnimatePresence mode="wait">
                         {course.isEnrolled ? (

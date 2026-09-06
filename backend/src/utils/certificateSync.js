@@ -34,24 +34,6 @@ export function removePdfFile(pdfUrl = "") {
   }
 }
 
-/**
- * =========================================================
- * RECONCILE CERTIFICATE ISSUED STATE
- * =========================================================
- *
- * Keeps the UI in sync with manual database changes:
- *
- *  1. Orphan certificates (whose capstone is no longer approved
- *     or does not exist) are removed along with their PDFs.
- *
- *  2. Duplicate certificates for the same capstone submission
- *     are removed (the oldest one is kept).
- *
- *  3. Capstone issuance flags are fixed:
- *       - capstone has NO certificate -> certificateIssued = false
- *         (so the admin sees the "Issue Certificate" button again)
- *       - capstone HAS a certificate  -> certificateIssued = true
- */
 export async function reconcileCertificateIssuedStates() {
   const [certificates, capstones] = await Promise.all([
     Certificate.find({ certificateType: "COURSE_COMPLETION" })

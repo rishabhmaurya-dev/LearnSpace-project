@@ -1,149 +1,299 @@
-/* =========================================================
-   PAGE CONTAINER & CANVAS
-   ========================================================= */
 .container {
   width: 100%;
-  max-width: 1000px;
+  max-width: 1600px;
   margin: 0 auto;
-  padding: 32px var(--page-padding) 64px var(--page-padding);
+  padding: 24px var(--page-padding) 64px var(--page-padding);
   background: var(--bg-primary-radial);
   min-height: calc(100vh - var(--header-height));
   font-family: var(--font-family);
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 22px;
 }
 
-/* =========================================================
-   HEADER SECTION
-   ========================================================= */
-.pageHeader {
+.hero {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 24px 28px;
+  box-shadow: var(--shadow-convex-md);
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  background-color: var(--bg-card);
-  padding: 24px 28px;
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border);
-  box-shadow: var(--card-shadow);
+  gap: 18px;
 }
 
-@media (min-width: 768px) {
-  .pageHeader {
+.hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--brand-gradient);
+}
+
+@media (min-width: 860px) {
+  .hero {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
   }
 }
 
-.headerBadge {
-  display: inline-block;
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-bold);
-  color: var(--primary);
+.heroContent {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.eyebrow {
+  font-size: 11px;
+  font-weight: var(--font-weight-extrabold);
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  background-color: var(--primary-soft);
-  padding: 3px 10px;
-  border-radius: var(--radius-full);
-  margin-bottom: 6px;
 }
 
-.pageHeader h1 {
+.heroTitle {
   font-size: var(--font-size-2xl);
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--font-weight-extrabold);
   color: var(--text-primary);
-  margin: 0 0 4px 0;
+  margin: 0;
   letter-spacing: -0.02em;
+  text-shadow: var(--text-engraved);
+  line-height: 1.15;
 }
 
-.pageHeader p {
-  font-size: var(--font-size-sm);
+.heroSubtitle {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
   color: var(--text-secondary);
   margin: 0;
-  line-height: 1.45;
+  max-width: 560px;
+  line-height: 1.5;
 }
 
-.statsCountBadge {
-  background: var(--brand-gradient-soft);
-  border: 1px solid var(--primary-light);
-  color: var(--primary-dark);
-  padding: 8px 18px;
-  border-radius: var(--radius-full);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  white-space: nowrap;
+.heroStats {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
-.statsCountBadge strong {
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-bold);
-  color: var(--primary);
-  margin-right: 4px;
+.heroStat {
+  background-color: var(--bg-surface-sunken);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: var(--shadow-inset-xs);
+  min-width: 140px;
 }
 
-/* =========================================================
-   CERTIFICATES RESPONSIVE GRID
-   ========================================================= */
-.certGrid {
+.statIcon {
+  font-size: 18px;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-convex-xs);
+  flex-shrink: 0;
+}
+
+.statIconVerified {
+  color: var(--success);
+  font-size: 15px;
+  font-weight: var(--font-weight-extrabold);
+}
+
+.statMeta {
+  display: flex;
+  flex-direction: column;
+}
+
+.statMeta strong {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-extrabold);
+  color: var(--text-primary);
+  line-height: 1.1;
+  text-shadow: var(--text-engraved);
+}
+
+.statMeta span {
+  font-size: 10.5px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-muted);
+}
+
+.howItWorks {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 20px;
+  gap: 12px;
 }
 
-@media (min-width: 640px) {
-  .certGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 1024px) {
-  .certGrid {
+@media (min-width: 768px) {
+  .howItWorks {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
-/* =========================================================
-   CERTIFICATE CARD (ELEVATED WITH STAGGER ANIMATION)
-   ========================================================= */
+.step {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  box-shadow: var(--shadow-convex-sm);
+  box-sizing: border-box;
+}
+
+.stepIcon {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-surface-sunken);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-convex-xs);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  flex-shrink: 0;
+}
+
+.stepText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.stepText strong {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+}
+
+.stepText p {
+  font-size: 11px;
+  font-weight: var(--font-weight-medium);
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.45;
+}
+
+.resultsBar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  padding: 0 4px;
+}
+
+.resultsBar strong {
+  color: var(--text-primary);
+  font-weight: var(--font-weight-extrabold);
+}
+
+.certGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 18px;
+}
+
+@media (max-width: 420px) {
+  .certGrid {
+    gap: 14px;
+  }
+}
+
 .certCard {
   background-color: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 22px;
-  box-shadow: var(--card-shadow);
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  box-shadow: var(--shadow-convex-sm);
   position: relative;
   overflow: hidden;
-  transition: transform var(--transition-normal), box-shadow var(--transition-normal), border-color var(--transition-normal);
-  animation: cardFadeIn 0.35s var(--ease-decelerate) both;
-  animation-delay: calc(var(--card-index, 0) * 0.05s);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px;
+  animation: cardIn 0.5s var(--ease-standard) backwards;
+  animation-delay: calc(var(--card-index, 0) * 70ms);
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal), border-color var(--transition-fast);
 }
 
-.certCard:hover {
-  transform: var(--hover-lift);
-  box-shadow: var(--card-shadow-hover);
-  border-color: var(--border-hover);
+.certCard::after {
+  content: "";
+  position: absolute;
+  top: -46px;
+  right: -46px;
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--primary-soft) 0%, transparent 70%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--transition-normal);
 }
 
-/* Decorative Top Gradient Stripe */
-.cardRibbon {
+.certCard:focus-within {
+  border-color: var(--border-focus);
+  box-shadow: var(--shadow-convex-md), var(--focus-ring);
+}
+
+@media (hover: hover) {
+  .certCard:hover {
+    transform: var(--hover-lift-sm);
+    box-shadow: var(--shadow-convex-md);
+    border-color: var(--border-hover);
+  }
+
+  .certCard:hover::after {
+    opacity: 1;
+  }
+}
+
+.cardCover {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  height: 4px;
+  height: 5px;
   background: var(--brand-gradient);
 }
 
-/* Top Card Header */
+.cardCoverGlow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, #1a613b 0%, #5cb882 55%, #22c55e 100%);
+  filter: blur(2px);
+  opacity: 0.5;
+}
+
 .certTop {
   display: flex;
   align-items: flex-start;
   gap: 14px;
+  min-width: 0;
 }
 
 .certBadgeWrap {
@@ -166,13 +316,13 @@
 }
 
 .certBadgeEmoji {
-  font-size: 24px;
+  font-size: 22px;
 }
 
 .certInfo {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
   min-width: 0;
 }
 
@@ -192,74 +342,101 @@
   text-overflow: ellipsis;
 }
 
-/* Metadata Strip */
+.subtitleTagWrap {
+  display: flex;
+  align-items: center;
+}
+
+.subtitleTag {
+  font-size: 10.5px;
+  font-weight: var(--font-weight-bold);
+  color: var(--primary-dark);
+  background-color: var(--primary-soft);
+  border: 1px solid var(--primary-light);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .certMeta {
   background-color: var(--bg-surface-sunken);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-sm);
-  padding: 10px 14px;
+  box-shadow: var(--shadow-inset-xs);
+  padding: 10px 12px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
 }
 
 .metaRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 11.5px;
-  color: var(--text-secondary);
+  gap: 12px;
+  font-size: 11px;
+  color: var(--text-muted);
 }
 
 .metaRow code {
   color: var(--primary-dark);
   background-color: var(--primary-soft);
+  border: 1px solid var(--primary-light);
   padding: 2px 6px;
   border-radius: var(--radius-xs);
   font-weight: var(--font-weight-semibold);
-  font-size: 11px;
+  font-size: 10.5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 60%;
 }
 
 .metaRow strong {
   color: var(--text-primary);
+  font-weight: var(--font-weight-bold);
+  font-size: 11.5px;
+  text-align: right;
 }
 
-/* Action Buttons */
 .cardActions {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8px;
   margin-top: auto;
-  padding-top: 4px;
+  padding-top: 10px;
+  border-top: 1px solid var(--divider);
 }
 
-/* =========================================================
-   BUTTONS (ACCESSIBLE & THEMED)
-   ========================================================= */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 38px;
+  gap: 6px;
+  height: 36px;
   padding: 0 12px;
   font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
-  border-radius: var(--radius-sm);
-  border: none;
+  font-weight: var(--font-weight-bold);
+  border-radius: var(--radius-xs);
+  box-sizing: border-box;
   cursor: pointer;
   text-decoration: none;
-  box-sizing: border-box;
   transition: all var(--transition-fast);
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .btn:active {
-  transform: var(--active-scale);
+  transform: var(--active-press);
+  box-shadow: var(--shadow-inset-xs);
 }
 
 .btnPrimary {
   background-color: var(--primary);
   color: var(--primary-contrast);
+  border: 1px solid transparent;
   box-shadow: var(--shadow-primary);
 }
 
@@ -270,31 +447,31 @@
 }
 
 .btnSecondary {
-  background-color: var(--bg-card);
+  background-color: var(--bg-surface-sunken);
   color: var(--text-primary);
-  border: 1px solid var(--border-strong);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-convex-xs);
 }
 
 .btnSecondary:hover {
-  background-color: var(--grey-100);
+  background-color: var(--bg-card-hover);
   border-color: var(--border-hover);
   color: var(--primary);
+  transform: var(--hover-lift-sm);
 }
 
 .btn:disabled {
   opacity: var(--opacity-disabled);
   cursor: not-allowed;
   transform: none !important;
+  box-shadow: none;
 }
 
-/* =========================================================
-   EMPTY STATE CARD
-   ========================================================= */
 .emptyCard {
   background-color: var(--bg-card);
   border: 1.5px dashed var(--border-strong);
   border-radius: var(--radius-lg);
-  padding: 60px 24px;
+  padding: 56px 24px;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -323,19 +500,22 @@
   line-height: 1.5;
 }
 
-/* =========================================================
-   SKELETON ANIMATIONS
-   ========================================================= */
 .skeletonCard {
   pointer-events: none;
   animation: pulseSkeleton 1.4s ease-in-out infinite;
+}
+
+.skeletonCard .certTop {
+  align-items: stretch;
 }
 
 .skeletonBadge {
   width: 46px;
   height: 46px;
   border-radius: var(--radius-md);
-  background-color: var(--grey-200);
+  background-color: var(--bg-surface-sunken);
+  border: 1px solid var(--border-subtle);
+  flex-shrink: 0;
 }
 
 .skeletonInfo {
@@ -343,49 +523,103 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
+  justify-content: center;
 }
 
 .skeletonTitle {
   width: 75%;
   height: 16px;
   border-radius: var(--radius-xs);
-  background-color: var(--grey-200);
+  background-color: var(--bg-surface-sunken);
+  border: 1px solid var(--border-subtle);
 }
 
 .skeletonSubtitle {
   width: 50%;
   height: 12px;
   border-radius: var(--radius-xs);
-  background-color: var(--grey-200);
+  background-color: var(--bg-surface-sunken);
+  border: 1px solid var(--border-subtle);
 }
 
 .skeletonTag {
-  width: 100px;
-  height: 20px;
+  width: 110px;
+  height: 24px;
   border-radius: var(--radius-full);
-  background-color: var(--grey-200);
+  background-color: var(--bg-surface-sunken);
+  border: 1px solid var(--border-subtle);
 }
 
 .skeletonMeta {
   width: 100%;
-  height: 52px;
+  height: 56px;
   border-radius: var(--radius-sm);
-  background-color: var(--grey-200);
+  background-color: var(--bg-surface-sunken);
+  border: 1px solid var(--border-subtle);
 }
 
 .skeletonActions {
   width: 100%;
-  height: 38px;
-  border-radius: var(--radius-sm);
-  background-color: var(--grey-200);
+  height: 36px;
+  border-radius: var(--radius-xs);
+  background-color: var(--bg-surface-sunken);
+  border: 1px solid var(--border-subtle);
+}
+
+@media (max-width: 420px) {
+  .hero {
+    padding: 20px 18px;
+  }
+
+  .heroStat {
+    padding: 8px 12px;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .statIcon {
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+  }
+
+  .step {
+    padding: 12px;
+  }
+
+  .certCard {
+    padding: 14px;
+    gap: 12px;
+  }
 }
 
 @keyframes pulseSkeleton {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.55; }
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
 }
 
-@keyframes cardFadeIn {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .certCard {
+    animation: none;
+  }
+
+  .certCard,
+  .certCard::after {
+    transition: none;
+  }
 }

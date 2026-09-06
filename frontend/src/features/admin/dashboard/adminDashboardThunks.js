@@ -8,10 +8,6 @@ import {
   getCourseOverviewApi,
 } from "./adminDashboardApi";
 
-/* =========================================================
-   DASHBOARD STATS
-========================================================= */
-
 export const fetchAdminDashboardStats = createAsyncThunk(
   "adminDashboard/fetchStats",
   async (_, { rejectWithValue }) => {
@@ -24,10 +20,6 @@ export const fetchAdminDashboardStats = createAsyncThunk(
     }
   },
 );
-
-/* =========================================================
-   PENDING ITEMS
-========================================================= */
 
 export const fetchAdminPendingItems = createAsyncThunk(
   "adminDashboard/fetchPendingItems",
@@ -42,10 +34,6 @@ export const fetchAdminPendingItems = createAsyncThunk(
   },
 );
 
-/* =========================================================
-   RECENT ACTIVITY
-========================================================= */
-
 export const fetchAdminActivity = createAsyncThunk(
   "adminDashboard/fetchActivity",
   async (_, { rejectWithValue }) => {
@@ -59,10 +47,6 @@ export const fetchAdminActivity = createAsyncThunk(
   },
 );
 
-/* =========================================================
-   LEADERBOARD
-========================================================= */
-
 export const fetchAdminLeaderboard = createAsyncThunk(
   "adminDashboard/fetchLeaderboard",
   async (limit = 10, { rejectWithValue }) => {
@@ -75,10 +59,6 @@ export const fetchAdminLeaderboard = createAsyncThunk(
     }
   },
 );
-
-/* =========================================================
-   COURSE OVERVIEW
-========================================================= */
 
 export const fetchCourseOverview = createAsyncThunk(
   "adminDashboard/fetchCourseOverview",

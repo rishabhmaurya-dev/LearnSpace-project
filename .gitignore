@@ -1,12 +1,3 @@
 .env
 node_modules/
 
-backend/ai-knowledge/
-backend/backup/
-backend/src/scripts/indexKnowledge.js
-backend/src/scripts/testChunks.js
-backend/src/scripts/testEmbedding.js
-backend/src/scripts/testSearchKnowledge.js
-backend/src/utils/chunkMarkdown.js
-backend/src/utils/embedding.js
-backend/src/utils/searchKnowledge.js

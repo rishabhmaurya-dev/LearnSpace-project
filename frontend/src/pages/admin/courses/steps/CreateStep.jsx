@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 
 import styles from "../course.module.css";
 
@@ -15,9 +15,7 @@ const CreateStep = ({
 }) => {
   const navigate = useNavigate();
 
-  /* -----------------------------------------------------
-      TOAST ALERTS TRIGGER
-  ----------------------------------------------------- */
+  /* toast alerts trigger */
   useEffect(() => {
     if (success && message) {
       toast.success(message);
@@ -30,9 +28,7 @@ const CreateStep = ({
     }
   }, [error]);
 
-  /* -----------------------------------------------------
-      REQUIREMENTS CALCULATIONS
-  ----------------------------------------------------- */
+  /* requirements calculations */
   const lessonsWithMcq = lessons.filter((l) => l.mcqCount > 0).length;
   const quizCount = course?.quiz?.length || 0;
   const hasCapstone =
@@ -70,9 +66,7 @@ const CreateStep = ({
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-      {/* =========================================
-          SECTION 1: PAGE HEADER CARD
-      ========================================= */}
+      {/* section 1: page header card */}
       <div className={styles.card}>
         <div className={styles.sectionHeader}>
           <div className={styles.titleWrapper}>
@@ -87,9 +81,7 @@ const CreateStep = ({
         </div>
       </div>
 
-      {/* =========================================
-          SECTION 2: REQUIREMENTS CHECKLIST CARD
-      ========================================= */}
+      {/* section 2: requirements checklist card */}
       <div className={styles.card}>
         <div className={styles.cardHeaderWrapper} style={{ marginBottom: 14 }}>
           <h4>Course Completion Checklist</h4>
@@ -118,9 +110,7 @@ const CreateStep = ({
         </div>
       </div>
 
-      {/* =========================================
-          SECTION 3: PUBLISH ACTION CARD
-      ========================================= */}
+      {/* section 3: publish action card */}
       <div className={styles.card}>
         <div className={styles.actionHeaderWrapper} style={{ marginBottom: 8 }}>
           <h4>🚀 Publish Course</h4>
@@ -173,9 +163,7 @@ const CreateStep = ({
         </div>
       </div>
 
-      {/* =========================================
-          SECTION 4: SAVE DRAFT / ALTERNATE ACTIONS CARD
-      ========================================= */}
+      {/* section 4: save draft / alternate actions card */}
       <div className={styles.card}>
         <div className={styles.draftHeaderWrapper} style={{ marginBottom: 8 }}>
           <h4>💾 Not ready yet?</h4>
@@ -211,9 +199,7 @@ const CreateStep = ({
         </div>
       </div>
 
-      {/* =========================================
-          SECTION 5: SUCCESS SCREEN CARD (IF PUBLISHED)
-      ========================================= */}
+      {/* section 5: success screen card (if published) */}
       {course?.isPublished && (
         <div className={`${styles.card} ${styles.successScreen}`}>
           <div className={styles.iconWrapper} style={{ marginBottom: 10 }}>

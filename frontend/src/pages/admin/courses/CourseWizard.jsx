@@ -70,9 +70,7 @@ const CourseWizard = ({ mode, courseId }) => {
 
   const course = storedCourse || createdCourse;
 
-  /* -----------------------------------------------------
-     CLEANUP
-  ----------------------------------------------------- */
+  /* cleanup */
 
   useEffect(() => {
     return () => {
@@ -81,9 +79,7 @@ const CourseWizard = ({ mode, courseId }) => {
     };
   }, [dispatch]);
 
-  /* -----------------------------------------------------
-     STEP HELPERS — URL Sync Added
-  ----------------------------------------------------- */
+  /* step helpers — url sync */
 
   // 2. goToStep me URL search params set kar diye
   const goToStep = useCallback(
@@ -100,9 +96,7 @@ const CourseWizard = ({ mode, courseId }) => {
   const handleNext = () => goToStep(activeStep + 1);
   const handleBack = () => goToStep(activeStep - 1);
 
-  /* -----------------------------------------------------
-     STEP 1 - BASIC INFO
-  ----------------------------------------------------- */
+  /* step 1 - basic info */
 
   const handleSaveBasic = (formData) => {
     if (isEdit && courseId) {
@@ -121,9 +115,7 @@ const CourseWizard = ({ mode, courseId }) => {
     }
   };
 
-  /* -----------------------------------------------------
-     STEP 2 - LESSONS
-  ----------------------------------------------------- */
+  /* step 2 - lessons */
 
   const handleFetchLessons = (id) => {
     dispatch(fetchCourseLessons(id));
@@ -164,9 +156,7 @@ const CourseWizard = ({ mode, courseId }) => {
     });
   };
 
-  /* -----------------------------------------------------
-     STEP 3 - QUIZ
-  ----------------------------------------------------- */
+  /* step 3 - quiz */
 
   const handleUploadQuiz = (id, file) => {
     return dispatch(uploadFinalQuizCsv({ courseId: id, file })).then(
@@ -178,9 +168,7 @@ const CourseWizard = ({ mode, courseId }) => {
     );
   };
 
-  /* -----------------------------------------------------
-     STEP 4 - CAPSTONE
-  ----------------------------------------------------- */
+  /* step 4 - capstone */
 
   const handleSaveCapstone = (payload) => {
     const id = courseId || course?._id;
@@ -188,9 +176,7 @@ const CourseWizard = ({ mode, courseId }) => {
     return dispatch(updateCourseCapstone({ courseId: id, payload }));
   };
 
-  /* -----------------------------------------------------
-     STEP 6 - PUBLISH
-  ----------------------------------------------------- */
+  /* step 6 - publish */
 
   const handlePublish = (id) => {
     if (!id) return;
@@ -201,9 +187,7 @@ const CourseWizard = ({ mode, courseId }) => {
     });
   };
 
-  /* -----------------------------------------------------
-     AUTO-FETCH LESSONS WHEN COURSE IS AVAILABLE
-  ----------------------------------------------------- */
+  /* auto-fetch lessons when course is available */
 
   useEffect(() => {
     if (course?._id && activeStep >= 1) {
@@ -211,9 +195,7 @@ const CourseWizard = ({ mode, courseId }) => {
     }
   }, [course?._id, activeStep, dispatch]);
 
-  /* -----------------------------------------------------
-     NAVIGATE TO NEXT AFTER CREATE
-  ----------------------------------------------------- */
+  /* navigate to next after create */
 
   useEffect(() => {
     if (
@@ -226,9 +208,7 @@ const CourseWizard = ({ mode, courseId }) => {
     }
   }, [success, message, isEdit, activeStep, goToStep]);
 
-  /* =========================================================
-     RENDER STEP CONTENT
-  ========================================================= */
+  /* render step content */
 
   const renderStep = () => {
     switch (activeStep) {

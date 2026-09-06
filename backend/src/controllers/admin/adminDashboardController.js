@@ -5,9 +5,7 @@ import { Certificate } from "../../models/Certificate.model.js";
 import { CapstoneSubmission } from "../../models/CapstoneSubmission.model.js";
 import { StudentProfile } from "../../models/StudentProfile.model.js";
 
-// ============================================================
-// HELPERS — monthly buckets for growth trends
-// ============================================================
+// helpers - monthly buckets for growth trends
 
 const MONTH_LABELS = [
   "Jan",
@@ -60,11 +58,6 @@ const buildMonthlySeries = (buckets, docs) => {
     count: counts.get(bucket.key) || 0,
   }));
 };
-
-// ============================================================
-// ADMIN DASHBOARD OVERVIEW
-// Counters + growth trends + category distribution
-// ============================================================
 
 export const getAdminDashboardStats = async (req, res) => {
   try {
@@ -170,14 +163,14 @@ export const getAdminDashboardStats = async (req, res) => {
         },
       },
 
-      /* 6-month growth series for the line chart */
+      // 6-month growth series for the line chart
       growth: {
         students: buildMonthlySeries(buckets, studentTrendDocs),
         courses: buildMonthlySeries(buckets, courseTrendDocs),
         certificates: buildMonthlySeries(buckets, certificateTrendDocs),
       },
 
-      /* top course categories for the doughnut chart */
+      // top course categories for the doughnut chart
       categories: categories.map((category) => ({
         name: category._id || "Uncategorised",
         count: category.count,
@@ -193,10 +186,6 @@ export const getAdminDashboardStats = async (req, res) => {
     });
   }
 };
-
-// ============================================================
-// ADMIN DASHBOARD - PENDING ITEMS
-// ============================================================
 
 export const getAdminPendingItems = async (req, res) => {
   try {
@@ -223,11 +212,6 @@ export const getAdminPendingItems = async (req, res) => {
     });
   }
 };
-
-// ============================================================
-// ADMIN DASHBOARD - RECENT ACTIVITY FEED
-// Merged timeline of courses / certificates / capstones
-// ============================================================
 
 export const getAdminActivity = async (req, res) => {
   try {
@@ -309,11 +293,6 @@ export const getAdminActivity = async (req, res) => {
   }
 };
 
-// ============================================================
-// ADMIN LEADERBOARD
-// Reputation + Completed Courses + Completed Projects
-// ============================================================
-
 export const getAdminLeaderboard = async (req, res) => {
   try {
     const limit = Math.min(Math.max(Number(req.query.limit) || 10, 1), 100);
@@ -378,10 +357,6 @@ export const getAdminLeaderboard = async (req, res) => {
     });
   }
 };
-
-// ============================================================
-// COURSE OVERVIEW
-// ============================================================
 
 export const getCourseOverview = async (req, res) => {
   try {

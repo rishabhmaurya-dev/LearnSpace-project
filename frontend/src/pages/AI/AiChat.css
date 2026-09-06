@@ -1,6 +1,4 @@
-/* =========================================================
-   PAGE CONTAINER
-   ========================================================= */
+/* page container */
 .sf-ai-page {
   width: 100%;
   max-width: var(--content-max-width);
@@ -15,9 +13,7 @@
   gap: 18px;
 }
 
-/* =========================================================
-   HEADER SECTION
-   ========================================================= */
+/* header section */
 .sf-ai-page-header {
   display: flex;
   align-items: center;
@@ -107,9 +103,7 @@
   color: var(--primary);
 }
 
-/* =========================================================
-   CHAT VIEWPORT
-   ========================================================= */
+/* chat viewport */
 .sf-ai-page-chat {
   flex: 1;
   min-height: 480px;
@@ -135,9 +129,7 @@
   border-radius: var(--radius-full);
 }
 
-/* =========================================================
-   WELCOME SCREEN & PROMPT CHIPS
-   ========================================================= */
+/* welcome screen & prompt chips */
 .sf-ai-page-welcome {
   margin: auto auto;
   text-align: center;
@@ -214,9 +206,7 @@
   background-color: var(--primary-soft);
 }
 
-/* =========================================================
-   MESSAGES STREAM & BUBBLES
-   ========================================================= */
+/* messages stream & bubbles */
 .sf-ai-page-messages {
   display: flex;
   flex-direction: column;
@@ -312,9 +302,7 @@
   box-shadow: none;
 }
 
-/* =========================================================
-   MARKDOWN STYLES
-   ========================================================= */
+/* markdown styles */
 .sf-ai-md-p {
   margin: 0 0 10px 0;
   line-height: 1.65;
@@ -411,9 +399,7 @@
   font-family: var(--font-mono);
 }
 
-/* =========================================================
-   TABLE STYLES
-   ========================================================= */
+/* table styles */
 .sf-ai-md-table-wrapper {
   overflow-x: auto;
   margin: 10px 0;
@@ -451,9 +437,7 @@
   background-color: var(--bg-hover);
 }
 
-/* =========================================================
-   CODE BLOCK STYLES
-   ========================================================= */
+/* code block styles */
 .sf-ai-page-code-block {
   margin: 10px 0;
   border-radius: var(--radius-md);
@@ -494,13 +478,12 @@
 }
 
 .sf-ai-page-code-content {
-  background-color: #1e1e2e;
+  background-color: #ffffff;
+  border-top: 1px solid var(--border-subtle);
   overflow-x: auto;
 }
 
-/* =========================================================
-   COPY RESPONSE BUTTON
-   ========================================================= */
+/* copy response button */
 .sf-ai-page-copy-response-btn {
   display: inline-flex;
   align-items: center;
@@ -523,9 +506,7 @@
   border-color: var(--primary);
 }
 
-/* =========================================================
-   TYPING ANIMATION WAVE
-   ========================================================= */
+/* typing animation */
 .sf-ai-typing-indicator {
   display: inline-flex;
   align-items: center;
@@ -546,12 +527,14 @@
   animation: typingBounce 1.3s infinite ease-in-out both;
 }
 
-.sf-ai-typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
-.sf-ai-typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+.sf-ai-typing-indicator span:nth-child(1) {
+  animation-delay: -0.32s;
+}
+.sf-ai-typing-indicator span:nth-child(2) {
+  animation-delay: -0.16s;
+}
 
-/* =========================================================
-   INPUT BOX SECTION
-   ========================================================= */
+/* input box */
 .sf-ai-page-input-section {
   display: flex;
   flex-direction: column;
@@ -570,11 +553,6 @@
   transition: all var(--transition-fast);
 }
 
-.sf-ai-input-neumorphic-box:focus-within {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 4px var(--primary-soft);
-}
-
 .sf-ai-input-neumorphic-box textarea {
   flex: 1;
   border: none;
@@ -591,6 +569,13 @@
 
 .sf-ai-input-neumorphic-box textarea::placeholder {
   color: var(--input-placeholder);
+}
+
+.sf-ai-input-neumorphic-box textarea:focus,
+.sf-ai-input-neumorphic-box textarea:focus-visible {
+  outline: none;
+  box-shadow: none;
+  border: none;
 }
 
 .sf-ai-send-btn {
@@ -630,15 +615,126 @@
   margin: 0;
 }
 
-/* =========================================================
-   ANIMATIONS
-   ========================================================= */
+/* animations */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes typingBounce {
-  0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
-  40% { transform: scale(1.1); opacity: 1; }
+  0%,
+  80%,
+  100% {
+    transform: scale(0.6);
+    opacity: 0.4;
+  }
+  40% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+}
+
+/* responsive */
+@media (max-width: 768px) {
+  .sf-ai-page {
+    padding: 14px 14px 22px;
+    gap: 14px;
+    min-height: 100vh;
+  }
+
+  .sf-ai-page-header {
+    padding: 14px 16px;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .sf-ai-page-icon {
+    width: 38px;
+    height: 38px;
+  }
+
+  .sf-ai-page-title h1 {
+    font-size: 18px;
+  }
+
+  .sf-ai-page-title p {
+    font-size: 11px;
+  }
+
+  .sf-ai-clear-btn,
+  .sf-ai-back-btn {
+    height: 36px;
+    padding: 0 12px;
+  }
+
+  .sf-ai-page-chat {
+    min-height: 0;
+    max-height: none;
+    flex: 1 1 auto;
+    padding: 16px;
+    border-radius: 16px;
+  }
+
+  .sf-ai-page-welcome {
+    padding: 20px 12px;
+  }
+
+  .sf-ai-big-icon {
+    width: 56px;
+    height: 56px;
+  }
+
+  .sf-ai-page-message-inner {
+    max-width: 90%;
+  }
+
+  .sf-ai-input-neumorphic-box {
+    padding: 6px 8px 6px 16px;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sf-ai-page {
+    padding: 10px 10px 18px;
+  }
+
+  .sf-ai-page-title h1 {
+    font-size: 16px;
+  }
+
+  .sf-ai-page-title p {
+    display: none;
+  }
+
+  .sf-ai-clear-btn span,
+  .sf-ai-back-btn span {
+    display: none;
+  }
+
+  .sf-ai-clear-btn,
+  .sf-ai-back-btn {
+    width: 36px;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .sf-ai-page-chat {
+    padding: 12px;
+  }
+
+  .sf-ai-page-avatar {
+    width: 30px;
+    height: 30px;
+  }
+
+  .sf-ai-page-message-inner {
+    max-width: 100%;
+  }
 }

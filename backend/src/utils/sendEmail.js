@@ -1,6 +1,4 @@
 import nodemailer from "nodemailer";
-import dotenv from "dotenv";
-dotenv.config();
 export const sendResetLinkEmail = async (toEmail, resetUrl) => {
   const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -30,9 +28,7 @@ export const sendResetLinkEmail = async (toEmail, resetUrl) => {
   await transporter.sendMail(mailOptions);
 };
 
-// ============================================================
-// NOTIFY ADMIN WHEN A COMPANY SUBMITS FOR VERIFICATION
-// ============================================================
+// notify admin when a company submits for verification
 
 export const sendCompanyVerificationRequestEmail = async (
   adminEmail,

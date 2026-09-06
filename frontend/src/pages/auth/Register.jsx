@@ -85,7 +85,7 @@ const Register = () => {
         <div className={styles.content}>
           {/* BRAND */}
           <div className={styles.brand}>
-            <div className={styles.brandIcon}>L</div>
+            <img src="/learnspace-logo-1024x1024.png" alt="LearnSpace" className={styles.brandIcon} />
 
             <div>
               <span className={styles.brandName}>Learn</span>

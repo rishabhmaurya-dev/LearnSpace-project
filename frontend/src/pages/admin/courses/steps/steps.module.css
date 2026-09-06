@@ -1,12 +1,6 @@
-/* ==========================================================================
-   COURSE CREATION WIZARD — ULTRA-3D HYBRID SKEUOMORPHIC SYSTEM
-   Boxed Layout (48px L/R Margins) • Strictly Controlled Variables
-   Tactile Inset Wells • Specular Beveled Outsets • GPU Smooth Motion
-   ========================================================================== */
+/* course creation wizard */
 
-/* =========================================================
-   1. MAIN STEP CONTAINER (CENTERED & BOUNDED FORM)
-   ========================================================= */
+/* 1. main step container */
 .stepForm {
   width: 100%;
   max-width: 860px; /* Form ko full-width stretch hone se rokega */
@@ -74,9 +68,7 @@
   box-shadow: var(--shadow-inset-xs);
 }
 
-/* =========================================================
-   2. FORM GRIDS & 3D INPUT CONTROLS
-   ========================================================= */
+/* 2. form grids & 3d inputs */
 .formGrid {
   display: grid;
   grid-template-columns: 1fr;
@@ -170,9 +162,7 @@
   margin: 0;
 }
 
-/* =========================================================
-   3. SKEUOMORPHIC 3D BUTTONS & NAVIGATION
-   ========================================================= */
+/* 3. buttons & navigation */
 .primaryBtn,
 .secondaryBtn,
 .successBtn,
@@ -329,9 +319,7 @@
   margin-left: auto;
 }
 
-/* =========================================================
-   4. IMAGE UPLOAD & PREVIEW SECTIONS
-   ========================================================= */
+/* 4. image upload & preview sections */
 .imageUploadRow {
   display: grid;
   grid-template-columns: 1fr;
@@ -453,9 +441,7 @@
   padding: 2px 6px;
 }
 
-/* =========================================================
-   5. UPLOAD SECTIONS & LESSON ACCORDION TILES
-   ========================================================= */
+/* 5. upload sections & lesson tiles */
 .uploadSection {
   background-color: var(--bg-card);
   border: 1px solid var(--border);
@@ -670,9 +656,7 @@
   font-weight: var(--font-weight-bold);
 }
 
-/* =========================================================
-   6. METRIC WELLS & FINAL QUIZ PREVIEW
-   ========================================================= */
+/* 6. metric wells & quiz preview */
 .metaGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -747,9 +731,7 @@
   line-height: 1.4;
 }
 
-/* =========================================================
-   7. REVIEW & CHECKLIST PANELS
-   ========================================================= */
+/* 7. review & checklist panels */
 .reviewGrid {
   display: grid;
   grid-template-columns: 1fr;
@@ -916,9 +898,7 @@
   box-shadow: none;
 }
 
-/* =========================================================
-   8. SUCCESS SCREEN & MISC UTILITIES
-   ========================================================= */
+/* 8. success screen & misc utilities */
 .successScreen {
   text-align: center;
   align-items: center;

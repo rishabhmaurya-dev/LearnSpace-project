@@ -1,6 +1,10 @@
-# LearnSpace LMS — Full Project Workflow Documentation
+ LearnSpace LMS — Full Project Workflow Documentation
 
 > This document is the complete working-flow reference for the **LearnSpace** Learning Management System (LMS) — also referred to internally as "SkillBridge"/"SkillForge" in some mail/legacy strings. Use it as context to understand every feature, API, data flow, and especially the **Certificate GET/Issue flow**.
+>
+> **Two docs, two audiences — do not confuse them:**
+> - This file (`PROJECT_FLOW.md`) is the **internal developer** reference (code files, APIs, data models, env vars).
+> - `backend/ai-knowledge/learnspace.md` is the **AI assistant's** knowledge base — it is **flow-only** and deliberately contains **no source code / file paths / env vars / internals**, so the AI can explain platform flows without ever leaking project code. If you change platform behavior, update **both** (flows in `learnspace.md` + re-index; internals here).
 
 ---
 
@@ -19,6 +23,7 @@ Repo layout (Windows, `S:\LMS-Learning Platform`):
 backend/    Express (ESM) REST API  — port 3000
 frontend/   React 19 + Vite + MUI + Tailwind SPA — port 5173 (also 5174 allowed by CORS)
 ```
+Note: the AI knowledge source doc lives at `backend/ai-knowledge/learnspace.md` (gitignored, flow-only).
 
 ---
 
@@ -45,7 +50,7 @@ frontend/   React 19 + Vite + MUI + Tailwind SPA — port 5173 (also 5174 allowe
 - **MUI 9**, **Tailwind/shadcn**, **framer-motion**, **gsap** (custom `animation/` components like `TypeWriter`, `Text`, `Seperator`, `Scroll`)
 - **chart.js + react-chartjs-2** (dashboard charts)
 - **react-markdown + remark-gfm + react-syntax-highlighter** (AI chat rendering)
-- **react-hot-toast** (toasts), **jspdf** (client-side PDF helpers)
+- **react-toastify** (toasts), **jspdf** (client-side PDF helpers)
 
 ---
 
@@ -317,12 +322,30 @@ A submission shows the **"🎓 Issue Certificate"** button only when:
 
 ## 9. AI Assistant ("LearnSpace AI")
 
-- Backend: `controllers/ai.controller.js` + `routes/ai.routes.js` → **`POST /api/ai/chat`** body `{ message (≤5000 chars), conversation[] }`.
-- Forwards to NVIDIA NIM: `https://integrate.api.nvidia.com/v1/chat/completions`, model `nvidia/nemotron-3.5-lightning-30b-a3b`, `temperature 0.4`, `max_tokens 7000`, `stream:false`, Bearer `NVIDIA_API_KEY`. Uses a keep-alive axios client (60s timeout).
-- System prompt makes it **LearnSpace AI**, an expert coding tutor: explain *what → why → how → runnable code*; full content for guides; detects English/Hindi/Hinglish (Hinglish = Hindi logic with English technical terms); **outputs ONLY clean GitHub-flavored Markdown**, never internal reasoning.
-- History kept to last 6 messages (backend) / last 10 (frontend), each clamped to 1500 chars.
-- Error mapping: 429 → busy; 401/403 → config key error; timeout → 504; else 500.
-- Frontend: `components/AI/LearnSpaceAi.jsx` — floating chat widget (bot button ⇄ window) with quick questions, copy buttons, Prism code blocks (oneDark theme), GFM tables via react-markdown; "Open full AI" navigates to **`/ai`** (`pages/AI/AiChat.jsx`) which hosts the same component; both inside `ProtectedRoute`. `services/ai.service.js` wraps the API.
+- Backend: `controllers/ai.controller.js` + `routes/ai.routes.js` → **`POST /api/ai/chat`** body `{ message (≤2000 chars), conversation[], stream? }`.
+- Forwards to NVIDIA NIM: `https://integrate.api.nvidia.com/v1/chat/completions`, model `nvidia/nemotron-3.5-lightning-30b-a3b`, `temperature 0.3`, `chat_template_kwargs.enable_thinking: false`, `frequency_penalty 1.0`, `presence_penalty 0.2`, Bearer `NVIDIA_API_KEY`.
+
+**Streaming (default for the UI):** pass `stream: "true"` → returns **SSE** (`Content-Type: text/event-stream`) where each `data: {...}` event carries a `{ delta }` chunk; a terminal `{ done: true }` (or `{ error }`) ends the stream. First words reach the user almost instantly while a large token budget still allows long answers.
+
+- **Token budget (per intent):** `casual → 250`, `general → 3200`, `knowledge → 4200`.
+- **Timeouts (long answers):** backend axios (stream + fallback) `300s`; frontend streaming client `300s`, so long responses aren't cut off mid-stream. First bytes still arrive instantly via SSE.
+- **System prompt** makes it **LearnSpace AI**, an expert coding tutor: explain *what → why → how → runnable code*; detects English/Hindi/Hinglish; **outputs ONLY clean GitHub-flavored Markdown**, never internal reasoning.
+  - **Policy on code:** general/learning-purpose code (e.g. "what is JS, explain with code", React/Express/MongoDB examples) is answered fully with runnable code. **LearnSpace's own source code / controllers / routes / components / models / file paths / internals are REFUSED** politely (1–2 lines), offering to teach the concept instead.
+  - Never reveals secrets, credentials, env vars, internal AI config, or RAG details.
+- **RAG / knowledge base:** LearnSpace-specific questions trigger vector search against the `learnspace.md` knowledge base. Intent classification: `knowledge` (LearnSpace keywords) / `general` (code/programming, no RAG) / `casual` (greetings — some answered from a fast canned reply with **no AI call**). Internal-probe prompts skip RAG. Knowledge chunks are trimmed to **1200 chars** each before being injected (keeps prompts small → faster replies).
+- **Live platform stats (admins only):** if the logged-in user is **ADMIN** and the question asks for an **aggregate count** (total/kitne students, courses, lessons, certificates, pending/approved capstones), `utils/adminStats.js` runs live `countDocuments` queries against MongoDB and injects the exact numbers into the prompt. **STUDENT** (and other) roles never get these — the AI refuses and has no live-DB access. This covers the user's "total students count" request while preserving privacy (only aggregates, never individual-user data).
+- **Live student own-data (students only):** if the logged-in user is **STUDENT** and asks about **their own** data (my/mera dashboard, my courses, my progress, my certificates, my capstones), `utils/studentDashboardStats.js` queries that student's own records (CourseProgress, Certificate, CapstoneSubmission, StudentProfile) and injects the exact numbers. Only the current student's own data — **never** other students, never platform-wide totals (those still require the admin role).
+- History kept to last 1–2 brief messages (backend), clamped to 400 chars each.
+- Error mapping: 429 → busy; 401/403 → config key error; timeout → 504; else 500. Streaming path writes these as SSE `{ error }` events.
+- Frontend: `services/ai.service.js` — `streamAIMessage()` parses the SSE stream and calls `onDelta` as text arrives (fallback `sendAIMessage()` retained). `components/AI/LearnSpaceAi.jsx` — floating chat widget (bot button ⇄ window) with quick questions, copy buttons, Prism code blocks (oneDark), GFM tables; "Open full AI" → **`/ai`** (`pages/AI/AiChat.jsx`) — both stream; both inside `ProtectedRoute`.
+
+### 9.1 Knowledge base pipeline (offline, not served at runtime)
+- **Source doc:** `backend/ai-knowledge/learnspace.md` — a **flow-only** knowledge base (user-facing flows: student journey, lesson-unlock, quiz, capstone, certificate, admin wizard, FAQ). It intentionally contains **no backend/frontend source code, no file paths, no env vars, no internals** — so the AI can never leak project code. (gitignored; deployed separately.)
+- `utils/chunkMarkdown.js` — splits into semantic sections; `MAX_CHARS = 1600` (tight chunks for better embeddings / fewer, faster retrievals).
+- `utils/embedding.js` — NVIDIA `nvidia/nemotron-3-embed-1b` vector generation.
+- `scripts/indexKnowledge.js` — **rebuild:** loads markdown → chunks → embeds → deletes old `source:"learnspace.md"` chunks → inserts fresh `KnowledgeChunk` docs in MongoDB Atlas. **Run this after editing `learnspace.md`** (see §13 commands).
+- `utils/searchKnowledge.js` — at query time embeds the question and runs Atlas `$vectorSearch` (index `"default"`, `numCandidates: 100`, limit 3).
+- Existing diagnostics: `scripts/testChunks.js`, `scripts/testEmbedding.js`, `scripts/testSearchKnowledge.js`.
 
 ---
 
@@ -378,7 +401,12 @@ Feature folders (each: `*Api.js` + `*Thunks.js` + `*Slice.js`):
 | Auth | `backend/src/controllers/authController.js`, `utils/generateTokens.js`, `middlewares/auth.middleware.js` |
 | Courses / lessons / quizzes (admin) | `controllers/admin/adminCourseController.js`, `adminLessonController.js`, `adminLessonQuizController.js`, `adminCourseQuizController.js` |
 | Students admin + dashboard | `controllers/admin/adminStudentController.js`, `adminDashboardController.js` |
-| AI | `controllers/ai.controller.js`, `routes/ai.routes.js`, `components/AI/LearnSpaceAi.jsx`, `pages/AI/AiChat.jsx` |
+| AI chat | `controllers/ai.controller.js`, `routes/ai.routes.js`, `components/AI/LearnSpaceAi.jsx`, `pages/AI/AiChat.jsx`, `services/ai.service.js` |
+| AI knowledge source doc | `backend/ai-knowledge/learnspace.md` (flow-only, gitignored) |
+| AI chunking / embeddings / search | `utils/chunkMarkdown.js`, `utils/embedding.js`, `utils/searchKnowledge.js` |
+| AI knowledge indexing script | `backend/src/scripts/indexKnowledge.js` |
+| AI live platform stats (admin aggregate counts) | `backend/src/utils/adminStats.js` |
+| AI live student own-data (student dashboard) | `backend/src/utils/studentDashboardStats.js` |
 | Markdown lesson parser | `backend/src/utils/parseMarkdown.js` |
 | Emails | `backend/src/utils/sendEmail.js` |
 | Axios auth interceptor | `frontend/src/services/axios.js` |
@@ -387,8 +415,17 @@ Feature folders (each: `*Api.js` + `*Thunks.js` + `*Slice.js`):
 | Student certificates | `frontend/src/pages/student/Certificates.jsx` |
 | Routes | `frontend/src/app/router.jsx`; backend `backend/src/app.js` |
 
+### 13.1 Useful commands
+
+| Command | Purpose |
+|---|---|
+| `node src/scripts/indexKnowledge.js` (from `backend/`) | Rebuild the AI knowledge base after editing `learnspace.md` (touches only the `KnowledgeChunk` collection). |
+| `node src/scripts/testChunks.js` | Print chunk count/avg size + first chunks (no DB needed). |
+| `node src/scripts/testSearchKnowledge.js` | End-to-end retrieval check against MongoDB Atlas. |
+| `npm run dev` (backend) / `npm run dev` (frontend) | Start API (`:3000`) & SPA (`:5173`). |
+
 ---
 
-## 14. One-Paragraph Summary (the "TL;DR" to give your AI)
+## 14. One-Paragraph Summary
 
 LearnSpace is a JWT-secured, role-based LMS: students progress through published courses one lesson at a time (each lesson quiz gates the next), must hit 100% lesson completion to take a 10–50 question final quiz, and passing it unlocks a capstone submission (GitHub repo + demo URL). An admin approves the capstone, which marks the course complete; the admin can then **Preview** a PDF certificate (rendered by PDFKit from `certificate.png` with the name/course/date/code/score drawn onto measured anchors, the legacy QR covered and replaced with a website-QR, and three administrator names — Anish, Rishabh, Raj — drawn in Kalam handwriting on their signature lines, issued under "LearnSpace") and hit **Issue & Send**, which writes the PDF to `uploads/certificates/`, creates a `Certificate` record (status SENT, code `SBF-YEAR-RANDOM`), adds the course category to the student's verified skills, and flags the capstone as issued. The student then sees the certificate in their dashboard and can download/view it. A background reconcile step self-cleans orphans/duplicates and keeps capstone flags in sync with manual DB edits.

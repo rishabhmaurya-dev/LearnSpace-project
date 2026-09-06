@@ -9,7 +9,7 @@
 
 .light {
   border-color: rgba(255, 255, 255, 0.3);
-  border-top-color: #fff;
+  border-top-color: var(--text-inverse, #ffffff);
 }
 
 @keyframes spin {

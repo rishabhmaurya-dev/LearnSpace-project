@@ -1,7 +1,4 @@
-/* ==========================================================================
-   CATEGORY DONUT COMPONENT — 3D HYBRID SYSTEM
-   Convex Base • Sunken Donut Well • Tactile Metric Badges • Pure Zero-White
-   ========================================================================== */
+/* category donut component */
 
 .donutCard {
   background-color: var(--bg-card);
@@ -24,9 +21,7 @@
   box-shadow: var(--shadow-convex-lg);
 }
 
-/* =========================================================
-   1. CARD HEADER & TOTAL BADGE
-   ========================================================= */
+/* 1. card header & total badge */
 .donutHeader {
   display: flex;
   align-items: flex-start;
@@ -69,9 +64,7 @@
   flex-shrink: 0;
 }
 
-/* =========================================================
-   2. DONUT CANVAS & SUNKEN 3D CENTER WELL
-   ========================================================= */
+/* 2. donut canvas & center well */
 .donutWrapper {
   position: relative;
   width: 100%;
@@ -119,9 +112,7 @@
   margin-top: 3px;
 }
 
-/* =========================================================
-   3. CATEGORY LEGEND LIST (3D TACTILE TILES)
-   ========================================================= */
+/* 3. category legend list */
 .categoryList {
   list-style: none;
   padding: 0;
@@ -202,9 +193,7 @@
   box-shadow: var(--shadow-convex-xs);
 }
 
-/* =========================================================
-   4. EMPTY / PLACEHOLDER STATE
-   ========================================================= */
+/* 4. empty / placeholder state */
 .donutPlaceholder {
   display: flex;
   align-items: center;

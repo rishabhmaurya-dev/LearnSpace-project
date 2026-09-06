@@ -32,9 +32,7 @@ const StudentList = () => {
     message,
   } = useSelector((state) => state.adminStudent);
 
-  /* =========================================
-      LOCAL STATE
-  ========================================= */
+  /* local state */
   const [search, setSearch] = useState("");
   const [skill, setSkill] = useState("");
   const [status, setStatus] = useState("");
@@ -42,9 +40,7 @@ const StudentList = () => {
   const [limit] = useState(10);
   const [debouncedSearch, setDebouncedSearch] = useState("");
 
-  /* =========================================
-      DEBOUNCE SEARCH
-  ========================================= */
+  /* debounce search */
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(search);
@@ -53,9 +49,7 @@ const StudentList = () => {
     return () => clearTimeout(timer);
   }, [search]);
 
-  /* =========================================
-      FETCH STUDENTS
-  ========================================= */
+  /* fetch students */
   useEffect(() => {
     dispatch(
       fetchStudents({
@@ -70,9 +64,7 @@ const StudentList = () => {
     );
   }, [dispatch, debouncedSearch, skill, status, page, limit]);
 
-  /* =========================================
-      CLEAR MESSAGES
-  ========================================= */
+  /* clear messages */
   useEffect(() => {
     if (success) {
       const timer = setTimeout(() => dispatch(clearStudentSuccess()), 2500);
@@ -87,9 +79,7 @@ const StudentList = () => {
     }
   }, [error, dispatch]);
 
-  /* =========================================
-      HANDLERS
-  ========================================= */
+  /* handlers */
   const handleSearchChange = (e) => {
     setSearch(e.target.value);
     setPage(1);
@@ -135,9 +125,7 @@ const StudentList = () => {
 
   return (
     <div className={styles.container}>
-      {/* =========================================
-          HEADER
-      ========================================= */}
+      {/* header */}
       <header className={styles.pageHeader}>
         <div className={styles.headerContent}>
           <span className={styles.eyebrow}>ADMINISTRATION</span>
@@ -172,9 +160,7 @@ const StudentList = () => {
         </div>
       </header>
 
-      {/* =========================================
-          ALERTS
-      ========================================= */}
+      {/* alerts */}
       {success && (
         <div className={`${styles.alert} ${styles.successAlert}`} role="alert">
           <span className={styles.alertIcon}>✓</span>
@@ -189,9 +175,7 @@ const StudentList = () => {
         </div>
       )}
 
-      {/* =========================================
-          FILTERS
-      ========================================= */}
+      {/* filters */}
       <section className={styles.filterCard}>
         <div className={styles.filterHeader}>
           <div>
@@ -264,9 +248,7 @@ const StudentList = () => {
         </div>
       </section>
 
-      {/* =========================================
-          RESULTS COUNT / BAR
-      ========================================= */}
+      {/* results count / bar */}
       {!loading && students.length > 0 && (
         <div className={styles.resultsHeader}>
           <div className={styles.resultsCount}>
@@ -279,9 +261,7 @@ const StudentList = () => {
         </div>
       )}
 
-      {/* =========================================
-          STUDENT CARDS GRID
-      ========================================= */}
+      {/* student cards grid */}
       {loading ? (
         <CardGridSkeleton count={6} />
       ) : students.length === 0 ? (
@@ -308,7 +288,9 @@ const StudentList = () => {
               style={{ "--card-index": index }}
             >
               {/* ACCENT GRADIENT BAND */}
-              <div className={styles.cardCover} />
+              <div className={styles.cardCover}>
+                <div className={styles.cardCoverGlow} />
+              </div>
 
               {/* CARD BODY */}
               <div className={styles.cardBody}>
@@ -408,16 +390,7 @@ const StudentList = () => {
                     </div>
                   </div>
 
-                  <div className={styles.studentStat}>
-                    <span className={styles.statIcon}>🚀</span>
-                    <div className={styles.statDetails}>
-                      <strong>
-                        {student.profile?.completedProjectsCount || 0}
-                      </strong>
-                      <small>Projects</small>
-                    </div>
                   </div>
-                </div>
 
                 {/* FOOTER: JOINED DATE & ACTIONS */}
                 <div className={styles.cardFooter}>
@@ -458,9 +431,7 @@ const StudentList = () => {
         </div>
       )}
 
-      {/* =========================================
-          PAGINATION
-      ========================================= */}
+      {/* pagination */}
       {students.length > 0 && !loading && (
         <div className={styles.pagination}>
           <button

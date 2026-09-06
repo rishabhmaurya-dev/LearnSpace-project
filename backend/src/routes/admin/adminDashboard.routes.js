@@ -12,10 +12,6 @@ import { protect, authorize } from "../../middlewares/auth.middleware.js";
 
 const router = express.Router();
 
-// ============================================================
-// ADMIN ONLY
-// ============================================================
-
 router.use(protect);
 router.use(authorize("ADMIN"));
 

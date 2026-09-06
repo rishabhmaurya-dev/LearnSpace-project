@@ -6,20 +6,12 @@ import {
 } from "./studentCertificateThunks";
 
 const initialState = {
-  /* =====================================================
-     DATA
-     ===================================================== */
-
   certificates: {
     courseCompletion: [],
     companyProject: [],
   },
 
   downloadingId: null,
-
-  /* =====================================================
-     LOADING / ERROR
-     ===================================================== */
 
   loading: false,
 
@@ -38,12 +30,7 @@ const studentCertificateSlice = createSlice({
   },
 
   extraReducers: (builder) => {
-    /* =====================================================
-       FETCH MY CERTIFICATES
-       ===================================================== */
-
     builder
-
       .addCase(fetchMyCertificates.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -64,12 +51,7 @@ const studentCertificateSlice = createSlice({
         state.error = action.payload || "Failed to fetch certificates";
       });
 
-    /* =====================================================
-       DOWNLOAD CERTIFICATE PDF
-       ===================================================== */
-
     builder
-
       .addCase(downloadCertificatePdf.pending, (state, action) => {
         state.downloadingId = action.meta.arg || null;
         state.error = null;

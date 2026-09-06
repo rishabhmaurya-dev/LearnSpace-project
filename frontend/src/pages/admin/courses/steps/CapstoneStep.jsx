@@ -4,7 +4,7 @@ import styles from "./steps.module.css";
 
 import { useDispatch } from "react-redux";
 
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 
 const CapstoneStep = ({
   course,

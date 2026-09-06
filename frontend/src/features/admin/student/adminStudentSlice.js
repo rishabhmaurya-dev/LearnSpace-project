@@ -11,10 +11,6 @@ import {
 } from "./adminStudentThunks";
 
 const initialState = {
-  /* =====================================================
-     STUDENTS LIST
-     ===================================================== */
-
   students: [],
 
   pagination: {
@@ -23,10 +19,6 @@ const initialState = {
     total: 0,
     totalPages: 0,
   },
-
-  /* =====================================================
-     SELECTED STUDENT
-     ===================================================== */
 
   selectedStudent: null,
 
@@ -37,10 +29,6 @@ const initialState = {
   capstoneSubmissions: [],
   projectEnrollments: [],
 
-  /* =====================================================
-     LEADERBOARD
-     ===================================================== */
-
   leaderboard: [],
 
   leaderboardPagination: {
@@ -50,17 +38,9 @@ const initialState = {
     totalPages: 0,
   },
 
-  /* =====================================================
-     EXTRA DETAILS
-     ===================================================== */
-
   studentCourseProgress: [],
   studentQuizHistory: [],
   studentProjectHistory: [],
-
-  /* =====================================================
-     LOADING STATES
-     ===================================================== */
 
   loading: false,
 
@@ -76,15 +56,7 @@ const initialState = {
 
   operationLoading: false,
 
-  /* =====================================================
-     ERROR
-     ===================================================== */
-
   error: null,
-
-  /* =====================================================
-     SUCCESS
-     ===================================================== */
 
   success: false,
 
@@ -119,12 +91,7 @@ const studentSlice = createSlice({
   },
 
   extraReducers: (builder) => {
-    /* =====================================================
-       FETCH STUDENTS
-       ===================================================== */
-
     builder
-
       .addCase(fetchStudents.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -153,12 +120,7 @@ const studentSlice = createSlice({
         state.error = action.payload || "Failed to fetch students";
       });
 
-    /* =====================================================
-       FETCH STUDENT DETAILS
-       ===================================================== */
-
     builder
-
       .addCase(fetchStudentDetails.pending, (state) => {
         state.detailsLoading = true;
         state.error = null;
@@ -188,12 +150,7 @@ const studentSlice = createSlice({
         state.error = action.payload || "Failed to fetch student details";
       });
 
-    /* =====================================================
-       UPDATE STATUS
-       ===================================================== */
-
     builder
-
       .addCase(updateStudentStatus.pending, (state) => {
         state.operationLoading = true;
         state.error = null;
@@ -210,7 +167,7 @@ const studentSlice = createSlice({
 
         const updatedStudent = action.payload.student;
 
-        /* Update list */
+        // update list
 
         const index = state.students.findIndex(
           (student) => student._id === updatedStudent._id,
@@ -220,7 +177,7 @@ const studentSlice = createSlice({
           state.students[index].isActive = updatedStudent.isActive;
         }
 
-        /* Update selected student */
+        // update selected student
 
         if (state.selectedStudent?._id === updatedStudent._id) {
           state.selectedStudent.isActive = updatedStudent.isActive;
@@ -235,12 +192,7 @@ const studentSlice = createSlice({
         state.error = action.payload || "Failed to update student status";
       });
 
-    /* =====================================================
-       UPDATE REPUTATION
-       ===================================================== */
-
     builder
-
       .addCase(updateStudentReputation.pending, (state) => {
         state.operationLoading = true;
         state.error = null;
@@ -280,14 +232,7 @@ const studentSlice = createSlice({
         state.error = action.payload || "Failed to update reputation";
       });
 
-    /* Badge handling removed */
-
-    /* =====================================================
-       LEADERBOARD
-       ===================================================== */
-
     builder
-
       .addCase(fetchStudentLeaderboard.pending, (state) => {
         state.leaderboardLoading = true;
         state.error = null;
@@ -314,12 +259,7 @@ const studentSlice = createSlice({
         state.error = action.payload || "Failed to fetch leaderboard";
       });
 
-    /* =====================================================
-       COURSE PROGRESS
-       ===================================================== */
-
     builder
-
       .addCase(fetchStudentCourseProgress.pending, (state) => {
         state.courseProgressLoading = true;
         state.error = null;
@@ -339,12 +279,7 @@ const studentSlice = createSlice({
         state.error = action.payload || "Failed to fetch course progress";
       });
 
-    /* =====================================================
-       QUIZ HISTORY
-       ===================================================== */
-
     builder
-
       .addCase(fetchStudentQuizHistory.pending, (state) => {
         state.quizHistoryLoading = true;
         state.error = null;

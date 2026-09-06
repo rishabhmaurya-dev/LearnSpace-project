@@ -7,10 +7,6 @@ import {
   deleteCertificateApi,
 } from "./adminCertificateApi";
 
-/* =========================================================
-   1. LIST CERTIFICATES
-   ========================================================= */
-
 export const fetchCertificates = createAsyncThunk(
   "adminCertificate/fetchCertificates",
   async (params = {}, { rejectWithValue }) => {
@@ -23,10 +19,6 @@ export const fetchCertificates = createAsyncThunk(
     }
   },
 );
-
-/* =========================================================
-   2. PREVIEW CERTIFICATE
-   ========================================================= */
 
 export const previewCertificate = createAsyncThunk(
   "adminCertificate/previewCertificate",
@@ -59,10 +51,6 @@ export const previewCertificate = createAsyncThunk(
   },
 );
 
-/* =========================================================
-   3. SEND CERTIFICATE
-   ========================================================= */
-
 export const sendCertificate = createAsyncThunk(
   "adminCertificate/sendCertificate",
   async (capstoneSubmissionId, { rejectWithValue }) => {
@@ -75,10 +63,6 @@ export const sendCertificate = createAsyncThunk(
     }
   },
 );
-
-/* =========================================================
-   4. DELETE CERTIFICATE
-   ========================================================= */
 
 export const deleteCertificate = createAsyncThunk(
   "adminCertificate/deleteCertificate",

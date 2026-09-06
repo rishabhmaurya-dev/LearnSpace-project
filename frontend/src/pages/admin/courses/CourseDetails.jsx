@@ -2,7 +2,7 @@ import { useEffect } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
-import { toast } from "react-hot-toast";
+import { toast } from "react-toastify";
 
 import { useNavigate, useParams, Link } from "react-router-dom";
 
@@ -37,9 +37,7 @@ const CourseDetails = () => {
     message,
   } = useSelector((state) => state.adminCourse);
 
-  /* -----------------------------------------------------
-     FETCH COURSE DETAILS
-  ----------------------------------------------------- */
+  /* fetch course details */
 
   useEffect(() => {
     if (courseId) {
@@ -47,9 +45,7 @@ const CourseDetails = () => {
     }
   }, [dispatch, courseId]);
 
-  /* -----------------------------------------------------
-     CLEAR MESSAGES
-  ----------------------------------------------------- */
+  /* clear messages */
 
   useEffect(() => {
     if (success) {
@@ -69,9 +65,7 @@ const CourseDetails = () => {
     }
   }, [error, dispatch]);
 
-  /* -----------------------------------------------------
-     HANDLERS
-  ----------------------------------------------------- */
+  /* handlers */
 
   const handleEdit = () => {
     navigate(`/admin/courses/${courseId}/edit`);
@@ -123,9 +117,7 @@ const CourseDetails = () => {
 
   return (
     <div className={styles.container}>
-      {/* =========================================
-          HEADER
-      ========================================= */}
+      {/* header */}
 
       <div className={styles.detailHeader}>
         <Link to="/admin/courses" className={styles.backLink}>
@@ -133,9 +125,7 @@ const CourseDetails = () => {
         </Link>
       </div>
 
-      {/* =========================================
-          HERO
-      ========================================= */}
+      {/* hero */}
 
       <div className={styles.courseHero}>
         <div className={styles.heroThumb}>
@@ -210,9 +200,7 @@ const CourseDetails = () => {
         </div>
       </div>
 
-      {/* =========================================
-          META GRID
-      ========================================= */}
+      {/* meta grid */}
 
       <div className={styles.metaGrid}>
         <MetaCard label="Lessons" value={lessons.length} icon="📖" />
@@ -240,9 +228,7 @@ const CourseDetails = () => {
         <MetaCard label="Published" value={publishedCount} icon="✅" />
       </div>
 
-      {/* =========================================
-          LESSONS
-      ========================================= */}
+      {/* lessons */}
 
       <div className={styles.detailSection}>
         <h3>
@@ -277,9 +263,7 @@ const CourseDetails = () => {
         )}
       </div>
 
-      {/* =========================================
-          FINAL QUIZ
-      ========================================= */}
+      {/* final quiz */}
 
       <div className={styles.detailSection}>
         <h3>
@@ -315,9 +299,7 @@ const CourseDetails = () => {
         )}
       </div>
 
-      {/* =========================================
-          CAPSTONE
-      ========================================= */}
+      {/* capstone */}
 
       <div className={styles.detailSection}>
         <h3>Capstone Project</h3>
@@ -350,9 +332,7 @@ const CourseDetails = () => {
   );
 };
 
-/* =========================================================
-   META CARD
-========================================================= */
+/* meta card */
 
 const MetaCard = ({ label, value, icon }) => {
   return (

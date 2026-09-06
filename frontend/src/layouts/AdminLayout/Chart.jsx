@@ -25,13 +25,13 @@ ChartJS.register(
 );
 
 const FALLBACK_THEME = {
-  primary: "#1976d2",
-  secondary: "#9c27b0",
-  success: "#2e7d32",
-  accentPurple: "#7c3aed",
-  textSecondary: "rgba(0, 0, 0, 0.6)",
-  textMuted: "rgba(0, 0, 0, 0.5)",
-  border: "rgba(0, 0, 0, 0.12)",
+  primary: "#237a4b",
+  secondary: "#2e8f5b",
+  success: "#22c55e",
+  accentPurple: "#174f34",
+  textSecondary: "rgba(23, 34, 28, 0.72)",
+  textMuted: "rgba(23, 34, 28, 0.6)",
+  border: "rgba(23, 34, 28, 0.12)",
 };
 
 const StatisticsChart = () => {
@@ -85,7 +85,7 @@ const StatisticsChart = () => {
         backgroundColor: (context) => {
           const { ctx, chartArea } = context.chart;
 
-          if (!chartArea) return "rgba(25, 118, 210, 0.08)";
+          if (!chartArea) return "rgba(35, 122, 75, 0.08)";
 
           const gradient = ctx.createLinearGradient(
             0,
@@ -94,8 +94,8 @@ const StatisticsChart = () => {
             chartArea.bottom,
           );
 
-          gradient.addColorStop(0, "rgba(25, 118, 210, 0.28)");
-          gradient.addColorStop(1, "rgba(25, 118, 210, 0)");
+          gradient.addColorStop(0, "rgba(35, 122, 75, 0.28)");
+          gradient.addColorStop(1, "rgba(35, 122, 75, 0)");
 
           return gradient;
         },
@@ -164,13 +164,13 @@ const StatisticsChart = () => {
       },
 
       tooltip: {
-        backgroundColor: "rgba(15, 23, 42, 0.95)",
+        backgroundColor: "#ffffff",
 
-        titleColor: "#f8fafc",
+        titleColor: "#17221c",
 
-        bodyColor: "#cbd5e1",
+        bodyColor: "#405047",
 
-        borderColor: "rgba(148, 163, 184, 0.2)",
+        borderColor: "rgba(23, 34, 28, 0.12)",
 
         borderWidth: 1,
 
@@ -218,7 +218,7 @@ const StatisticsChart = () => {
         },
 
         grid: {
-          color: "rgba(148, 163, 184, 0.10)",
+          color: "rgba(112, 128, 118, 0.14)",
 
           drawTicks: false,
         },

@@ -44,10 +44,6 @@ const adminDashboardSlice = createSlice({
   },
 
   extraReducers: (builder) => {
-    /* =====================================================
-       STATS
-    ===================================================== */
-
     builder
       .addCase(fetchAdminDashboardStats.pending, (state) => {
         state.loading = true;
@@ -68,10 +64,6 @@ const adminDashboardSlice = createSlice({
         state.error = action.payload;
       });
 
-    /* =====================================================
-       PENDING ITEMS
-    ===================================================== */
-
     builder
       .addCase(fetchAdminPendingItems.pending, (state) => {
         state.pendingLoading = true;
@@ -88,10 +80,6 @@ const adminDashboardSlice = createSlice({
 
         state.pendingError = action.payload;
       });
-
-    /* =====================================================
-       RECENT ACTIVITY
-    ===================================================== */
 
     builder
       .addCase(fetchAdminActivity.pending, (state) => {
@@ -112,10 +100,6 @@ const adminDashboardSlice = createSlice({
         state.activityError = action.payload;
       });
 
-    /* =====================================================
-       LEADERBOARD
-    ===================================================== */
-
     builder
       .addCase(fetchAdminLeaderboard.pending, (state) => {
         state.leaderboardLoading = true;
@@ -134,10 +118,6 @@ const adminDashboardSlice = createSlice({
 
         state.leaderboardError = action.payload;
       });
-
-    /* =====================================================
-       COURSES
-    ===================================================== */
 
     builder
       .addCase(fetchCourseOverview.pending, (state) => {

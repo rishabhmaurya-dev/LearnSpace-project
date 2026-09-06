@@ -1,16 +1,33 @@
-/* =========================================
-   REGISTER PAGE — Bold Typography Design System
-   ========================================= */
-
 .page {
+  height: 100vh;
   min-height: 100vh;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 40px 20px;
-  background: var(--cyber-mesh-gradient);
+  background: linear-gradient(160deg, #14532d 0%, #0b3a20 55%, #052e16 100%);
   position: relative;
+  overflow: hidden;
+}
+
+.page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      circle at 50% 30%,
+      rgba(46, 143, 91, 0.22),
+      transparent 70%
+    ),
+    linear-gradient(rgba(35, 122, 75, 0.18), rgba(5, 46, 22, 0.5)),
+    url("/learnspace-wallpaper-1080p.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: blur(4px);
+  z-index: 0;
 }
 
 .content {
@@ -19,9 +36,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
+  z-index: 1;
 }
 
-/* Brand */
 .brand {
   display: flex;
   align-items: center;
@@ -32,15 +50,9 @@
 .brandIcon {
   width: 40px;
   height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--accent);
-  color: var(--accent-foreground);
+  object-fit: contain;
+  flex-shrink: 0;
   border-radius: var(--radius-sm);
-  font-family: var(--font-heading);
-  font-size: 18px;
-  font-weight: 700;
 }
 
 .brandName,
@@ -59,19 +71,19 @@
   color: var(--accent);
 }
 
-/* Card */
 .card {
   width: 100%;
   padding: 40px;
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: var(--radius-lg);
-  backdrop-filter: var(--glass-blur-md);
-  -webkit-backdrop-filter: var(--glass-blur-md);
-  box-shadow: var(--shadow-convex-md);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  box-shadow:
+    var(--shadow-convex-md),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
-/* Header */
 .header {
   text-align: left;
   margin-bottom: 28px;
@@ -95,7 +107,6 @@
   font-size: 14px;
 }
 
-/* Alerts */
 .error,
 .success {
   display: flex;
@@ -118,7 +129,6 @@
   border: 1px solid var(--success-border);
 }
 
-/* Form */
 .form {
   display: flex;
   flex-direction: column;
@@ -140,7 +150,6 @@
   color: var(--muted-foreground);
 }
 
-/* Input */
 .inputWrapper,
 .selectWrapper {
   position: relative;
@@ -162,15 +171,16 @@
 .field select {
   width: 100%;
   height: 48px;
-  padding: 0 14px 0 14px;
+  padding: 0 48px 0 14px;
   border: 1px solid var(--input-border);
   border-radius: var(--radius-sm);
   outline: none;
   background: var(--input-bg);
   color: var(--foreground);
   font-size: 16px;
-  transition: border-color 150ms cubic-bezier(0.25, 0, 0, 1),
-              box-shadow 150ms cubic-bezier(0.25, 0, 0, 1);
+  transition:
+    border-color 150ms cubic-bezier(0.25, 0, 0, 1),
+    box-shadow 150ms cubic-bezier(0.25, 0, 0, 1);
 }
 
 .field input::placeholder {
@@ -199,7 +209,6 @@
   font-family: var(--font-mono);
 }
 
-/* Button */
 .button {
   width: 100%;
   height: 48px;
@@ -218,9 +227,10 @@
   letter-spacing: 0.1em;
   text-transform: uppercase;
   cursor: pointer;
-  transition: background 150ms cubic-bezier(0.25, 0, 0, 1),
-              transform 150ms cubic-bezier(0.25, 0, 0, 1),
-              box-shadow 150ms cubic-bezier(0.25, 0, 0, 1);
+  transition:
+    background 150ms cubic-bezier(0.25, 0, 0, 1),
+    transform 150ms cubic-bezier(0.25, 0, 0, 1),
+    box-shadow 150ms cubic-bezier(0.25, 0, 0, 1);
 }
 
 .button:hover {
@@ -238,7 +248,7 @@
   transform: none;
 }
 
-.passwordToggle {
+.inputWrapper .passwordToggle {
   position: absolute;
   right: 12px;
   top: 50%;
@@ -258,15 +268,15 @@
   z-index: 2;
 }
 
-.passwordToggle:hover {
+.inputWrapper .passwordToggle:hover {
   color: var(--accent);
+  transform: translateY(-50%);
 }
 
-.passwordToggle:active {
+.inputWrapper .passwordToggle:active {
   transform: translateY(-50%) scale(0.95);
 }
 
-/* Spinner */
 .spinner {
   width: 16px;
   height: 16px;
@@ -280,10 +290,11 @@
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-/* Divider */
 .divider {
   display: flex;
   align-items: center;
@@ -306,7 +317,6 @@
   white-space: nowrap;
 }
 
-/* Footer */
 .footer {
   display: flex;
   align-items: center;
@@ -324,7 +334,7 @@
 }
 
 .footer a::after {
-  content: '';
+  content: "";
   display: block;
   width: 100%;
   height: 1px;
@@ -338,7 +348,6 @@
   transform: scaleX(1);
 }
 
-/* Bottom Text */
 .bottomText {
   margin: 20px 0 0;
   color: var(--muted-foreground);
@@ -348,7 +357,62 @@
   text-align: center;
 }
 
-/* Responsive */
+/* glass on dark: lighten text */
+
+.brandName {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.brandAccent {
+  color: #6fd89a;
+}
+
+.header {
+  border-bottom-color: rgba(255, 255, 255, 0.14);
+}
+
+.header h1 {
+  color: #ffffff;
+}
+
+.header p {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.field label {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.field input {
+  background: rgba(255, 255, 255, 0.92);
+  border-color: rgba(255, 255, 255, 0.35);
+  color: var(--foreground);
+}
+
+.inputIcon {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.forgot a {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.divider small {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.divider span {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.footer {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.bottomText {
+  color: rgba(255, 255, 255, 0.55);
+}
+
 @media (max-width: 600px) {
   .page {
     padding: 24px 16px;

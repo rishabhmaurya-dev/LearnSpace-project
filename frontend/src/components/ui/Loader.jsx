@@ -42,7 +42,7 @@ const StyledWrapper = styled.div`
     font-size: 1em;
     font-weight: 300;
     user-select: none;
-    color: #fff;
+    color: #237a4b;
 
     scale: 2;
   }
@@ -74,11 +74,11 @@ const StyledWrapper = styled.div`
     height: 100%;
 
     background-image:
-      radial-gradient(circle at 50% 50%, #ff0 0%, transparent 50%),
-      radial-gradient(circle at 45% 45%, #f00 0%, transparent 45%),
-      radial-gradient(circle at 55% 55%, #0ff 0%, transparent 45%),
-      radial-gradient(circle at 45% 55%, #0f0 0%, transparent 45%),
-      radial-gradient(circle at 55% 45%, #00f 0%, transparent 45%);
+      radial-gradient(circle at 50% 50%, #5cb882 0%, transparent 50%),
+      radial-gradient(circle at 45% 45%, #237a4b 0%, transparent 45%),
+      radial-gradient(circle at 55% 55%, #8fd4a9 0%, transparent 45%),
+      radial-gradient(circle at 45% 55%, #2e8f5b 0%, transparent 45%),
+      radial-gradient(circle at 55% 45%, #4fb58a 0%, transparent 45%);
     mask: radial-gradient(
       circle at 50% 50%,
       transparent 0%,
@@ -178,7 +178,7 @@ const StyledWrapper = styled.div`
     }
     5% {
       opacity: 1;
-      text-shadow: 0 0 4px #fff;
+      text-shadow: 0 0 4px rgba(35, 122, 75, 0.6);
       transform: scale(1.1) translateY(-2px);
     }
     20% {

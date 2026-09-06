@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 
 import { formatDate } from "../capstones/CapstoneReview";
 import {
@@ -43,9 +43,7 @@ const StudentDetails = () => {
 
   const capstone = useSelector((state) => state.adminCapstone);
 
-  /* =====================================================
-      LOCAL STATE
-  ===================================================== */
+  /* local state */
   const [activeTab, setActiveTab] = useState("overview");
 
   const [showReputationModal, setShowReputationModal] = useState(false);
@@ -59,18 +57,14 @@ const StudentDetails = () => {
   const [repOperation, setRepOperation] = useState("ADD");
   const [repReason, setRepReason] = useState("");
 
-  /* =====================================================
-      FETCH
-  ===================================================== */
+  /* fetch */
   useEffect(() => {
     if (studentId) {
       dispatch(fetchStudentDetails(studentId));
     }
   }, [dispatch, studentId]);
 
-  /* =====================================================
-      TOASTS
-  ===================================================== */
+  /* toasts */
   useEffect(() => {
     if (!success) return;
     toast.success(message);
@@ -89,9 +83,7 @@ const StudentDetails = () => {
     return () => clearTimeout(timer);
   }, [error, dispatch]);
 
-  /* =====================================================
-      STATUS
-  ===================================================== */
+  /* status */
   const handleToggleStatus = () => {
     if (!selectedStudent) return;
     dispatch(
@@ -102,9 +94,7 @@ const StudentDetails = () => {
     );
   };
 
-  /* =====================================================
-      REPUTATION
-  ===================================================== */
+  /* reputation */
   const openReputationModal = () => {
     setRepPoints("");
     setRepOperation("ADD");
@@ -127,9 +117,7 @@ const StudentDetails = () => {
     setShowReputationModal(false);
   };
 
-  /* =====================================================
-      CAPSTONE REVIEW
-  ===================================================== */
+  /* capstone review */
   const openReviewModal = (submission, action) => {
     setReviewTarget(submission);
     setReviewAction(action);
@@ -163,9 +151,7 @@ const StudentDetails = () => {
     dispatch(fetchStudentDetails(studentId));
   };
 
-  /* =====================================================
-      LOADING & ERROR STATES
-  ===================================================== */
+  /* loading & error states */
   if (detailsLoading && !selectedStudent) {
     return (
       <div className={styles.statePage}>
@@ -638,9 +624,7 @@ const StudentDetails = () => {
   );
 };
 
-/* =========================================================
-   SUB-COMPONENTS
-========================================================= */
+/* sub-components */
 
 const HeroStat = ({ icon, label, value, tone = "", index = 0 }) => (
   <div

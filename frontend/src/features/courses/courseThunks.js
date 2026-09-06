@@ -22,10 +22,6 @@ import {
 
 const getError = (error, fallback) => error.response?.data?.message || fallback;
 
-/* =========================================================
-   1. FETCH ALL COURSES
-   ========================================================= */
-
 export const fetchAdminCourses = createAsyncThunk(
   "adminCourse/fetchCourses",
   async (params = {}, { rejectWithValue }) => {
@@ -36,10 +32,6 @@ export const fetchAdminCourses = createAsyncThunk(
     }
   },
 );
-
-/* =========================================================
-   2. FETCH COURSE DETAILS
-   ========================================================= */
 
 export const fetchAdminCourseDetails = createAsyncThunk(
   "adminCourse/fetchDetails",
@@ -52,10 +44,6 @@ export const fetchAdminCourseDetails = createAsyncThunk(
   },
 );
 
-/* =========================================================
-   3. CREATE COURSE (STEP 1)
-   ========================================================= */
-
 export const createAdminCourse = createAsyncThunk(
   "adminCourse/create",
   async (formData, { rejectWithValue }) => {
@@ -66,10 +54,6 @@ export const createAdminCourse = createAsyncThunk(
     }
   },
 );
-
-/* =========================================================
-   4. UPDATE COURSE (STEP 1 EDIT)
-   ========================================================= */
 
 export const updateAdminCourse = createAsyncThunk(
   "adminCourse/update",
@@ -82,10 +66,6 @@ export const updateAdminCourse = createAsyncThunk(
   },
 );
 
-/* =========================================================
-   5. UPDATE CAPSTONE (STEP 4)
-   ========================================================= */
-
 export const updateCourseCapstone = createAsyncThunk(
   "adminCourse/updateCapstone",
   async ({ courseId, payload }, { rejectWithValue }) => {
@@ -96,10 +76,6 @@ export const updateCourseCapstone = createAsyncThunk(
     }
   },
 );
-
-/* =========================================================
-   6. DELETE COURSE
-   ========================================================= */
 
 export const deleteAdminCourse = createAsyncThunk(
   "adminCourse/delete",
@@ -112,10 +88,6 @@ export const deleteAdminCourse = createAsyncThunk(
   },
 );
 
-/* =========================================================
-   7. PUBLISH COURSE
-   ========================================================= */
-
 export const publishAdminCourse = createAsyncThunk(
   "adminCourse/publish",
   async (courseId, { rejectWithValue }) => {
@@ -126,10 +98,6 @@ export const publishAdminCourse = createAsyncThunk(
     }
   },
 );
-
-/* =========================================================
-   8. UNPUBLISH COURSE
-   ========================================================= */
 
 export const unpublishAdminCourse = createAsyncThunk(
   "adminCourse/unpublish",
@@ -142,10 +110,6 @@ export const unpublishAdminCourse = createAsyncThunk(
   },
 );
 
-/* =========================================================
-   9. FETCH COURSE LESSONS
-   ========================================================= */
-
 export const fetchCourseLessons = createAsyncThunk(
   "adminCourse/fetchLessons",
   async (courseId, { rejectWithValue }) => {
@@ -156,10 +120,6 @@ export const fetchCourseLessons = createAsyncThunk(
     }
   },
 );
-
-/* =========================================================
-   10. UPLOAD SINGLE LESSON MARKDOWN
-   ========================================================= */
 
 export const uploadLessonMarkdown = createAsyncThunk(
   "adminCourse/uploadLessonMarkdown",
@@ -174,10 +134,6 @@ export const uploadLessonMarkdown = createAsyncThunk(
   },
 );
 
-/* =========================================================
-   11. UPLOAD LESSON MARKDOWN + MCQ CSV (combined)
-   ========================================================= */
-
 export const uploadLessonWithMcq = createAsyncThunk(
   "adminCourse/uploadLessonWithMcq",
   async ({ courseId, markdownFile, mcqCsvFile }, { rejectWithValue }) => {
@@ -190,10 +146,6 @@ export const uploadLessonWithMcq = createAsyncThunk(
     }
   },
 );
-
-/* =========================================================
-   12. UPLOAD MULTIPLE LESSON MARKDOWN FILES
-   ========================================================= */
 
 export const uploadMultipleLessons = createAsyncThunk(
   "adminCourse/uploadMultipleLessons",
@@ -208,10 +160,6 @@ export const uploadMultipleLessons = createAsyncThunk(
   },
 );
 
-/* =========================================================
-   12. DELETE LESSON
-   ========================================================= */
-
 export const deleteLesson = createAsyncThunk(
   "adminCourse/deleteLesson",
   async ({ lessonId, courseId }, { rejectWithValue }) => {
@@ -225,10 +173,6 @@ export const deleteLesson = createAsyncThunk(
   },
 );
 
-/* =========================================================
-   13. UPLOAD LESSON MCQ CSV
-   ========================================================= */
-
 export const uploadLessonMcqCsv = createAsyncThunk(
   "adminCourse/uploadLessonMcqCsv",
   async ({ lessonId, file }, { rejectWithValue }) => {
@@ -240,10 +184,6 @@ export const uploadLessonMcqCsv = createAsyncThunk(
   },
 );
 
-/* =========================================================
-   14. FETCH LESSON MCQs
-   ========================================================= */
-
 export const fetchLessonMcqs = createAsyncThunk(
   "adminCourse/fetchLessonMcqs",
   async (lessonId, { rejectWithValue }) => {
@@ -254,10 +194,6 @@ export const fetchLessonMcqs = createAsyncThunk(
     }
   },
 );
-
-/* =========================================================
-   15. DELETE LESSON MCQs
-   ========================================================= */
 
 export const deleteLessonMcqs = createAsyncThunk(
   "adminCourse/deleteLessonMcqs",
@@ -272,10 +208,6 @@ export const deleteLessonMcqs = createAsyncThunk(
   },
 );
 
-/* =========================================================
-   16. UPLOAD FINAL COURSE QUIZ CSV
-   ========================================================= */
-
 export const uploadFinalQuizCsv = createAsyncThunk(
   "adminCourse/uploadFinalQuizCsv",
   async ({ courseId, file }, { rejectWithValue }) => {
@@ -286,10 +218,6 @@ export const uploadFinalQuizCsv = createAsyncThunk(
     }
   },
 );
-
-/* =========================================================
-   REFRESH COURSE DETAILS (after uploads)
-   ========================================================= */
 
 export const refreshCourseDetails = (courseId) => (dispatch) => {
   return dispatch(fetchAdminCourseDetails(courseId));

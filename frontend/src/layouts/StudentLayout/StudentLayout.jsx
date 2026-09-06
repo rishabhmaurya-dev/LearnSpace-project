@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 
 import StudentSidebar from "./StudentSidebar";
 import StudentHeader from "./StudentHeader";
@@ -9,6 +9,7 @@ import styles from "./StudentLayout.module.css";
 
 const StudentLayout = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
 
   const toggleSidebar = () => {
     setIsOpen((prev) => !prev);
@@ -23,10 +24,12 @@ const StudentLayout = () => {
       <StudentSidebar isOpen={isOpen} onClose={closeSidebar} />
 
       <div className={styles.main}>
-        <StudentHeader onToggleSidebar={toggleSidebar} />
+        <StudentHeader onToggleSidebar={toggleSidebar} isOpen={isOpen} />
 
         <main className={styles.content}>
-          <Outlet />
+          <div key={location.pathname} className={styles.pageTransition}>
+            <Outlet />
+          </div>
         </main>
 
         <LearnSpaceAi />

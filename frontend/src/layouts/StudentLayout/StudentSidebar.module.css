@@ -1,23 +1,15 @@
-/* ==========================================================================
-   STUDENT SIDEBAR — Bold Typography Design System
-   Sharp edges. No shadows. Accent underlines. Editorial.
-   ========================================================================== */
-
-/* =========================================================
-   1. FIXED MOBILE TOGGLE TRIGGER (HAMBURGER)
-   ========================================================= */
+/* 1. fixed mobile toggle trigger (hamburger) */
 .hamburgerBtn {
   display: none;
 }
 
-/* =========================================================
-   2. MOBILE BACKDROP OVERLAY
-   ========================================================= */
+/* 2. mobile backdrop overlay */
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(10, 10, 10, 0.8);
+  background: var(--student-overlay);
   z-index: 9998;
+  backdrop-filter: var(--glass-blur-sm);
 }
 
 @media (min-width: 1024px) {
@@ -26,24 +18,25 @@
   }
 }
 
-/* =========================================================
-   3. SIDEBAR STRUCTURE
-   ========================================================= */
+/* 3. sidebar structure */
 .sidebar {
   position: fixed;
   top: 0;
   bottom: 0;
   left: 0;
   width: 260px;
-  background: var(--muted);
-  border-right: 1px solid var(--border);
+  background: var(--student-sidebar-bg);
+  border-right: 1px solid var(--student-panel-border);
   display: flex;
   flex-direction: column;
   padding: 24px 0;
   box-sizing: border-box;
   z-index: 9999;
   transform: translateX(-100%);
-  transition: transform 200ms cubic-bezier(0.25, 0, 0, 1);
+  box-shadow: var(--student-panel-shadow);
+  transition:
+    transform var(--transition-normal),
+    box-shadow var(--transition-normal);
 }
 
 .sidebar.open {
@@ -62,15 +55,13 @@
   }
 }
 
-/* =========================================================
-   4. BRAND LOGO HEADER
-   ========================================================= */
+/* 4. brand logo header */
 .logo {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20px 20px;
-  border-bottom: 1px solid var(--border);
+  padding: 0 20px 10px;
+  border-bottom: 1px solid var(--student-panel-border);
   margin-bottom: 16px;
 }
 
@@ -85,23 +76,17 @@
 .logoMark {
   width: 36px;
   height: 36px;
-  background: var(--accent);
-  color: var(--accent-foreground);
-  font-family: var(--font-heading);
-  font-size: 14px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  object-fit: contain;
   flex-shrink: 0;
+  border-radius: 6px;
 }
 
 .logoText {
-  font-family: var(--font-heading);
-  font-size: 16px;
+  font-family: var(--font-display);
+  font-size: 17px;
   font-weight: 700;
   color: var(--foreground);
-  letter-spacing: -0.04em;
+  letter-spacing: 0.01em;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -114,7 +99,7 @@
   width: 32px;
   height: 32px;
   background: transparent;
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-subtle);
   color: var(--muted-foreground);
   font-size: 14px;
   font-weight: 700;
@@ -125,6 +110,7 @@
 .closeBtn:hover {
   color: var(--danger);
   border-color: var(--danger);
+  background: var(--danger-soft);
 }
 
 .closeBtn:active {
@@ -137,9 +123,7 @@
   }
 }
 
-/* =========================================================
-   5. NAVIGATION LIST & SECTION HEADERS
-   ========================================================= */
+/* 5. navigation list & section headers */
 .sectionTitle {
   font-family: var(--font-mono);
   font-size: 10px;
@@ -177,15 +161,20 @@
   text-decoration: none;
   border: 1px solid transparent;
   background: transparent;
-  transition: all 150ms cubic-bezier(0.25, 0, 0, 1);
+  transition:
+    transform var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast),
+    background-color var(--transition-fast);
   box-sizing: border-box;
   position: relative;
 }
 
 .navItem:hover {
   color: var(--foreground);
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--student-surface-hover);
   border-color: var(--border);
+  transform: translateX(2px);
 }
 
 .icon {
@@ -198,9 +187,9 @@
 
 /* Active State */
 .navItem.active {
-  color: var(--accent);
-  background: rgba(255, 61, 0, 0.08);
-  border-color: rgba(255, 61, 0, 0.2);
+  color: var(--student-item-active-text);
+  background: var(--student-item-active-bg);
+  border-color: var(--student-item-active-border);
   font-weight: 600;
 }
 
@@ -211,16 +200,14 @@
   top: 0;
   bottom: 0;
   width: 2px;
-  background: var(--accent);
+  background: var(--student-item-active-text);
 }
 
-/* =========================================================
-   6. FOOTER & LOGOUT ACTION
-   ========================================================= */
+/* 6. footer & logout action */
 .bottom {
   margin-top: auto;
   padding-top: 16px;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--student-panel-border);
   padding-left: 12px;
   padding-right: 12px;
 }
@@ -234,28 +221,33 @@
   gap: 8px;
   background: transparent;
   color: var(--muted-foreground);
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-subtle);
   font-family: var(--font-mono);
   font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.05em;
   cursor: pointer;
-  transition: all 150ms cubic-bezier(0.25, 0, 0, 1);
+  box-shadow: var(--shadow-convex-xs);
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast),
+    background-color var(--transition-fast);
 }
 
 .logout:hover {
-  background: rgba(239, 68, 68, 0.08);
+  background: var(--danger-soft);
   border-color: var(--danger);
   color: var(--danger);
+  box-shadow: var(--shadow-pink);
 }
 
 .logout:active {
   transform: translateY(1px);
 }
 
-/* =========================================================
-   7. FOCUS ACCESSIBILITY
-   ========================================================= */
+/* 7. focus accessibility */
 .navItem:focus-visible,
 .logout:focus-visible,
 .closeBtn:focus-visible {
@@ -263,9 +255,7 @@
   outline-offset: 2px;
 }
 
-/* =========================================================
-   8. REDUCED MOTION
-   ========================================================= */
+/* 8. reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .sidebar,
   .navItem,

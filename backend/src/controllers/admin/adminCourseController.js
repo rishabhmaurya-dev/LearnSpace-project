@@ -12,11 +12,6 @@ const cleanString = (value) => {
   return typeof value === "string" ? value.trim() : "";
 };
 
-/* =========================================================
-   CREATE COURSE - STEP 1
-   ADMIN ONLY
-========================================================= */
-
 export const createCourse = async (req, res) => {
   try {
     const {
@@ -111,9 +106,7 @@ export const createCourse = async (req, res) => {
   }
 };
 
-/* =========================================================
-   GET ALL COURSES
-========================================================= */
+// get all courses
 
 export const getAdminCourses = async (req, res) => {
   try {
@@ -177,9 +170,7 @@ export const getAdminCourses = async (req, res) => {
   }
 };
 
-/* =========================================================
-   GET COURSE DETAILS
-========================================================= */
+// get course details
 
 export const getCourseById = async (req, res) => {
   try {
@@ -254,10 +245,7 @@ export const getCourseById = async (req, res) => {
   }
 };
 
-/* =========================================================
-   UPDATE COURSE DETAILS
-   STEP 1 EDIT
-========================================================= */
+// update course details (step 1 edit)
 
 export const updateCourse = async (req, res) => {
   try {
@@ -396,10 +384,7 @@ export const updateCourse = async (req, res) => {
   }
 };
 
-/* =========================================================
-   UPDATE CAPSTONE
-   STEP 4
-========================================================= */
+// update capstone (step 4)
 
 export const updateCapstone = async (req, res) => {
   try {
@@ -457,9 +442,7 @@ export const updateCapstone = async (req, res) => {
   }
 };
 
-/* =========================================================
-   DELETE COURSE
-========================================================= */
+// delete course
 
 export const deleteCourse = async (req, res) => {
   try {
@@ -509,9 +492,7 @@ export const deleteCourse = async (req, res) => {
   }
 };
 
-/* =========================================================
-   PUBLISH COURSE
-========================================================= */
+// publish course
 
 export const publishCourse = async (req, res) => {
   try {
@@ -550,10 +531,6 @@ export const publishCourse = async (req, res) => {
         message: "At least one lesson is required before publishing",
       });
     }
-
-    /* -----------------------------
-       CHECK EACH LESSON MCQ
-    ----------------------------- */
 
     const lessons = await Lesson.find({
       courseId: course._id,
@@ -597,10 +574,6 @@ export const publishCourse = async (req, res) => {
       });
     }
 
-    /* -----------------------------
-       FINAL QUIZ
-    ----------------------------- */
-
     const quizCount = course.quiz.length;
 
     if (quizCount < 10 || quizCount > 50) {
@@ -609,10 +582,6 @@ export const publishCourse = async (req, res) => {
         message: "Final course quiz must contain between 10 and 50 MCQs",
       });
     }
-
-    /* -----------------------------
-       CAPSTONE
-    ----------------------------- */
 
     if (
       !course.capstoneProject?.title ||
@@ -645,9 +614,7 @@ export const publishCourse = async (req, res) => {
   }
 };
 
-/* =========================================================
-   UNPUBLISH COURSE
-========================================================= */
+// unpublish course
 
 export const unpublishCourse = async (req, res) => {
   try {

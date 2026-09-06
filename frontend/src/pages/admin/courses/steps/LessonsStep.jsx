@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import toast from "react-hot-toast"; // 1. Toast Import Karein
+import { toast } from "react-toastify"; // 1. Toast Import Karein
 
 import styles from "./steps.module.css";
 
@@ -35,9 +35,8 @@ Step-by-step explanation of what the code does.
 https://www.youtube.com/watch?v=example
 
 ## Notes
-https://example.com/notes.pdf
+introduction-to-react.pdf
 `;
-
 const LessonsStep = ({
   course,
   lessons,
@@ -54,14 +53,11 @@ const LessonsStep = ({
   onDeleteMcqs,
 }) => {
   const [lessonFiles, setLessonFiles] = useState([]);
-  const [mcqFiles, setMcqFiles] = useState({});
 
   const lessonRef = useRef(null);
   const multipleRef = useRef(null);
 
-  /* -----------------------------------------------------
-     FETCH LESSONS ON MOUNT
-  ----------------------------------------------------- */
+  /* fetch lessons on mount */
 
   useEffect(() => {
     if (course?._id) {
@@ -69,9 +65,7 @@ const LessonsStep = ({
     }
   }, [course?._id]);
 
-  /* -----------------------------------------------------
-     TOAST ALERTS TRIGGER
-  ----------------------------------------------------- */
+  /* toast alerts trigger */
 
   // 2. Success Alert ke liye Toast
   useEffect(() => {
@@ -87,47 +81,34 @@ const LessonsStep = ({
     }
   }, [error]);
 
-  /* -----------------------------------------------------
-     HANDLERS
-  ----------------------------------------------------- */
+  /* handlers */
 
   const handleLessonFiles = (e) => {
     const files = Array.from(e.target.files || []);
 
-    if (files.length) setLessonFiles(files);
-  };
+    if (!files.length || !course?._id) return;
 
-  const handleUploadLessons = () => {
-    if (!lessonFiles.length || !course?._id) return;
+    setLessonFiles(files);
 
-    if (lessonFiles.length === 1) {
-      onUploadSingle(course._id, lessonFiles[0]);
+    if (files.length === 1) {
+      onUploadSingle(course._id, files[0]).then(() => {
+        setLessonFiles([]);
+        if (lessonRef.current) lessonRef.current.value = "";
+      });
     } else {
-      onUploadMultiple(course._id, lessonFiles);
+      onUploadMultiple(course._id, files).then(() => {
+        setLessonFiles([]);
+        if (lessonRef.current) lessonRef.current.value = "";
+      });
     }
-
-    setLessonFiles([]);
-
-    if (lessonRef.current) lessonRef.current.value = "";
-    if (multipleRef.current) multipleRef.current.value = "";
   };
 
   const handleMcqFile = (lessonId, e) => {
     const file = e.target.files?.[0];
 
-    if (file) {
-      setMcqFiles((prev) => ({ ...prev, [lessonId]: file }));
-    }
-  };
-
-  const handleUploadMcq = (lesson) => {
-    const file = mcqFiles[lesson._id];
-
     if (!file) return;
 
-    onUploadMcq(lesson._id, file);
-
-    setMcqFiles((prev) => ({ ...prev, [lesson._id]: undefined }));
+    onUploadMcq(lessonId, file);
   };
 
   const downloadTemplate = () => {
@@ -179,9 +160,7 @@ const LessonsStep = ({
 
       {/* Static alert divs Yahan se hata diye gaye hain */}
 
-      {/* =========================================
-          UPLOAD LESSONS (.md)
-      ========================================= */}
+      {/* upload lessons (.md) */}
 
       <div className={styles.uploadSection}>
         <h4>📄 Upload Lesson (.md)</h4>
@@ -193,9 +172,9 @@ const LessonsStep = ({
           >
             <span className={styles.fileDropIcon}>📄</span>
 
-            <strong>Choose Markdown file(s)</strong>
+            <strong>Select Markdown file(s)</strong>
 
-            <span>Select one or multiple .md files · Max 2MB each</span>
+            <span>Select one or multiple .md files — uploads automatically</span>
 
             <input
               ref={lessonRef}
@@ -206,36 +185,13 @@ const LessonsStep = ({
             />
           </div>
 
-          {lessonFiles.length > 0 && (
-            <div className={styles.fileList}>
-              {lessonFiles.map((file, index) => (
-                <div key={index} className={styles.fileName}>
-                  <span>{file.name}</span>
-
-                  <button onClick={() => setLessonFiles([])}>✕</button>
-                </div>
-              ))}
+          {uploading && (
+            <div className={styles.hint}>
+              <span className={styles.spinner}></span> Uploading...
             </div>
           )}
 
           <div className={styles.headerActions}>
-            <button
-              className={styles.primaryBtn}
-              disabled={lessonFiles.length === 0 || uploading}
-              onClick={handleUploadLessons}
-            >
-              {uploading ? (
-                <>
-                  <span className={styles.spinner}></span>
-                  Uploading...
-                </>
-              ) : (
-                `Upload ${lessonFiles.length || ""} Lesson${
-                  lessonFiles.length === 1 ? "" : "s"
-                }`
-              )}
-            </button>
-
             <button
               type="button"
               className={styles.ghostBtn}
@@ -247,9 +203,7 @@ const LessonsStep = ({
         </div>
       </div>
 
-      {/* =========================================
-          MARKDOWN FORMAT GUIDE
-      ========================================= */}
+      {/* markdown format guide */}
 
       <div className={styles.uploadSection}>
         <h4>📝 Markdown Format Guide</h4>
@@ -306,9 +260,7 @@ const LessonsStep = ({
         </div>
       </div>
 
-      {/* =========================================
-          LESSON LIST WITH MCQ UPLOAD
-      ========================================= */}
+      {/* lesson list with mcq upload */}
 
       <div className={styles.uploadSection}>
         <div className={styles.uploadSectionHeader}>
@@ -350,9 +302,7 @@ const LessonsStep = ({
                   Delete
                 </button>
 
-                {/* =====================================
-                    LESSON MCQ CSV UPLOAD
-                ===================================== */}
+                {/* lesson mcq csv upload */}
                 <div className={styles.mcqUploadRow}>
                   <div className={styles.mcqInfo}>
                     <strong>Lesson MCQ Quiz (CSV)</strong>
@@ -377,33 +327,8 @@ const LessonsStep = ({
                     htmlFor={`mcq-${lesson._id}`}
                     className={styles.fileBtn}
                   >
-                    {mcqFiles[lesson._id]
-                      ? "✓ CSV Selected"
-                      : "⬆ Upload MCQ CSV"}
+                    {uploading ? "Uploading..." : "⬆ Upload MCQ CSV"}
                   </label>
-
-                  {mcqFiles[lesson._id] && (
-                    <span className={styles.mcqCsvName}>
-                      {mcqFiles[lesson._id].name}
-                    </span>
-                  )}
-
-                  {mcqFiles[lesson._id] && (
-                    <button
-                      className={styles.primaryBtn}
-                      disabled={uploading}
-                      onClick={() => handleUploadMcq(lesson)}
-                    >
-                      {uploading ? (
-                        <>
-                          <span className={styles.spinner}></span>
-                          Uploading...
-                        </>
-                      ) : (
-                        "Upload"
-                      )}
-                    </button>
-                  )}
 
                   {lesson.mcqCount > 0 && (
                     <button
@@ -429,9 +354,7 @@ const LessonsStep = ({
         )}
       </div>
 
-      {/* =========================================
-          MCQ CSV TEMPLATE INFO
-      ========================================= */}
+      {/* mcq csv template info */}
 
       <div className={styles.uploadSection}>
         <h4>❓ Lesson MCQ CSV Format</h4>

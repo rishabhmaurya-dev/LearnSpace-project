@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 
 import styles from "./steps.module.css";
 
@@ -77,9 +77,7 @@ const QuizStep = ({
         Upload the course final quiz as a CSV file. It must contain between 10
         and 50 MCQs. Select the file and it uploads automatically.
       </p>
-      {/* =========================================
-          CURRENT QUIZ STATUS
-      ========================================= */}
+      {/* current quiz status */}
 
       <div className={styles.uploadSection}>
         <h4>📊 Current Quiz Status</h4>
@@ -102,9 +100,7 @@ const QuizStep = ({
         </div>
       </div>
 
-      {/* =========================================
-          UPLOAD FINAL QUIZ — DIRECT
-      ========================================= */}
+      {/* upload final quiz — direct */}
 
       <div className={styles.uploadSection}>
         <h4>⬆ Upload Final Quiz CSV</h4>
@@ -136,9 +132,7 @@ const QuizStep = ({
         </div>
       </div>
 
-      {/* =========================================
-          TEMPLATE
-      ========================================= */}
+      {/* template */}
 
       <div className={styles.uploadSection}>
         <h4>📋 CSV Format</h4>
@@ -161,9 +155,7 @@ const QuizStep = ({
         </div>
       </div>
 
-      {/* =========================================
-          PREVIEW — live from refetched course
-      ========================================= */}
+      {/* preview — live from refetched course */}
 
       {quizCount > 0 && (
         <div className={styles.uploadSection}>

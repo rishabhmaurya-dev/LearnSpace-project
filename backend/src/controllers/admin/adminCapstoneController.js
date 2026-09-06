@@ -11,10 +11,7 @@ const isValidObjectId = (id) => {
   return mongoose.Types.ObjectId.isValid(id);
 };
 
-// ============================================================
-// GET ALL CAPSTONE SUBMISSIONS
-// Search + Status + Pagination
-// ============================================================
+// get all capstone submissions (search + status + pagination)
 
 export const getCapstoneSubmissions = async (req, res) => {
   try {
@@ -28,10 +25,6 @@ export const getCapstoneSubmissions = async (req, res) => {
     const skip = (currentPage - 1) * perPage;
 
     const filter = {};
-
-    // --------------------------------------------------------
-    // STATUS FILTER
-    // --------------------------------------------------------
 
     if (status) {
       const allowedStatuses = ["PENDING", "APPROVED", "REJECTED"];
@@ -47,12 +40,6 @@ export const getCapstoneSubmissions = async (req, res) => {
 
       filter.status = normalizedStatus;
     }
-
-    // --------------------------------------------------------
-    // SEARCH
-    // Search is performed through aggregation because
-    // student/course information is stored as references.
-    // --------------------------------------------------------
 
     const pipeline = [
       {
@@ -159,9 +146,7 @@ export const getCapstoneSubmissions = async (req, res) => {
   }
 };
 
-// ============================================================
-// GET PENDING CAPSTONE SUBMISSIONS
-// ============================================================
+// get pending capstone submissions
 
 export const getPendingCapstones = async (req, res) => {
   try {
@@ -208,9 +193,7 @@ export const getPendingCapstones = async (req, res) => {
   }
 };
 
-// ============================================================
-// GET SINGLE CAPSTONE DETAILS
-// ============================================================
+// get single capstone details
 
 export const getCapstoneDetails = async (req, res) => {
   try {
@@ -235,17 +218,9 @@ export const getCapstoneDetails = async (req, res) => {
       });
     }
 
-    // --------------------------------------------------------
-    // STUDENT PROFILE
-    // --------------------------------------------------------
-
     const studentProfile = await StudentProfile.findOne({
       userId: submission.studentId._id,
     }).lean();
-
-    // --------------------------------------------------------
-    // COURSE PROGRESS
-    // --------------------------------------------------------
 
     const courseProgress = await CourseProgress.findOne({
       studentId: submission.studentId._id,
@@ -273,9 +248,7 @@ export const getCapstoneDetails = async (req, res) => {
   }
 };
 
-// ============================================================
-// APPROVE CAPSTONE
-// ============================================================
+// approve capstone
 
 export const approveCapstone = async (req, res) => {
   try {
@@ -305,10 +278,6 @@ export const approveCapstone = async (req, res) => {
       });
     }
 
-    // --------------------------------------------------------
-    // VERIFY STUDENT
-    // --------------------------------------------------------
-
     const student = await User.findOne({
       _id: submission.studentId,
       role: "STUDENT",
@@ -321,9 +290,7 @@ export const approveCapstone = async (req, res) => {
       });
     }
 
-    // --------------------------------------------------------
-    // VERIFY COURSE PROGRESS
-    // --------------------------------------------------------
+    // verify course progress
 
     const progress = await CourseProgress.findOne({
       studentId: submission.studentId,
@@ -344,9 +311,7 @@ export const approveCapstone = async (req, res) => {
       });
     }
 
-    // --------------------------------------------------------
-    // UPDATE CAPSTONE
-    // --------------------------------------------------------
+    // mark submission approved
 
     submission.status = "APPROVED";
     submission.adminFeedback = feedback.trim();
@@ -355,18 +320,12 @@ export const approveCapstone = async (req, res) => {
 
     await submission.save();
 
-    // --------------------------------------------------------
-    // COMPLETE COURSE
-    // --------------------------------------------------------
+    // complete course
 
     progress.isCompleted = true;
     progress.courseCompletedAt = new Date();
 
     await progress.save();
-
-    // --------------------------------------------------------
-    // GET COURSE BADGE INFORMATION
-    // --------------------------------------------------------
 
     const course = await Course.findById(submission.courseId)
       .select("title")
@@ -379,16 +338,13 @@ export const approveCapstone = async (req, res) => {
       });
     }
 
-    // --------------------------------------------------------
-    // UPDATE STUDENT PROFILE
-    // --------------------------------------------------------
+    // update student profile
 
     const studentProfile = await StudentProfile.findOne({
       userId: submission.studentId,
     });
 
     if (studentProfile) {
-      // COMPLETED COURSE COUNT
       studentProfile.completedCoursesCount += 1;
 
       await studentProfile.save();
@@ -410,9 +366,7 @@ export const approveCapstone = async (req, res) => {
   }
 };
 
-// ============================================================
-// REJECT CAPSTONE
-// ============================================================
+// reject capstone
 
 export const rejectCapstone = async (req, res) => {
   try {
@@ -479,9 +433,7 @@ export const rejectCapstone = async (req, res) => {
   }
 };
 
-// ============================================================
-// GET CAPSTONE STATISTICS
-// ============================================================
+// get capstone statistics
 
 export const getCapstoneStats = async (req, res) => {
   try {
