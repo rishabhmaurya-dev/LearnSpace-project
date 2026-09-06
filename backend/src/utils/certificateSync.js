@@ -1,33 +1,17 @@
-import path from "path";
-import fs from "fs";
-import { fileURLToPath } from "url";
-
 import { Certificate } from "../models/Certificate.model.js";
 import { CapstoneSubmission } from "../models/CapstoneSubmission.model.js";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Folder where generated certificate PDFs are stored.
-export const CERT_STORAGE_DIR = path.resolve(
-  __dirname,
-  "../../uploads/certificates",
-);
+import cloudinary from "../config/cloudinary.js";
 
 /**
- * Remove a certificate PDF from disk (best effort).
+ * Remove a certificate PDF from Cloudinary (best effort).
  */
-export function removePdfFile(pdfUrl = "") {
+export async function removePdfFile(pdfUrl = "") {
   try {
     if (!pdfUrl) return;
 
-    const fileName = pdfUrl.split("/").pop();
-    if (!fileName) return;
-
-    const filePath = path.join(CERT_STORAGE_DIR, fileName);
-
-    if (fs.existsSync(filePath)) {
-      fs.unlinkSync(filePath);
+    const match = pdfUrl.match(/\/raw\/upload\/[^/]+\/(.+)\.pdf$/);
+    if (match) {
+      await cloudinary.uploader.destroy(match[1], { resource_type: "raw" });
     }
   } catch (error) {
     console.error("Failed to remove certificate PDF:", error.message);
@@ -73,7 +57,7 @@ export async function reconcileCertificateIssuedStates() {
   );
 
   for (const cert of orphanCerts) {
-    removePdfFile(cert.pdfUrl);
+    await removePdfFile(cert.pdfUrl);
     await Certificate.deleteOne({ _id: cert._id });
   }
 
@@ -91,7 +75,7 @@ export async function reconcileCertificateIssuedStates() {
     const duplicates = certs.slice(1);
 
     for (const dup of duplicates) {
-      removePdfFile(dup.pdfUrl);
+      await removePdfFile(dup.pdfUrl);
       await Certificate.deleteOne({ _id: dup._id });
     }
   }

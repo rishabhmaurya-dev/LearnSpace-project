@@ -1,17 +1,7 @@
 import mongoose from "mongoose";
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
+import axios from "axios";
 
 import { Certificate } from "../../models/Certificate.model.js";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const CERT_STORAGE_DIR = path.resolve(
-  __dirname,
-  "../../../uploads/certificates",
-);
 
 /**
  * GET /api/student/certificates
@@ -90,23 +80,27 @@ export async function downloadCertificatePdf(req, res) {
       });
     }
 
-    // pdfUrl is stored as "/uploads/certificates/<file>.pdf"
-    const fileName = path.basename(certificate.pdfUrl);
-    const filePath = path.join(CERT_STORAGE_DIR, fileName);
-
-    if (!fs.existsSync(filePath)) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Certificate PDF file is missing" });
-    }
-
     const safeName = `${certificate.certificateCode}.pdf`;
 
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader("Content-Disposition", `attachment; filename="${safeName}"`);
 
-    const stream = fs.createReadStream(filePath);
-    stream.pipe(res);
+    try {
+      const { data } = await axios.get(certificate.pdfUrl, {
+        responseType: "stream",
+        maxRedirects: 3,
+      });
+
+      data.pipe(res);
+    } catch (error) {
+      if (!res.headersSent) {
+        return res.status(502).json({
+          success: false,
+          message: "Failed to fetch certificate PDF",
+        });
+      }
+      res.end();
+    }
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

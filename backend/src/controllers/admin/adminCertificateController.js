@@ -1,7 +1,4 @@
 import mongoose from "mongoose";
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
 
 import { Certificate } from "../../models/Certificate.model.js";
 import { CapstoneSubmission } from "../../models/CapstoneSubmission.model.js";
@@ -18,19 +15,8 @@ import {
 import { StudentProfile } from "../../models/StudentProfile.model.js";
 import { createOrGetStudentProfile } from "../studentController.js";
 
-import {
-  removePdfFile,
-  reconcileCertificateIssuedStates,
-} from "../../utils/certificateSync.js";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Folder where generated certificate PDFs will be stored.
-const CERT_STORAGE_DIR = path.resolve(
-  __dirname,
-  "../../../uploads/certificates",
-);
+import { reconcileCertificateIssuedStates } from "../../utils/certificateSync.js";
+import cloudinary from "../../config/cloudinary.js";
 
 /**
  * Generate a unique, human-friendly certificate code.
@@ -54,6 +40,24 @@ function formatDate(date) {
     month: "short",
     year: "numeric",
   }).format(date);
+}
+
+function uploadPdfToCloudinary(pdfBuffer, certificateCode) {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      {
+        folder: "certificates",
+        resource_type: "raw",
+        public_id: certificateCode,
+        format: "pdf",
+      },
+      (error, result) => {
+        if (error) return reject(error);
+        resolve(result);
+      },
+    );
+    stream.end(pdfBuffer);
+  });
 }
 
 async function loadCapstoneContext(capstoneId) {
@@ -224,13 +228,8 @@ export async function sendCertificate(req, res) {
       score: preview.score,
     });
 
-    // Persist the PDF to disk.
-    fs.mkdirSync(CERT_STORAGE_DIR, { recursive: true });
-    const fileName = `${certificateCode}.pdf`;
-    const filePath = path.join(CERT_STORAGE_DIR, fileName);
-    fs.writeFileSync(filePath, pdfBuffer);
-
-    const pdfUrl = `${process.env.BACKEND_URL || "http://localhost:3000"}/uploads/certificates/${fileName}`;
+    const uploadResult = await uploadPdfToCloudinary(pdfBuffer, certificateCode);
+    const pdfUrl = uploadResult.secure_url;
 
     // Create the certificate record.
     const certificate = await Certificate.create({
@@ -333,9 +332,15 @@ export async function deleteCertificate(req, res) {
 
     const capstoneId = certificate.capstoneSubmissionId;
 
-    // 1. remove the pdf file
-
-    removePdfFile(certificate.pdfUrl);
+    // 1. remove the pdf file from Cloudinary
+    if (certificate.pdfUrl) {
+      try {
+        const match = certificate.pdfUrl.match(/\/raw\/upload\/[^/]+\/(.+)\.pdf$/);
+        if (match) {
+          await cloudinary.uploader.destroy(match[1], { resource_type: "raw" });
+        }
+      } catch (_) {}
+    }
 
     // 2. reset the linked capstone so the admin can re-issue
 
