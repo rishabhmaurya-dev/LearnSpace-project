@@ -16,6 +16,7 @@ import {
   PLATFORM_BRAND,
 } from "../../utils/certificateGenerator.js";
 import { StudentProfile } from "../../models/StudentProfile.model.js";
+import { createOrGetStudentProfile } from "../studentController.js";
 
 import {
   removePdfFile,
@@ -55,10 +56,6 @@ function formatDate(date) {
   }).format(date);
 }
 
-/**
- * Load the dynamic data needed to build a certificate for an approved capstone.
- * Returns null if the capstone is not approved or a required ref is missing.
- */
 async function loadCapstoneContext(capstoneId) {
   const capstone = await CapstoneSubmission.findOne({
     _id: capstoneId,
@@ -74,7 +71,6 @@ async function loadCapstoneContext(capstoneId) {
 
   if (!student || !course) return null;
 
-  // Grab the final quiz score for the "score" metadata (optional).
   const progress = await CourseProgress.findOne({
     studentId: capstone.studentId,
     courseId: capstone.courseId,
@@ -88,10 +84,6 @@ async function loadCapstoneContext(capstoneId) {
   };
 }
 
-/**
- * GET /api/admin/certificates
- * List all issued certificates (newest first).
- */
 export async function getCertificates(req, res) {
   try {
     const { type } = req.query;
@@ -115,15 +107,6 @@ export async function getCertificates(req, res) {
     res.status(500).json({ success: false, message: error.message });
   }
 }
-
-/**
- * POST /api/admin/certificates/preview
- * Body: { capstoneSubmissionId }
- * Renders the certificate using the official template image
- * (certificate.png) with the dynamic data filled in, and
- * streams it back as a PDF for a WYSIWYG preview. Nothing is
- * persisted.
- */
 export async function previewCertificate(req, res) {
   try {
     const { capstoneSubmissionId } = req.body;
@@ -247,7 +230,7 @@ export async function sendCertificate(req, res) {
     const filePath = path.join(CERT_STORAGE_DIR, fileName);
     fs.writeFileSync(filePath, pdfBuffer);
 
-    const pdfUrl = `http://localhost:3000/uploads/certificates/${fileName}`;
+    const pdfUrl = `${process.env.BACKEND_URL || "http://localhost:3000"}/uploads/certificates/${fileName}`;
 
     // Create the certificate record.
     const certificate = await Certificate.create({
@@ -281,9 +264,7 @@ export async function sendCertificate(req, res) {
       issueDate: new Date(),
     });
 
-    // ============================================
-    // UPDATE VERIFIED SKILLS
-    // ============================================
+    // update verified skills
 
     const category = course.category?.trim();
 
@@ -309,6 +290,12 @@ export async function sendCertificate(req, res) {
         throw new Error("Student not found while updating verified skills");
       }
     }
+    // +100 reputation points per issued certificate
+
+    const studentProfile = await createOrGetStudentProfile(student._id);
+    studentProfile.reputationPoints += 100;
+    await studentProfile.save();
+
     // Mark capstone as issued.
     capstone.certificateIssued = true;
     capstone.certificateIssuedAt = new Date();
@@ -316,7 +303,8 @@ export async function sendCertificate(req, res) {
 
     res.status(201).json({
       success: true,
-      message: "Certificate issued and sent successfully",
+      message:
+        "Certificate issued and sent successfully. 100 reputation points added to the student.",
       certificate,
     });
   } catch (error) {
@@ -324,14 +312,7 @@ export async function sendCertificate(req, res) {
   }
 }
 
-/**
- * DELETE /api/admin/certificates/:certificateId
- * Deletes a certificate and its related data (cascade cleanup):
- *   - removes the generated PDF file from disk
- *   - resets the linked capstone so "Issue Certificate" appears again
- *   - removes the associated verified skill if no other certificate
- *     remains for that student + course
- */
+// delete a certificate and its related data (cascade cleanup)
 export async function deleteCertificate(req, res) {
   try {
     const { certificateId } = req.params;
@@ -352,15 +333,11 @@ export async function deleteCertificate(req, res) {
 
     const capstoneId = certificate.capstoneSubmissionId;
 
-    // ------------------------------------------------------------------
-    // 1. Remove the PDF file
-    // ------------------------------------------------------------------
+    // 1. remove the pdf file
 
     removePdfFile(certificate.pdfUrl);
 
-    // ------------------------------------------------------------------
-    // 2. Reset the linked capstone so the admin can re-issue
-    // ------------------------------------------------------------------
+    // 2. reset the linked capstone so the admin can re-issue
 
     if (capstoneId) {
       await CapstoneSubmission.updateOne(
@@ -374,16 +351,11 @@ export async function deleteCertificate(req, res) {
       );
     }
 
-    // ------------------------------------------------------------------
-    // 3. Delete the certificate record
-    // ------------------------------------------------------------------
+    // 3. delete the certificate record
 
     await Certificate.deleteOne({ _id: certificate._id });
 
-    // ------------------------------------------------------------------
-    // 4. Remove the verified skill if no other certificate remains
-    //    for this student + course
-    // ------------------------------------------------------------------
+    // 4. remove the verified skill if no other certificate remains for this student + course
 
     if (certificate.studentId && certificate.courseId) {
       const remainingCertificates = await Certificate.countDocuments({
@@ -405,6 +377,19 @@ export async function deleteCertificate(req, res) {
           );
         }
       }
+    }
+
+    // 5. rollback reputation points (-100)
+
+    if (certificate.studentId) {
+      const studentProfile = await createOrGetStudentProfile(
+        certificate.studentId,
+      );
+      studentProfile.reputationPoints = Math.max(
+        0,
+        studentProfile.reputationPoints - 100,
+      );
+      await studentProfile.save();
     }
 
     res.status(200).json({

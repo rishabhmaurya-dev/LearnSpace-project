@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-hot-toast";
+import { toast } from "react-toastify";
 
 import {
   fetchMyCertificates,
@@ -8,7 +8,15 @@ import {
 } from "../../features/student/studentCertificateThunks";
 import { clearStudentCertificateError } from "../../features/student/studentCertificateSlice";
 
+import { GradualSpacing } from "../../animation/Text";
+
 import styles from "./certificates.module.css";
+
+const API_ORIGIN = (
+  import.meta.env.VITE_API_URL || ""
+)
+  .replace(/\/$/, "")
+  .replace(/\/api$/, "");
 
 const Certificates = () => {
   const dispatch = useDispatch();
@@ -48,33 +56,94 @@ const Certificates = () => {
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
     } catch (err) {
-      toast.error(err || "Failed to download certificate");
+      toast.error(err?.message || err || "Failed to download certificate");
     }
   };
 
   const courseCerts = certificates?.courseCompletion || [];
+  const hasCerts = courseCerts.length > 0;
 
   return (
     <div className={styles.container}>
-      {/* PAGE HEADER */}
-      <div className={styles.pageHeader}>
-        <div>
-          <span className={styles.headerBadge}>VERIFIED CREDENTIALS</span>
-          <h1>My Certificates</h1>
-          <p>
+      <section className={styles.hero}>
+        <div className={styles.heroContent}>
+          <span className={styles.eyebrow}>VERIFIED CREDENTIALS</span>
+          <h1 className={styles.heroTitle}>
+            <GradualSpacing text="My Certificates" />
+          </h1>
+          <p className={styles.heroSubtitle}>
             Official completion certificates earned for courses and evaluated
-            projects.
+            projects — downloadable and verifiable anytime with a unique
+            credential code.
           </p>
         </div>
-        <div className={styles.statsCountBadge}>
-          <strong>{courseCerts.length}</strong> Earned
-        </div>
-      </div>
 
-      {/* MAIN CONTENT AREA */}
+        <div className={styles.heroStats}>
+          <div className={styles.heroStat}>
+            <span className={styles.statIcon}>📜</span>
+            <div className={styles.statMeta}>
+              <strong>{courseCerts.length}</strong>
+              <span>Total Earned</span>
+            </div>
+          </div>
+
+          <div className={styles.heroStat}>
+            <span
+              className={`${styles.statIcon} ${styles.statIconVerified}`}
+            >
+              ✓
+            </span>
+            <div className={styles.statMeta}>
+              <strong>{courseCerts.length}</strong>
+              <span>Verified</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* how it works (static) */}
+      <section className={styles.howItWorks}>
+        <div className={styles.step}>
+          <span className={styles.stepIcon}>🎓</span>
+          <div className={styles.stepText}>
+            <strong>Complete the Course</strong>
+            <p>Finish all lessons and pass each quiz to unlock the final assessment.</p>
+          </div>
+        </div>
+
+        <div className={styles.step}>
+          <span className={styles.stepIcon}>🚀</span>
+          <div className={styles.stepText}>
+            <strong>Pass the Capstone</strong>
+            <p>Submit your project and get it reviewed and approved by the admins.</p>
+          </div>
+        </div>
+
+        <div className={styles.step}>
+          <span className={styles.stepIcon}>🏅</span>
+          <div className={styles.stepText}>
+            <strong>Earn Your Certificate</strong>
+            <p>Receive an official PDF with a unique credential code you can share and verify.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* results bar */}
+      {!loading && hasCerts && (
+        <div className={styles.resultsBar}>
+          <strong>{courseCerts.length}</strong>
+          <span>
+            {courseCerts.length === 1
+              ? "certificate earned"
+              : "certificates earned"}
+          </span>
+        </div>
+      )}
+
+      {/* main content */}
       {loading ? (
         <CertificateSkeleton />
-      ) : courseCerts.length === 0 ? (
+      ) : !hasCerts ? (
         <div className={styles.emptyCard}>
           <div className={styles.emptyIcon}>📜</div>
           <h3>No Certificates Earned Yet</h3>
@@ -100,9 +169,7 @@ const Certificates = () => {
   );
 };
 
-/* =========================================================
-   CERTIFICATE SKELETON
-========================================================= */
+/* certificate skeleton */
 const CertificateSkeleton = () => {
   return (
     <div className={styles.certGrid}>
@@ -124,9 +191,7 @@ const CertificateSkeleton = () => {
   );
 };
 
-/* =========================================================
-   CERTIFICATE CARD COMPONENT
-========================================================= */
+/* certificate card component */
 const CertificateCard = ({ cert, index, loading, onDownload }) => {
   const entityName =
     cert.courseId?.title ||
@@ -136,12 +201,13 @@ const CertificateCard = ({ cert, index, loading, onDownload }) => {
 
   const subtitle = cert.metadata?.subtitle || "";
 
-  const viewPdfUrl = `http://localhost:3000/uploads/certificates/${cert.certificateCode}.pdf`;
+  const viewPdfUrl = `${API_ORIGIN}/uploads/certificates/${cert.certificateCode}.pdf`;
 
   return (
-    <div className={styles.certCard} style={{ "--card-index": index }}>
-      {/* Decorative Ribbon Accent */}
-      <div className={styles.cardRibbon} />
+    <article className={styles.certCard} style={{ "--card-index": index }}>
+      <div className={styles.cardCover}>
+        <div className={styles.cardCoverGlow} />
+      </div>
 
       <div className={styles.certTop}>
         <div className={styles.certBadgeWrap}>
@@ -157,8 +223,8 @@ const CertificateCard = ({ cert, index, loading, onDownload }) => {
       </div>
 
       {subtitle && (
-        <div className={styles.badgeTagWrap}>
-          <span>✨ {subtitle}</span>
+        <div className={styles.subtitleTagWrap}>
+          <span className={styles.subtitleTag}>✨ {subtitle}</span>
         </div>
       )}
 
@@ -180,7 +246,7 @@ const CertificateCard = ({ cert, index, loading, onDownload }) => {
           onClick={onDownload}
           disabled={loading}
         >
-          {loading ? "Preparing PDF..." : "⬇ Download PDF"}
+          {loading ? "Preparing PDF…" : "Download PDF"}
         </button>
 
         <a
@@ -189,16 +255,14 @@ const CertificateCard = ({ cert, index, loading, onDownload }) => {
           rel="noopener noreferrer"
           className={`${styles.btn} ${styles.btnSecondary}`}
         >
-          👁 View Online
+          View Online
         </a>
       </div>
-    </div>
+    </article>
   );
 };
 
-/* =========================================================
-   HELPERS
-========================================================= */
+/* helpers */
 const formatDate = (dateString) => {
   if (!dateString) return "—";
   const date = new Date(dateString);

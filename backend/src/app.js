@@ -12,7 +12,6 @@ import adminCourseQuizRoutes from "./routes/admin/adminCourseQuiz.routes.js";
 
 import aiRoutes from "./routes/ai.routes.js";
 
-
 import adminStudentRoutes from "./routes/admin/adminStudent.routes.js";
 
 import adminCapstoneRoutes from "./routes/admin/adminCapstone.routes.js";
@@ -34,9 +33,26 @@ const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
+const allowedOrigins = [
+  "http://127.0.0.1:5173",
+  "http://127.0.0.1:5174",
+  "http://localhost:5173",
+  "http://localhost:5174",
+];
+
+if (process.env.CLIENT_URL) {
+  allowedOrigins.push(process.env.CLIENT_URL);
+}
+
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://localhost:5174"],
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   }),
 );
@@ -46,7 +62,7 @@ app.use("/uploads", express.static(path.resolve(__dirname, "../uploads")));
 
 app.get("/api/files/download", (req, res) => {
   const filePath = path.resolve(__dirname, "../uploads/notes/proj.pdf");
-  
+
   if (!fs.existsSync(filePath)) {
     return res.status(404).json({
       message: "PDF not found",
@@ -79,5 +95,17 @@ app.use("/api/admin/certificates", adminCertificateRoutes);
 // ============================================================
 
 app.use("/api/student/certificates", studentCertificateRoutes);
+
+// ============================================================
+// GLOBAL ERROR HANDLER
+// ============================================================
+
+app.use((err, req, res, next) => {
+  console.error("Unhandled Error:", err.stack || err.message);
+  res.status(err.status || 500).json({
+    success: false,
+    message: err.message || "Internal Server Error",
+  });
+});
 
 export default app;
