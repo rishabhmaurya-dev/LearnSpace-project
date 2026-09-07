@@ -77,7 +77,7 @@ const Login = () => {
         <div className={styles.content}>
           <div className={styles.brand}>
             <img
-              src="/learnspace-logo-1024x1024.png"
+              src="/logo.jpg"
               alt="LearnSpace"
               className={styles.brandIcon}
             />
