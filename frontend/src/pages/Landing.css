@@ -1435,15 +1435,27 @@
   .ls-nav-links {
     display: none;
   }
+
+  .ls-roles {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+
+  .ls-section {
+    padding: 4.5rem 0;
+  }
 }
 
 @media (max-width: 640px) {
   .ls-hero {
-    padding-top: 4.5rem;
+    padding-top: 4rem;
   }
 
   .ls-hero-chips {
     gap: 0.45rem;
+  }
+
+  .ls-hero-title {
+    font-size: clamp(1.9rem, 6vw, 2.5rem);
   }
 
   .ls-cta-banner {
@@ -1456,10 +1468,37 @@
     padding: 1.8rem 1.5rem;
     justify-content: center;
     text-align: center;
+    flex-direction: column;
+    gap: 1.1rem;
   }
 
   .ls-cert-band > div:nth-child(2) {
     min-width: 0;
+  }
+
+  .ls-cert-band .ls-btn-hero {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .ls-tour-tabs {
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 0.4rem;
+  }
+
+  .ls-tour-tab {
+    flex-shrink: 0;
+  }
+
+  .ls-flow-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ls-section {
+    padding: 3.5rem 0;
   }
 
   .lm-side {
@@ -1472,11 +1511,151 @@
 }
 
 @media (max-width: 480px) {
+  .ls-container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .ls-nav-wrapper {
+    height: 62px;
+  }
+
+  .ls-logo {
+    font-size: 1.1rem;
+    gap: 0.5rem;
+  }
+
+  .ls-logo-img {
+    width: 32px;
+    height: 32px;
+  }
+
   .ls-nav-actions .ls-btn-outline {
     display: none;
   }
 
+  .ls-btn {
+    padding: 0 1rem;
+  }
+
+  .ls-hero {
+    padding: 3.5rem 16px 3rem;
+    gap: 1.2rem;
+  }
+
+  .ls-hero-title {
+    font-size: 1.85rem;
+    line-height: 1.12;
+  }
+
+  .ls-hero-subtitle {
+    font-size: 0.98rem;
+  }
+
+  .ls-btn-hero {
+    height: 46px;
+    font-size: 0.92rem;
+  }
+
+  .ls-hero-chips {
+    gap: 0.4rem;
+  }
+
+  .ls-chip {
+    font-size: 0.8rem;
+    padding: 0.45rem 0.85rem;
+  }
+
+  .ls-section {
+    padding: 3rem 0;
+  }
+
+  .ls-section-title {
+    font-size: 1.5rem;
+  }
+
+  .ls-section-subtitle {
+    font-size: 0.94rem;
+  }
+
+  .ls-cert-band {
+    padding: 1.6rem 1.2rem;
+  }
+
+  .ls-cert-icon {
+    width: 56px;
+    height: 56px;
+    font-size: 1.5rem;
+    border-radius: 16px;
+  }
+
+  .ls-cert-band h2 {
+    font-size: 1.15rem;
+  }
+
+  .ls-cert-band p {
+    font-size: 0.88rem;
+  }
+
+  .ls-cta-banner {
+    padding: 2rem 1.25rem;
+  }
+
+  .ls-cta-banner h2 {
+    font-size: 1.35rem;
+  }
+
+  .ls-cta-banner .ls-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .ls-role-card {
+    padding: 1.5rem;
+  }
+
+  .ls-role-card h3 {
+    font-size: 1.2rem;
+  }
+
+  .ls-faq-question {
+    font-size: 0.93rem;
+    padding: 1rem 1.1rem;
+  }
+
+  .ls-faq-answer p {
+    padding: 0 1.1rem 1.1rem;
+  }
+
+  .ls-footer {
+    padding: 2.5rem 0 1.5rem;
+  }
+
   .ls-footer-grid {
     grid-template-columns: 1fr;
+    gap: 1.75rem;
+  }
+
+  .ls-marquee-item {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .ls-hero-title {
+    font-size: 1.65rem;
+  }
+
+  .ls-hero-chips {
+    max-width: 100%;
+  }
+
+  .ls-chip {
+    font-size: 0.76rem;
+  }
+
+  .ls-tour-tab {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
   }
 }

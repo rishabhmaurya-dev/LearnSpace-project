@@ -723,6 +723,31 @@ const FinalQuizView = ({
       ? 0
       : Math.round((answeredCount / totalQuestions) * 100);
 
+  const [timeLeft, setTimeLeft] = useState(
+    Number(timeLimitMinutes || 0) * 60,
+  );
+  const timeUp = timeLeft <= 0;
+
+  useEffect(() => {
+    setTimeLeft(Number(timeLimitMinutes || 0) * 60);
+  }, [timeLimitMinutes]);
+
+  useEffect(() => {
+    if (result || timeUp) return;
+
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => (prev > 1 ? prev - 1 : 0));
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [result, timeUp]);
+
+  const formatTime = (totalSeconds) => {
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${minutes}:${String(seconds).padStart(2, "0")}`;
+  };
+
   if (result) {
     return (
       <div className={styles.quizResult}>
@@ -754,6 +779,30 @@ const FinalQuizView = ({
     );
   }
 
+  if (timeUp) {
+    return (
+      <div className={styles.quizResult}>
+        <div className={`${styles.resultBox} ${styles.resultFailed}`}>
+          <div>
+            <h3>⏰ Time's Up!</h3>
+            <p>
+              Your {timeLimitMinutes} minute time limit has ended. Retake the
+              quiz to try again.
+            </p>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          className={styles.primaryButton}
+          onClick={onRetake}
+        >
+          Retake Final Quiz
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.quizArea}>
       <div className={styles.quizMetaBar}>
@@ -761,7 +810,11 @@ const FinalQuizView = ({
         <span>
           📝 Answered {answeredCount}/{totalQuestions}
         </span>
-        {timeLimitMinutes && <span>⏱ {timeLimitMinutes} min limit</span>}
+        {timeLimitMinutes && (
+          <span className={timeLeft <= 60 ? styles.timerUrgent : undefined}>
+            ⏱ {formatTime(timeLeft)}
+          </span>
+        )}
       </div>
 
       <div className={styles.quizMetaProgress}>
