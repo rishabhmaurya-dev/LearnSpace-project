@@ -1,9 +1,11 @@
 import jwt from "jsonwebtoken";
 
+const isProduction = process.env.NODE_ENV === "production";
+
 export const COOKIE_OPTIONS = {
   httpOnly: true,
-  secure: false,
-  sameSite: "lax", 
+  secure: isProduction,
+  sameSite: isProduction ? "none" : "lax",
   maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
 };
 
