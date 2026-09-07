@@ -68,7 +68,7 @@ const StudentSidebar = ({ isOpen, onClose }) => {
             className={styles.logoBrand}
             onClick={onClose}
           >
-            <img src="/learnspace-logo-1024x1024.png" alt="LearnSpace" className={styles.logoMark} />
+            <img src="/logo.jpg" alt="LearnSpace" className={styles.logoMark} />
             <span className={styles.logoText}>
               LEARN<strong>SPACE</strong>
             </span>

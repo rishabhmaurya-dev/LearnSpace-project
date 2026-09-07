@@ -28,7 +28,7 @@ const AdminSidebar = ({ isOpen, onClose }) => {
       <aside className={`${styles.sidebar} ${isOpen ? styles.open : ""}`}>
         <div className={styles.logo}>
           <div className={styles.logoBrand}>
-            <img src="/learnspace-logo-1024x1024.png" alt="LearnSpace" className={styles.logoMark} />
+            <img src="/logo.jpg" alt="LearnSpace" className={styles.logoMark} />
             <span className={styles.logoText}>LearnSpace</span>
           </div>
 

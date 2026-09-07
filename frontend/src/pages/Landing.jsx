@@ -131,7 +131,7 @@ const MockLearner = () => (
   <div className="lm-shell">
     <aside className="lm-side">
       <div className="lm-side-logo">
-        <img src="/learnspace-logo-1024x1024.png" alt="LearnSpace" />
+        <img src="/logo.jpg" alt="LearnSpace" />
         LearnSpace
       </div>
       {[
@@ -377,7 +377,7 @@ const Landing = () => {
         <div className="ls-container ls-nav-wrapper">
           <a href="#home" className="ls-logo">
             <img
-              src="/learnspace-logo-1024x1024.png"
+              src="/logo.jpg"
               alt="LearnSpace"
               className="ls-logo-img"
             />
@@ -742,7 +742,7 @@ const Landing = () => {
               <div className="ls-footer-col">
                 <a href="#home" className="ls-logo ls-footer-logo">
                   <img
-                    src="/learnspace-logo-1024x1024.png"
+                    src="/logo.jpg"
                     alt="LearnSpace"
                     className="ls-logo-img"
                   />

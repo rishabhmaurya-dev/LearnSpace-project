@@ -1,4 +1,5 @@
 .env
 node_modules/
-public/
-frontend/public/
+
+frontend/public/notes
+frontend/public/React
