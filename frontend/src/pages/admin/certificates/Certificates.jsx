@@ -30,9 +30,10 @@ const Certificates = () => {
     deletingId,
   } = useSelector((state) => state.adminCertificate);
 
+  const accessToken = useSelector((state) => state.auth.accessToken);
+
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [search, setSearch] = useState("");
-  const [viewingId, setViewingId] = useState(null);
 
   /* fetch course completion certificates */
 
@@ -87,31 +88,21 @@ const Certificates = () => {
     }
   };
 
-  /* view handler: fetch via authenticated API, open in new tab */
+  /* view handler: open certificate PDF instantly in a new tab */
 
-  const handleViewPdf = async (certificateId) => {
-    setViewingId(certificateId);
-    try {
-      const response = await api.get(
-        `/admin/certificates/${certificateId}/pdf?inline=1`,
-        { responseType: "blob" },
-      );
+  const handleViewPdf = (certificateId) => {
+    const baseUrl = api.defaults.baseURL || "";
+    const url = `${baseUrl}/admin/certificates/${certificateId}/pdf?inline=1&token=${encodeURIComponent(
+      accessToken || "",
+    )}`;
 
-      const blob = new Blob([response.data], { type: "application/pdf" });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.target = "_blank";
-      link.rel = "noopener noreferrer";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      setTimeout(() => URL.revokeObjectURL(url), 60000);
-    } catch (err) {
-      toast.error(err?.response?.data?.message || "Failed to open certificate");
-    } finally {
-      setViewingId(null);
-    }
+    const link = document.createElement("a");
+    link.href = url;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const uniqueStudents = certificates.filter(
@@ -301,7 +292,6 @@ const Certificates = () => {
               cert={cert}
               index={index}
               deleting={deletingId === cert._id}
-              viewing={viewingId === cert._id}
               onDelete={() => setDeleteTarget(cert)}
               onView={() => handleViewPdf(cert._id)}
             />
@@ -385,7 +375,6 @@ const CertificateCard = ({
   cert,
   index,
   deleting = false,
-  viewing = false,
   onDelete,
   onView,
 }) => {
@@ -463,9 +452,8 @@ const CertificateCard = ({
               type="button"
               className={styles.viewButton}
               onClick={onView}
-              disabled={viewing}
             >
-              {viewing ? "Opening…" : "View Certificate"}
+              View Certificate
               <span>↗</span>
             </button>
           ) : (
