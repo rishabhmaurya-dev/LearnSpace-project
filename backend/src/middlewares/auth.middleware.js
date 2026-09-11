@@ -10,6 +10,13 @@ export const protect = async (req, res, next) => {
       req.headers.authorization.startsWith("Bearer")
     ) {
       token = req.headers.authorization.split(" ")[1];
+    } else if (req.query.token) {
+      /*
+       * Allow the token via ?token= query param as a fallback.
+       * Needed so certificate PDFs can open instantly in a NEW TAB,
+       * where the browser cannot attach Authorization headers.
+       */
+      token = req.query.token;
     }
 
     if (!token) {
@@ -54,5 +61,3 @@ export const authorize = (...roles) => {
     next();
   };
 };
-
-// 3. Approved Company Guard (REMOVED - Company functionality deleted)
