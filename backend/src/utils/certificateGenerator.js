@@ -14,7 +14,7 @@ export const CERT_ISSUER = "LearnSpace";
 export const PLATFORM_BRAND = {
   name: "LearnSpace",
   tagline: "Bridging Skills, Building Careers",
-  website: process.env.FRONTEND_URL || "https://jsconceptss.netlify.app",
+  website: process.env.FRONTEND_URL || "https://learnspace-kappa.vercel.app",
 };
 
 // Palette: cream paper, deep forest green + antique gold.
