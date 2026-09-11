@@ -4,6 +4,7 @@ import {
   getCertificates,
   previewCertificate,
   sendCertificate,
+  viewCertificatePdf,
   deleteCertificate,
 } from "../../controllers/admin/adminCertificateController.js";
 
@@ -22,6 +23,9 @@ router.post("/preview", previewCertificate);
 
 // Generate + persist + send a certificate
 router.post("/send", sendCertificate);
+
+// Stream a certificate PDF (inline view or download)
+router.get("/:certificateId/pdf", viewCertificatePdf);
 
 // Cascade delete a certificate (resets capstone + cleans related data)
 router.delete("/:certificateId", deleteCertificate);

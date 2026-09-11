@@ -1,7 +1,3 @@
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
-
 import mongoose from "mongoose";
 
 import { Certificate } from "../../models/Certificate.model.js";
@@ -9,6 +5,7 @@ import { CapstoneSubmission } from "../../models/CapstoneSubmission.model.js";
 import { Course } from "../../models/Course.model.js";
 import { User } from "../../models/User.model.js";
 import { CourseProgress } from "../../models/CourseProgress.model.js";
+import { StudentProfile } from "../../models/StudentProfile.model.js";
 
 import {
   generateCertificateFromTemplate,
@@ -16,41 +13,38 @@ import {
   CERT_ISSUER,
   PLATFORM_BRAND,
 } from "../../utils/certificateGenerator.js";
-import { StudentProfile } from "../../models/StudentProfile.model.js";
+
 import { createOrGetStudentProfile } from "../studentController.js";
 
 import { reconcileCertificateIssuedStates } from "../../utils/certificateSync.js";
+
 import cloudinary from "../../config/cloudinary.js";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Local folder used to persist generated certificate PDFs so they can be
-// served statically via /uploads/certificates/<code>.pdf.
-const CERT_STORAGE_DIR = path.resolve(__dirname, "../../../uploads/certificates");
-
-function saveCertificatePdfLocally(pdfBuffer, certificateCode) {
-  fs.mkdirSync(CERT_STORAGE_DIR, { recursive: true });
-  const filePath = path.join(CERT_STORAGE_DIR, `${certificateCode}.pdf`);
-  fs.writeFileSync(filePath, pdfBuffer);
-  return filePath;
-}
+import { streamCertificatePdf } from "../../utils/certificatePdfProxy.js";
 
 /**
- * Generate a unique, human-friendly certificate code.
- * Format: SBF-<YEAR>-<BASE32 random>
+ * Generate a unique certificate code.
+ *
+ * Format:
+ * SBF-2026-XXXXXXXX
  */
 function makeCertificateCode() {
   const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
   let rand = "";
+
   for (let i = 0; i < 8; i += 1) {
     rand += chars[Math.floor(Math.random() * chars.length)];
   }
+
   return `SBF-${new Date().getFullYear()}-${rand}`;
 }
 
 /**
- * Format a Date as a human readable string, e.g. "05 Jan 2025".
+ * Format date.
+ *
+ * Example:
+ * 05 Jan 2026
  */
 function formatDate(date) {
   return new Intl.DateTimeFormat("en-GB", {
@@ -60,38 +54,71 @@ function formatDate(date) {
   }).format(date);
 }
 
+/**
+ * Upload generated PDF Buffer directly to Cloudinary.
+ *
+ * IMPORTANT:
+ * We do NOT save the PDF to:
+ *
+ * backend/uploads/certificates
+ *
+ * because Vercel filesystem is read-only.
+ */
 function uploadPdfToCloudinary(pdfBuffer, certificateCode) {
   return new Promise((resolve, reject) => {
     const stream = cloudinary.uploader.upload_stream(
       {
         folder: "certificates",
+
+        /*
+         * PDF is uploaded as a raw resource.
+         */
         resource_type: "raw",
+
+        /*
+         * Certificate code becomes the
+         * Cloudinary public_id.
+         */
         public_id: certificateCode,
+
         format: "pdf",
       },
+
       (error, result) => {
-        if (error) return reject(error);
+        if (error) {
+          return reject(error);
+        }
+
         resolve(result);
       },
     );
+
     stream.end(pdfBuffer);
   });
 }
 
+/**
+ * Load approved capstone + student + course + progress.
+ */
 async function loadCapstoneContext(capstoneId) {
   const capstone = await CapstoneSubmission.findOne({
     _id: capstoneId,
     status: "APPROVED",
   });
 
-  if (!capstone) return null;
+  if (!capstone) {
+    return null;
+  }
 
   const [student, course] = await Promise.all([
     User.findById(capstone.studentId).lean(),
+
     Course.findById(capstone.courseId).lean(),
   ]);
 
-  if (!student || !course) return null;
+  if (!student || !course) {
+    return null;
+  }
 
   const progress = await CourseProgress.findOne({
     studentId: capstone.studentId,
@@ -102,44 +129,73 @@ async function loadCapstoneContext(capstoneId) {
     capstone,
     student,
     course,
+
     score: progress?.isQuizPassed ? progress.quizScore : null,
   };
 }
 
+/**
+ * GET /api/admin/certificates
+ */
 export async function getCertificates(req, res) {
   try {
     const { type } = req.query;
 
-    // Sync certificate / capstone / UI state (dedupe + orphan cleanup + flags).
+    /*
+     * Keep certificate/capstone state synchronized.
+     */
     await reconcileCertificateIssuedStates();
 
     const filter = {};
+
     if (type === "COURSE" || type === "course") {
       filter.certificateType = "COURSE_COMPLETION";
     }
 
     const certificates = await Certificate.find(filter)
-      .sort({ issueDate: -1, createdAt: -1 })
+      .sort({
+        issueDate: -1,
+        createdAt: -1,
+      })
       .populate("courseId", "title category")
       .populate("issuedBy", "name email")
       .lean();
 
-    res.status(200).json({ success: true, certificates });
+    return res.status(200).json({
+      success: true,
+      certificates,
+    });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    console.error("getCertificates error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
   }
 }
+
+/**
+ * POST /api/admin/certificates/preview
+ *
+ * Generates PDF in memory and directly sends it
+ * to the browser.
+ *
+ * No filesystem write.
+ */
 export async function previewCertificate(req, res) {
   try {
     const { capstoneSubmissionId } = req.body;
 
     if (!mongoose.isValidObjectId(capstoneSubmissionId)) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Invalid capstone submission id" });
+      return res.status(400).json({
+        success: false,
+        message: "Invalid capstone submission id",
+      });
     }
 
     const ctx = await loadCapstoneContext(capstoneSubmissionId);
+
     if (!ctx) {
       return res.status(404).json({
         success: false,
@@ -147,60 +203,85 @@ export async function previewCertificate(req, res) {
       });
     }
 
-    const { capstone, student, course, score } = ctx;
+    const { student, course, score } = ctx;
 
     const studentName = student.name || "Student";
+
     const courseTitle = course.title;
+
     const certificateCode = makeCertificateCode();
+
     const issueDate = formatDate(new Date());
 
     const preview = buildCertificatePreviewData({
       studentName,
       courseTitle,
+
       courseDescription: course.description || "",
+
       certificateCode,
       issueDate,
+
       score: score != null ? `${score}%` : "",
     });
 
+    /*
+     * Generate PDF directly into Buffer.
+     */
     const pdfBuffer = await generateCertificateFromTemplate({
       studentName,
       courseTitle,
       certificateCode,
       issueDate,
-      score: preview.score,
+
       companyName: CERT_ISSUER,
+
       verificationUrl: PLATFORM_BRAND.website,
+
+      score: preview.score,
     });
 
     res.setHeader("Content-Type", "application/pdf");
+
     res.setHeader(
       "Content-Disposition",
       `inline; filename="certificate-preview-${certificateCode}.pdf"`,
     );
+
     res.setHeader("Content-Length", pdfBuffer.length);
-    res.status(200).send(pdfBuffer);
+
+    return res.status(200).send(pdfBuffer);
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    console.error("previewCertificate error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
   }
 }
 
 /**
  * POST /api/admin/certificates/send
- * Body: { capstoneSubmissionId }
- * Generates the PDF, persists a Certificate and marks the capstone as issued.
+ *
+ * Generates certificate,
+ * uploads PDF to Cloudinary,
+ * stores Cloudinary URL in MongoDB,
+ * marks capstone as issued.
  */
 export async function sendCertificate(req, res) {
   try {
     const { capstoneSubmissionId } = req.body;
 
     if (!mongoose.isValidObjectId(capstoneSubmissionId)) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Invalid capstone submission id" });
+      return res.status(400).json({
+        success: false,
+        message: "Invalid capstone submission id",
+      });
     }
 
     const ctx = await loadCapstoneContext(capstoneSubmissionId);
+
     if (!ctx) {
       return res.status(404).json({
         success: false,
@@ -210,7 +291,9 @@ export async function sendCertificate(req, res) {
 
     const { capstone, student, course, score } = ctx;
 
-    // Prevent duplicate certificate issue for the same capstone.
+    /*
+     * Prevent duplicate certificates.
+     */
     if (capstone.certificateIssued) {
       return res.status(409).json({
         success: false,
@@ -219,8 +302,11 @@ export async function sendCertificate(req, res) {
     }
 
     const studentName = student.name || "Student";
+
     const courseTitle = course.title;
+
     const certificateCode = makeCertificateCode();
+
     const issueDate = formatDate(new Date());
 
     const verificationUrl = PLATFORM_BRAND.website;
@@ -228,77 +314,129 @@ export async function sendCertificate(req, res) {
     const preview = buildCertificatePreviewData({
       studentName,
       courseTitle,
+
       courseDescription: course.description || "",
+
       certificateCode,
       issueDate,
+
       score: score != null ? `${score}%` : "",
     });
 
-    // Generate the PDF from the official certificate template
-    // (certificate.png) with the dynamic data filled in.
+    // -----------------------------------------------------
+    // 1. Generate PDF in memory
+    // -----------------------------------------------------
+
     const pdfBuffer = await generateCertificateFromTemplate({
       studentName,
       courseTitle,
       certificateCode,
       issueDate,
+
       companyName: CERT_ISSUER,
+
       verificationUrl,
+
       score: preview.score,
     });
 
-    const uploadResult = await uploadPdfToCloudinary(pdfBuffer, certificateCode);
+    if (!pdfBuffer || !Buffer.isBuffer(pdfBuffer) || pdfBuffer.length === 0) {
+      throw new Error("Certificate PDF generation failed");
+    }
+
+    // -----------------------------------------------------
+    // 2. Upload PDF directly to Cloudinary
+    // -----------------------------------------------------
+
+    const uploadResult = await uploadPdfToCloudinary(
+      pdfBuffer,
+      certificateCode,
+    );
+
+    if (!uploadResult?.secure_url) {
+      throw new Error("Certificate PDF upload to Cloudinary failed");
+    }
+
     const pdfUrl = uploadResult.secure_url;
 
-    // Also persist a local copy so it can be served/viewed from
-    // /uploads/certificates/<certificateCode>.pdf without Cloudinary.
-    saveCertificatePdfLocally(pdfBuffer, certificateCode);
+    console.log(`[certificate] PDF uploaded successfully: ${pdfUrl}`);
 
-    // Create the certificate record.
+    // -----------------------------------------------------
+    // 3. Create certificate DB record
+    // -----------------------------------------------------
+
     const certificate = await Certificate.create({
       studentId: student._id,
+
       studentName,
+
       studentEmail: student.email || "",
 
       certificateType: "COURSE_COMPLETION",
+
       status: "SENT",
 
       issuerType: "ADMIN",
+
       issuedBy: req.user?._id || null,
 
       courseId: course._id,
+
       capstoneSubmissionId: capstone._id,
 
       title: `Certificate of Completion - ${courseTitle}`,
+
       websiteName: CERT_ISSUER,
+
       description: preview.courseDescription || "",
 
       metadata: {
         studentName,
+
         entityName: courseTitle,
+
         subtitle: "",
+
         companyName: CERT_ISSUER,
-        score: score,
+
+        score,
       },
 
+      /*
+       * IMPORTANT:
+       *
+       * This is now Cloudinary URL.
+       *
+       * There is NO local:
+       * /uploads/certificates/...
+       */
       pdfUrl,
+
       certificateCode,
+
       issueDate: new Date(),
     });
 
-    // update verified skills
+    // -----------------------------------------------------
+    // 4. Update verified skills
+    // -----------------------------------------------------
 
     const category = course.category?.trim();
 
     if (!category) {
-      console.log("Course category is empty");
+      console.log("[certificate] Course category is empty");
     } else {
       const updatedStudent = await StudentProfile.findOneAndUpdate(
-        { userId: student._id },
+        {
+          userId: student._id,
+        },
+
         {
           $addToSet: {
             verifiedSkills: category,
           },
         },
+
         {
           new: true,
           runValidators: true,
@@ -311,94 +449,202 @@ export async function sendCertificate(req, res) {
         throw new Error("Student not found while updating verified skills");
       }
     }
-    // +100 reputation points per issued certificate
+
+    // -----------------------------------------------------
+    // 5. Add reputation points
+    // -----------------------------------------------------
 
     const studentProfile = await createOrGetStudentProfile(student._id);
+
     studentProfile.reputationPoints += 100;
+
     await studentProfile.save();
 
-    // Mark capstone as issued.
+    // -----------------------------------------------------
+    // 6. Mark capstone as certificate issued
+    // -----------------------------------------------------
+
     capstone.certificateIssued = true;
+
     capstone.certificateIssuedAt = new Date();
+
     await capstone.save();
 
-    res.status(201).json({
+    // -----------------------------------------------------
+    // 7. Response
+    // -----------------------------------------------------
+
+    return res.status(201).json({
       success: true,
+
       message:
         "Certificate issued and sent successfully. 100 reputation points added to the student.",
+
       certificate,
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    console.error("sendCertificate error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
   }
 }
 
-// delete a certificate and its related data (cascade cleanup)
-export async function deleteCertificate(req, res) {
+/**
+ * GET /api/admin/certificates/:certificateId/pdf
+ *
+ * ?inline=1 -> browser preview
+ * otherwise -> download
+ */
+export async function viewCertificatePdf(req, res) {
   try {
     const { certificateId } = req.params;
 
     if (!mongoose.isValidObjectId(certificateId)) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Invalid certificate id" });
+      return res.status(400).json({
+        success: false,
+        message: "Invalid certificate id",
+      });
     }
 
     const certificate = await Certificate.findById(certificateId);
 
     if (!certificate) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Certificate not found" });
+      return res.status(404).json({
+        success: false,
+        message: "Certificate not found",
+      });
+    }
+
+    if (!certificate.pdfUrl) {
+      return res.status(404).json({
+        success: false,
+        message: "PDF has not been generated for this certificate",
+      });
+    }
+
+    const inline = req.query.inline === "1";
+
+    /*
+     * PDF is fetched from Cloudinary.
+     */
+    await streamCertificatePdf(req, res, certificate, inline);
+  } catch (error) {
+    console.error("viewCertificatePdf error:", error);
+
+    if (!res.headersSent) {
+      return res.status(500).json({
+        success: false,
+        message: error.message,
+      });
+    }
+
+    res.end();
+  }
+}
+
+/**
+ * DELETE /api/admin/certificates/:certificateId
+ *
+ * Deletes:
+ * 1. Cloudinary PDF
+ * 2. Certificate DB record
+ * 3. Resets capstone
+ * 4. Removes verified skill when appropriate
+ * 5. Rolls back reputation points
+ */
+export async function deleteCertificate(req, res) {
+  try {
+    const { certificateId } = req.params;
+
+    if (!mongoose.isValidObjectId(certificateId)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid certificate id",
+      });
+    }
+
+    const certificate = await Certificate.findById(certificateId);
+
+    if (!certificate) {
+      return res.status(404).json({
+        success: false,
+        message: "Certificate not found",
+      });
     }
 
     const capstoneId = certificate.capstoneSubmissionId;
 
-    // 1. remove the pdf file from Cloudinary
-    if (certificate.pdfUrl) {
-      try {
-        const match = certificate.pdfUrl.match(/\/raw\/upload\/[^/]+\/(.+)\.pdf$/);
-        if (match) {
-          await cloudinary.uploader.destroy(match[1], { resource_type: "raw" });
-        }
-      } catch (_) {}
-    }
+    // -----------------------------------------------------
+    // 1. Remove PDF from Cloudinary
+    // -----------------------------------------------------
 
-    // 1b. remove the local copy of the pdf (best effort)
     if (certificate.certificateCode) {
-      const localPdf = path.join(
-        CERT_STORAGE_DIR,
-        `${certificate.certificateCode}.pdf`,
-      );
       try {
-        if (fs.existsSync(localPdf)) fs.unlinkSync(localPdf);
-      } catch (_) {}
+        await cloudinary.uploader.destroy(
+          `certificates/${certificate.certificateCode}`,
+          {
+            resource_type: "raw",
+          },
+        );
+
+        console.log(
+          `[certificate] Deleted Cloudinary PDF: certificates/${certificate.certificateCode}`,
+        );
+      } catch (error) {
+        console.warn(
+          "[certificate] Cloudinary PDF deletion failed:",
+          error.message,
+        );
+      }
     }
 
-    // 2. reset the linked capstone so the admin can re-issue
+    // -----------------------------------------------------
+    // 2. Reset linked capstone
+    // -----------------------------------------------------
 
     if (capstoneId) {
       await CapstoneSubmission.updateOne(
-        { _id: capstoneId },
+        {
+          _id: capstoneId,
+        },
+
         {
           $set: {
             certificateIssued: false,
+
             certificateIssuedAt: null,
           },
         },
       );
     }
 
-    // 3. delete the certificate record
+    // -----------------------------------------------------
+    // 3. Delete certificate record
+    // -----------------------------------------------------
 
-    await Certificate.deleteOne({ _id: certificate._id });
+    await Certificate.deleteOne({
+      _id: certificate._id,
+    });
 
-    // 4. remove the verified skill if no other certificate remains for this student + course
+    // -----------------------------------------------------
+    // 4. Remove verified skill if no other
+    // certificate exists for this student/course
+    // -----------------------------------------------------
 
     if (certificate.studentId && certificate.courseId) {
       const remainingCertificates = await Certificate.countDocuments({
         studentId: certificate.studentId,
+
         courseId: certificate.courseId,
+
+        certificateType: "COURSE_COMPLETION",
+
+        status: {
+          $ne: "REVOKED",
+        },
       });
 
       if (remainingCertificates === 0) {
@@ -410,32 +656,50 @@ export async function deleteCertificate(req, res) {
 
         if (category) {
           await StudentProfile.updateOne(
-            { userId: certificate.studentId },
-            { $pull: { verifiedSkills: category } },
+            {
+              userId: certificate.studentId,
+            },
+
+            {
+              $pull: {
+                verifiedSkills: category,
+              },
+            },
           );
         }
       }
     }
 
-    // 5. rollback reputation points (-100)
+    // -----------------------------------------------------
+    // 5. Rollback reputation points
+    // -----------------------------------------------------
 
     if (certificate.studentId) {
       const studentProfile = await createOrGetStudentProfile(
         certificate.studentId,
       );
+
       studentProfile.reputationPoints = Math.max(
         0,
         studentProfile.reputationPoints - 100,
       );
+
       await studentProfile.save();
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
+
       message: "Certificate deleted successfully",
+
       certificateId: certificate._id,
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    console.error("deleteCertificate error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
   }
 }

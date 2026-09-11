@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
@@ -12,18 +12,14 @@ import { GradualSpacing } from "../../animation/Text";
 
 import styles from "./certificates.module.css";
 
-const API_ORIGIN = (
-  import.meta.env.VITE_API_URL || ""
-)
-  .replace(/\/$/, "")
-  .replace(/\/api$/, "");
-
 const Certificates = () => {
   const dispatch = useDispatch();
 
   const { certificates, loading, downloadingId, error } = useSelector(
     (state) => state.studentCertificate,
   );
+
+  const [viewingId, setViewingId] = useState(null);
 
   useEffect(() => {
     dispatch(fetchMyCertificates());
@@ -57,6 +53,32 @@ const Certificates = () => {
       URL.revokeObjectURL(url);
     } catch (err) {
       toast.error(err?.message || err || "Failed to download certificate");
+    }
+  };
+
+  // Fetch the PDF through the authenticated API (Bearer token attached),
+  // then open a blob URL in a new tab so it renders in the browser viewer.
+  const handleViewPdf = async (certificateId) => {
+    setViewingId(certificateId);
+    try {
+      const result = await dispatch(
+        downloadCertificatePdf(certificateId),
+      ).unwrap();
+
+      const blob = new Blob([result], { type: "application/pdf" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      setTimeout(() => URL.revokeObjectURL(url), 60000);
+    } catch (err) {
+      toast.error(err?.message || err || "Failed to open certificate");
+    } finally {
+      setViewingId(null);
     }
   };
 
@@ -159,8 +181,10 @@ const Certificates = () => {
               key={cert._id}
               cert={cert}
               index={idx}
-              loading={downloadingId === cert._id}
+              downloading={downloadingId === cert._id}
+              viewing={viewingId === cert._id}
               onDownload={() => handleDownload(cert._id)}
+              onView={() => handleViewPdf(cert._id)}
             />
           ))}
         </div>
@@ -192,7 +216,14 @@ const CertificateSkeleton = () => {
 };
 
 /* certificate card component */
-const CertificateCard = ({ cert, index, loading, onDownload }) => {
+const CertificateCard = ({
+  cert,
+  index,
+  downloading,
+  viewing,
+  onDownload,
+  onView,
+}) => {
   const entityName =
     cert.courseId?.title ||
     cert.projectId?.title ||
@@ -200,8 +231,6 @@ const CertificateCard = ({ cert, index, loading, onDownload }) => {
     "Course Completion";
 
   const subtitle = cert.metadata?.subtitle || "";
-
-  const viewPdfUrl = `${API_ORIGIN}/uploads/certificates/${cert.certificateCode}.pdf`;
 
   return (
     <article className={styles.certCard} style={{ "--card-index": index }}>
@@ -244,19 +273,19 @@ const CertificateCard = ({ cert, index, loading, onDownload }) => {
           type="button"
           className={`${styles.btn} ${styles.btnPrimary}`}
           onClick={onDownload}
-          disabled={loading}
+          disabled={downloading || viewing}
         >
-          {loading ? "Preparing PDF…" : "Download PDF"}
+          {downloading ? "Preparing PDF…" : "Download PDF"}
         </button>
 
-        <a
-          href={viewPdfUrl}
-          target="_blank"
-          rel="noopener noreferrer"
+        <button
+          type="button"
           className={`${styles.btn} ${styles.btnSecondary}`}
+          onClick={onView}
+          disabled={downloading || viewing}
         >
-          View Online
-        </a>
+          {viewing ? "Opening…" : "View Online"}
+        </button>
       </div>
     </article>
   );

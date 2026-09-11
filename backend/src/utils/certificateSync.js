@@ -3,33 +3,94 @@ import { CapstoneSubmission } from "../models/CapstoneSubmission.model.js";
 import cloudinary from "../config/cloudinary.js";
 
 /**
- * Remove a certificate PDF from Cloudinary (best effort).
+ * Remove certificate PDF from Cloudinary.
+ *
+ * Certificates are stored only on Cloudinary.
+ * No local filesystem cleanup is required because
+ * Vercel has a read-only filesystem.
  */
-export async function removePdfFile(pdfUrl = "") {
+export async function removePdfFile(pdfUrl = "", certificateCode = "") {
   try {
-    if (!pdfUrl) return;
+    if (!pdfUrl && !certificateCode) return;
 
-    const match = pdfUrl.match(/\/raw\/upload\/[^/]+\/(.+)\.pdf$/);
-    if (match) {
-      await cloudinary.uploader.destroy(match[1], { resource_type: "raw" });
+    let publicId = "";
+
+    /*
+     * Preferred method:
+     * certificateCode is the Cloudinary public_id.
+     */
+    if (certificateCode) {
+      publicId = `certificates/${certificateCode}`;
+    } else {
+      /*
+       * Fallback:
+       * Extract public_id from Cloudinary raw PDF URL.
+       *
+       * Example:
+       * /raw/upload/v123456/certificates/SBF-2026-XXXX.pdf
+       */
+      const match = pdfUrl.match(
+        /\/raw\/upload\/(?:v\d+\/)?(.+)\.pdf(?:\?.*)?$/,
+      );
+
+      if (match) {
+        publicId = match[1];
+      }
     }
+
+    if (!publicId) {
+      console.warn(
+        "[certificate] Could not determine Cloudinary public_id for PDF removal.",
+      );
+      return;
+    }
+
+    await cloudinary.uploader.destroy(publicId, {
+      resource_type: "raw",
+    });
+
+    console.log(`[certificate] Cloudinary PDF removed: ${publicId}`);
   } catch (error) {
-    console.error("Failed to remove certificate PDF:", error.message);
+    /*
+     * Best effort cleanup.
+     *
+     * Certificate database cleanup should not fail only because
+     * Cloudinary deletion failed.
+     */
+    console.error(
+      "[certificate] Failed to remove certificate PDF from Cloudinary:",
+      error.message,
+    );
   }
 }
 
+/**
+ * Reconcile certificate and capstone issued states.
+ *
+ * Responsibilities:
+ * 1. Remove orphan certificates.
+ * 2. Remove duplicate certificates for the same capstone.
+ * 3. Correct certificateIssued flags.
+ */
 export async function reconcileCertificateIssuedStates() {
   const [certificates, capstones] = await Promise.all([
-    Certificate.find({ certificateType: "COURSE_COMPLETION" })
-      .select("capstoneSubmissionId pdfUrl createdAt")
+    Certificate.find({
+      certificateType: "COURSE_COMPLETION",
+    })
+      .select("_id capstoneSubmissionId pdfUrl certificateCode createdAt")
       .lean(),
 
-    CapstoneSubmission.find({ status: "APPROVED" })
+    CapstoneSubmission.find({
+      status: "APPROVED",
+    })
       .select("_id certificateIssued certificateIssuedAt")
       .lean(),
   ]);
 
-  // Group certificates by their capstone submission id.
+  // --------------------------------------------------------
+  // Group certificates by capstone submission
+  // --------------------------------------------------------
+
   const certsByCapstone = new Map();
 
   for (const cert of certificates) {
@@ -39,12 +100,16 @@ export async function reconcileCertificateIssuedStates() {
 
     if (!key) continue;
 
-    if (!certsByCapstone.has(key)) certsByCapstone.set(key, []);
+    if (!certsByCapstone.has(key)) {
+      certsByCapstone.set(key, []);
+    }
 
     certsByCapstone.get(key).push(cert);
   }
 
-  const capstoneIdSet = new Set(capstones.map((cap) => String(cap._id)));
+  const capstoneIdSet = new Set(
+    capstones.map((capstone) => String(capstone._id)),
+  );
 
   // --------------------------------------------------------
   // 1. Remove orphan certificates
@@ -57,8 +122,11 @@ export async function reconcileCertificateIssuedStates() {
   );
 
   for (const cert of orphanCerts) {
-    await removePdfFile(cert.pdfUrl);
-    await Certificate.deleteOne({ _id: cert._id });
+    await removePdfFile(cert.pdfUrl, cert.certificateCode);
+
+    await Certificate.deleteOne({
+      _id: cert._id,
+    });
   }
 
   // --------------------------------------------------------
@@ -68,20 +136,22 @@ export async function reconcileCertificateIssuedStates() {
   for (const certs of certsByCapstone.values()) {
     if (certs.length <= 1) continue;
 
-    certs.sort(
-      (a, b) => new Date(a.createdAt) - new Date(b.createdAt),
-    );
+    certs.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
 
+    // Keep the oldest certificate.
     const duplicates = certs.slice(1);
 
-    for (const dup of duplicates) {
-      await removePdfFile(dup.pdfUrl);
-      await Certificate.deleteOne({ _id: dup._id });
+    for (const duplicate of duplicates) {
+      await removePdfFile(duplicate.pdfUrl, duplicate.certificateCode);
+
+      await Certificate.deleteOne({
+        _id: duplicate._id,
+      });
     }
   }
 
   // --------------------------------------------------------
-  // 3. Fix capstone issuance flags
+  // 3. Fix capstone certificateIssued flags
   // --------------------------------------------------------
 
   const updates = [];
@@ -92,12 +162,16 @@ export async function reconcileCertificateIssuedStates() {
     if (capstone.certificateIssued !== hasCertificate) {
       updates.push({
         updateOne: {
-          filter: { _id: capstone._id },
+          filter: {
+            _id: capstone._id,
+          },
+
           update: {
             $set: {
               certificateIssued: hasCertificate,
+
               certificateIssuedAt: hasCertificate
-                ? (capstone.certificateIssuedAt || new Date())
+                ? capstone.certificateIssuedAt || new Date()
                 : null,
             },
           },
@@ -106,7 +180,7 @@ export async function reconcileCertificateIssuedStates() {
     }
   }
 
-  if (updates.length) {
+  if (updates.length > 0) {
     await CapstoneSubmission.bulkWrite(updates);
   }
 }
