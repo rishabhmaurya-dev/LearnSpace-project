@@ -1,3 +1,7 @@
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+
 import mongoose from "mongoose";
 
 import { Certificate } from "../../models/Certificate.model.js";
@@ -17,6 +21,20 @@ import { createOrGetStudentProfile } from "../studentController.js";
 
 import { reconcileCertificateIssuedStates } from "../../utils/certificateSync.js";
 import cloudinary from "../../config/cloudinary.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Local folder used to persist generated certificate PDFs so they can be
+// served statically via /uploads/certificates/<code>.pdf.
+const CERT_STORAGE_DIR = path.resolve(__dirname, "../../../uploads/certificates");
+
+function saveCertificatePdfLocally(pdfBuffer, certificateCode) {
+  fs.mkdirSync(CERT_STORAGE_DIR, { recursive: true });
+  const filePath = path.join(CERT_STORAGE_DIR, `${certificateCode}.pdf`);
+  fs.writeFileSync(filePath, pdfBuffer);
+  return filePath;
+}
 
 /**
  * Generate a unique, human-friendly certificate code.
@@ -231,6 +249,10 @@ export async function sendCertificate(req, res) {
     const uploadResult = await uploadPdfToCloudinary(pdfBuffer, certificateCode);
     const pdfUrl = uploadResult.secure_url;
 
+    // Also persist a local copy so it can be served/viewed from
+    // /uploads/certificates/<certificateCode>.pdf without Cloudinary.
+    saveCertificatePdfLocally(pdfBuffer, certificateCode);
+
     // Create the certificate record.
     const certificate = await Certificate.create({
       studentId: student._id,
@@ -339,6 +361,17 @@ export async function deleteCertificate(req, res) {
         if (match) {
           await cloudinary.uploader.destroy(match[1], { resource_type: "raw" });
         }
+      } catch (_) {}
+    }
+
+    // 1b. remove the local copy of the pdf (best effort)
+    if (certificate.certificateCode) {
+      const localPdf = path.join(
+        CERT_STORAGE_DIR,
+        `${certificate.certificateCode}.pdf`,
+      );
+      try {
+        if (fs.existsSync(localPdf)) fs.unlinkSync(localPdf);
       } catch (_) {}
     }
 
