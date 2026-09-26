@@ -81,13 +81,15 @@ const Register = () => {
 
   return (
     <ScrollReveal>
-      <div className={styles.page}>
+      <main className={styles.page}>
         <div className={styles.content}>
           {/* BRAND */}
           <div className={styles.brand}>
             <img
-              src="/logo.jpg"
+              src="/logo-128.jpg"
               alt="LearnSpace"
+              width="40"
+              height="40"
               className={styles.brandIcon}
             />
 
@@ -212,7 +214,7 @@ const Register = () => {
             Learn skills. Build projects. Shape your future.
           </p>
         </div>
-      </div>
+      </main>
     </ScrollReveal>
   );
 };

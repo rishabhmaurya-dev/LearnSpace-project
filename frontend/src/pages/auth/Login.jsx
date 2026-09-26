@@ -73,12 +73,14 @@ const Login = () => {
 
   return (
     <ScrollReveal>
-      <div className={styles.page}>
+      <main className={styles.page}>
         <div className={styles.content}>
           <div className={styles.brand}>
             <img
-              src="/logo.jpg"
+              src="/logo-128.jpg"
               alt="LearnSpace"
+              width="40"
+              height="40"
               className={styles.brandIcon}
             />
 
@@ -177,7 +179,7 @@ const Login = () => {
             Learn skills. Build projects. Grow your career.
           </p>
         </div>
-      </div>
+      </main>
     </ScrollReveal>
   );
 };

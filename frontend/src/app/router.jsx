@@ -1,67 +1,97 @@
+/* eslint-disable react-refresh/only-export-components -- route table exports a
+   router object plus lazy() page references, which the fast-refresh rule cannot
+   classify; this file is not a component module. */
+import { lazy, Suspense } from "react";
 import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import ProtectedRoute from "../components/guards/ProtectedRoute";
 import RoleRoute from "../components/guards/RoleRoute";
 import RootRedirect from "../components/guards/RootRedirect";
+import Loader from "../components/ui/Loader";
 
-import AIChat from "../pages/AI/AiChat";
-import Login from "../pages/auth/Login";
-import Register from "../pages/auth/Register";
-import ForgotPassword from "../pages/auth/ForgotPassword";
-import ResetPassword from "../pages/auth/ResetPassword";
+const AIChat = lazy(() => import("../pages/AI/AiChat"));
+const Login = lazy(() => import("../pages/auth/Login"));
+const Register = lazy(() => import("../pages/auth/Register"));
+const ForgotPassword = lazy(() => import("../pages/auth/ForgotPassword"));
+const ResetPassword = lazy(() => import("../pages/auth/ResetPassword"));
 
-import AdminLayout from "../layouts/AdminLayout/AdminLayout";
+const AdminLayout = lazy(() => import("../layouts/AdminLayout/AdminLayout"));
 
-import NotFound from "../pages/errors/NotFound";
-import Unauthorized from "../pages/errors/Unauthorized";
+const NotFound = lazy(() => import("../pages/errors/NotFound"));
+const Unauthorized = lazy(() => import("../pages/errors/Unauthorized"));
 
-import AdminDashboard from "../pages/admin/dashboard/AdminDashboard";
-import StudentList from "../pages/admin/students/StudentList";
-import StudentDetails from "../pages/admin/students/StudentDetails";
-import StudentLeaderboard from "../pages/admin/students/StudentLeaderboard";
-import CapstoneReview from "../pages/admin/capstones/CapstoneReview";
-import AdminCertificates from "../pages/admin/certificates/Certificates";
-import CourseList from "../pages/admin/courses/CourseList";
-import CourseDetails from "../pages/admin/courses/CourseDetails";
-import CreateCourse from "../pages/admin/courses/CreateCourse";
-import EditCourse from "../pages/admin/courses/EditCourse";
+const AdminDashboard = lazy(
+  () => import("../pages/admin/dashboard/AdminDashboard"),
+);
+const StudentList = lazy(() => import("../pages/admin/students/StudentList"));
+const StudentDetails = lazy(
+  () => import("../pages/admin/students/StudentDetails"),
+);
+const StudentLeaderboard = lazy(
+  () => import("../pages/admin/students/StudentLeaderboard"),
+);
+const CapstoneReview = lazy(
+  () => import("../pages/admin/capstones/CapstoneReview"),
+);
+const AdminCertificates = lazy(
+  () => import("../pages/admin/certificates/Certificates"),
+);
+const CourseList = lazy(() => import("../pages/admin/courses/CourseList"));
+const CourseDetails = lazy(
+  () => import("../pages/admin/courses/CourseDetails"),
+);
+const CreateCourse = lazy(() => import("../pages/admin/courses/CreateCourse"));
+const EditCourse = lazy(() => import("../pages/admin/courses/EditCourse"));
 
 // Student layout + pages
-import StudentLayout from "../layouts/StudentLayout/StudentLayout";
-import StudentDashboard from "../pages/student/StudentDashboard";
-import MyCourses from "../pages/student/MyCourses";
-import CourseCatalog from "../pages/student/CourseCatalog";
-import CourseLearn from "../pages/student/CourseLearn";
-import LessonLearn from "../pages/student/LessonLearn";
-import MyProfile from "../pages/student/MyProfile";
-import StudentCertificates from "../pages/student/Certificates";
-import FinalAssessment from "../pages/student/FinalAssessment";
+const StudentLayout = lazy(
+  () => import("../layouts/StudentLayout/StudentLayout"),
+);
+const StudentDashboard = lazy(
+  () => import("../pages/student/StudentDashboard"),
+);
+const MyCourses = lazy(() => import("../pages/student/MyCourses"));
+const CourseCatalog = lazy(() => import("../pages/student/CourseCatalog"));
+const CourseLearn = lazy(() => import("../pages/student/CourseLearn"));
+const LessonLearn = lazy(() => import("../pages/student/LessonLearn"));
+const MyProfile = lazy(() => import("../pages/student/MyProfile"));
+const StudentCertificates = lazy(
+  () => import("../pages/student/Certificates"),
+);
+const FinalAssessment = lazy(
+  () => import("../pages/student/FinalAssessment"),
+);
+
+const withSuspense = (element) => (
+  <Suspense fallback={<Loader />}>{element}</Suspense>
+);
+
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <RootRedirect />,
+    element: withSuspense(<RootRedirect />),
   },
 
   // public
 
   {
     path: "/login",
-    element: <Login />,
+    element: withSuspense(<Login />),
   },
 
   {
     path: "/register",
-    element: <Register />,
+    element: withSuspense(<Register />),
   },
 
   {
     path: "/forgot-password",
-    element: <ForgotPassword />,
+    element: withSuspense(<ForgotPassword />),
   },
 
   {
     path: "/reset-password/:token",
-    element: <ResetPassword />,
+    element: withSuspense(<ResetPassword />),
   },
 
   // protected
@@ -78,7 +108,7 @@ export const router = createBrowserRouter([
         children: [
           {
             path: "/admin",
-            element: <AdminLayout />,
+            element: withSuspense(<AdminLayout />),
 
             children: [
               {
@@ -88,56 +118,56 @@ export const router = createBrowserRouter([
 
               {
                 path: "dashboard",
-                element: <AdminDashboard />,
+                element: withSuspense(<AdminDashboard />),
               },
 
               // students
               {
                 path: "students",
-                element: <StudentList />,
+                element: withSuspense(<StudentList />),
               },
 
               {
                 path: "students/leaderboard",
-                element: <StudentLeaderboard />,
+                element: withSuspense(<StudentLeaderboard />),
               },
 
               {
                 path: "students/:studentId",
-                element: <StudentDetails />,
+                element: withSuspense(<StudentDetails />),
               },
 
               // courses
               {
                 path: "courses",
-                element: <CourseList />,
+                element: withSuspense(<CourseList />),
               },
 
               {
                 path: "courses/new",
-                element: <CreateCourse />,
+                element: withSuspense(<CreateCourse />),
               },
 
               {
                 path: "courses/:courseId/edit",
-                element: <EditCourse />,
+                element: withSuspense(<EditCourse />),
               },
 
               {
                 path: "courses/:courseId",
-                element: <CourseDetails />,
+                element: withSuspense(<CourseDetails />),
               },
 
               // capstones
               {
                 path: "capstones",
-                element: <CapstoneReview />,
+                element: withSuspense(<CapstoneReview />),
               },
 
               // certificates
               {
                 path: "certificates",
-                element: <AdminCertificates />,
+                element: withSuspense(<AdminCertificates />),
               },
             ],
           },
@@ -153,12 +183,12 @@ export const router = createBrowserRouter([
           // AI Chat — student-only
           {
             path: "/ai",
-            element: <AIChat />,
+            element: withSuspense(<AIChat />),
           },
 
           {
             path: "/student",
-            element: <StudentLayout />,
+            element: withSuspense(<StudentLayout />),
 
             children: [
               {
@@ -168,41 +198,41 @@ export const router = createBrowserRouter([
 
               {
                 path: "dashboard",
-                element: <StudentDashboard />,
+                element: withSuspense(<StudentDashboard />),
               },
 
               {
                 path: "courses",
-                element: <MyCourses />,
+                element: withSuspense(<MyCourses />),
               },
 
               {
                 path: "catalog",
-                element: <CourseCatalog />,
+                element: withSuspense(<CourseCatalog />),
               },
 
               {
                 path: "courses/:courseId/learn",
-                element: <CourseLearn />,
+                element: withSuspense(<CourseLearn />),
               },
 
               {
                 path: "courses/:courseId/learn/:lessonId",
-                element: <LessonLearn />,
+                element: withSuspense(<LessonLearn />),
               },
               {
                 path: "courses/:courseId/final",
-                element: <FinalAssessment />,
+                element: withSuspense(<FinalAssessment />),
               },
 
               {
                 path: "certificates",
-                element: <StudentCertificates />,
+                element: withSuspense(<StudentCertificates />),
               },
 
               {
                 path: "profile",
-                element: <MyProfile />,
+                element: withSuspense(<MyProfile />),
               },
             ],
           },
@@ -215,11 +245,11 @@ export const router = createBrowserRouter([
 
   {
     path: "/unauthorized",
-    element: <Unauthorized />,
+    element: withSuspense(<Unauthorized />),
   },
 
   {
     path: "*",
-    element: <NotFound />,
+    element: withSuspense(<NotFound />),
   },
 ]);

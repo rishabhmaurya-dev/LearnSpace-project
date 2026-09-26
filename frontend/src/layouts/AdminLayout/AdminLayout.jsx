@@ -22,7 +22,7 @@ const AdminLayout = () => {
       <AdminSidebar isOpen={isOpen} onClose={closeSidebar} />
 
       <div className={styles.main}>
-        <AdminHeader onToggleSidebar={toggleSidebar} />
+        <AdminHeader onToggleSidebar={toggleSidebar} isOpen={isOpen} />
 
         <main className={styles.content}>
           <div key={location.pathname} className={styles.pageTransition}>

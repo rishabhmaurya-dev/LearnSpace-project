@@ -1,15 +1,13 @@
-/* 1. fixed mobile toggle trigger (hamburger) */
-.hamburgerBtn {
-  display: none;
-}
+/* ---------- mobile backdrop ---------- */
 
-/* 2. mobile backdrop overlay */
 .overlay {
   position: fixed;
   inset: 0;
-  background: var(--student-overlay);
   z-index: 9998;
-  backdrop-filter: var(--glass-blur-sm);
+  background: var(--student-overlay);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  animation: overlayFade 160ms ease;
 }
 
 @media (min-width: 1024px) {
@@ -18,29 +16,37 @@
   }
 }
 
-/* 3. sidebar structure */
+@keyframes overlayFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ---------- shell ---------- */
+
 .sidebar {
   position: fixed;
   top: 0;
   bottom: 0;
   left: 0;
-  width: 260px;
-  background: var(--student-sidebar-bg);
-  border-right: 1px solid var(--student-panel-border);
+  z-index: 9999;
   display: flex;
   flex-direction: column;
-  padding: 24px 0;
+  width: 256px;
+  padding: 0;
   box-sizing: border-box;
-  z-index: 9999;
+  background: var(--bg-card);
+  border-right: 1px solid var(--border);
   transform: translateX(-100%);
-  box-shadow: var(--student-panel-shadow);
-  transition:
-    transform var(--transition-normal),
-    box-shadow var(--transition-normal);
+  transition: transform 220ms cubic-bezier(0.32, 0.72, 0, 1);
 }
 
 .sidebar.open {
   transform: translateX(0);
+  box-shadow: 0 0 0 1px var(--border), 18px 0 44px rgba(23, 34, 28, 0.12);
 }
 
 @media (min-width: 1024px) {
@@ -51,70 +57,74 @@
     min-height: 100vh;
     flex-shrink: 0;
     transform: translateX(0);
-    z-index: 50;
+    box-shadow: none;
   }
 }
 
-/* 4. brand logo header */
-.logo {
+/* ---------- brand ---------- */
+
+.brand {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20px 10px;
-  border-bottom: 1px solid var(--student-panel-border);
-  margin-bottom: 16px;
+  gap: 10px;
+  height: 64px;
+  flex-shrink: 0;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--border);
 }
 
-.logoBrand {
+.brandLink {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   min-width: 0;
   text-decoration: none;
 }
 
-.logoMark {
-  width: 36px;
-  height: 36px;
-  object-fit: contain;
+.brandMark {
+  width: 30px;
+  height: 30px;
   flex-shrink: 0;
-  border-radius: 6px;
+  object-fit: contain;
+  border-radius: 7px;
 }
 
-.logoText {
-  font-family: var(--font-display);
-  font-size: 17px;
+.brandText {
+  font-family: var(--font-heading);
+  font-size: 16.5px;
   font-weight: 700;
+  letter-spacing: -0.025em;
   color: var(--foreground);
-  letter-spacing: 0.01em;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+}
+
+.brandText span {
+  color: var(--primary);
 }
 
 .closeBtn {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  background: transparent;
-  border: 1px solid var(--border-subtle);
-  color: var(--muted-foreground);
-  font-size: 14px;
-  font-weight: 700;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--bg-card);
+  color: var(--text-muted);
   cursor: pointer;
-  transition: all 150ms cubic-bezier(0.25, 0, 0, 1);
+  transition:
+    background-color 140ms ease,
+    color 140ms ease,
+    border-color 140ms ease;
 }
 
 .closeBtn:hover {
-  color: var(--danger);
-  border-color: var(--danger);
-  background: var(--danger-soft);
-}
-
-.closeBtn:active {
-  transform: translateY(1px);
+  background: var(--bg-secondary);
+  border-color: var(--border-strong);
+  color: var(--foreground);
 }
 
 @media (min-width: 1024px) {
@@ -123,144 +133,264 @@
   }
 }
 
-/* 5. navigation list & section headers */
-.sectionTitle {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  font-weight: 600;
-  color: var(--muted-foreground);
-  letter-spacing: 0.15em;
-  padding: 0 20px 10px;
-  text-transform: uppercase;
-}
+/* ---------- navigation ---------- */
 
 .nav {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
-  overflow-x: hidden;
-  padding: 0 12px;
+  overscroll-behavior: contain;
+  padding: 18px 12px 20px;
 }
 
 .nav::-webkit-scrollbar {
   width: 0;
 }
 
+.group + .group {
+  margin-top: 20px;
+}
+
+.groupLabel {
+  display: block;
+  padding: 0 10px;
+  margin-bottom: 7px;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text-disabled);
+}
+
+.groupItems {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
 .navItem {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 10px 12px;
-  font-family: var(--font-mono);
-  font-size: 12px;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 7px;
+  font-size: 13.5px;
   font-weight: 500;
-  letter-spacing: 0.05em;
-  color: var(--muted-foreground);
+  color: var(--text-secondary);
   text-decoration: none;
-  border: 1px solid transparent;
-  background: transparent;
   transition:
-    transform var(--transition-fast),
-    border-color var(--transition-fast),
-    color var(--transition-fast),
-    background-color var(--transition-fast);
-  box-sizing: border-box;
-  position: relative;
+    background-color 140ms ease,
+    color 140ms ease;
 }
 
 .navItem:hover {
+  background: var(--bg-secondary);
   color: var(--foreground);
-  background: var(--student-surface-hover);
-  border-color: var(--border);
-  transform: translateX(2px);
 }
 
-.icon {
-  width: 24px;
+.navIcon {
   flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  color: var(--text-muted);
+  transition: color 140ms ease;
 }
 
-/* Active State */
+.navItem:hover .navIcon {
+  color: var(--text-secondary);
+}
+
 .navItem.active {
-  color: var(--student-item-active-text);
-  background: var(--student-item-active-bg);
-  border-color: var(--student-item-active-border);
+  background: var(--primary-soft);
+  color: var(--primary-dark);
   font-weight: 600;
 }
 
-.navItem.active::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: var(--student-item-active-text);
+.navItem.active .navIcon {
+  color: var(--primary);
 }
 
-/* 6. footer & logout action */
-.bottom {
-  margin-top: auto;
-  padding-top: 16px;
-  border-top: 1px solid var(--student-panel-border);
-  padding-left: 12px;
-  padding-right: 12px;
+/* ---------- account footer ---------- */
+
+.footer {
+  position: relative;
+  flex-shrink: 0;
+  padding: 10px 12px;
+  border-top: 1px solid var(--border);
+  background: var(--bg-card);
 }
 
-.logout {
+.userBtn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   width: 100%;
-  height: 40px;
+  padding: 7px 8px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  transition:
+    background-color 140ms ease,
+    border-color 140ms ease;
+}
+
+.userBtn:hover {
+  background: var(--bg-secondary);
+  border-color: var(--border);
+}
+
+.userAvatar,
+.userAvatarImg {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: 50%;
+}
+
+.userAvatar {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  background: var(--primary-soft);
+  border: 1px solid var(--primary-border);
+  color: var(--primary-dark);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.userAvatarImg {
+  object-fit: cover;
+  display: block;
+}
+
+.userMeta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+  gap: 1px;
+}
+
+.userMeta strong {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--foreground);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.userMeta small {
+  font-size: 11.5px;
+  line-height: 1.3;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.userChevron {
+  flex-shrink: 0;
+  color: var(--text-disabled);
+  transition: transform 180ms ease;
+}
+
+.userChevron.flip {
+  transform: rotate(180deg);
+}
+
+.userMenu {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 12px;
+  right: 12px;
+  z-index: 10;
+  padding: 5px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  box-shadow: 0 12px 30px rgba(23, 34, 28, 0.13);
+  animation: menuRise 140ms ease;
+}
+
+@keyframes menuRise {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 8px 9px;
+  border: none;
+  border-radius: 6px;
   background: transparent;
-  color: var(--muted-foreground);
-  border: 1px solid var(--border-subtle);
-  font-family: var(--font-mono);
-  font-size: 12px;
+  font-family: inherit;
+  font-size: 13px;
   font-weight: 500;
-  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  text-decoration: none;
+  text-align: left;
   cursor: pointer;
-  box-shadow: var(--shadow-convex-xs);
   transition:
-    transform var(--transition-fast),
-    box-shadow var(--transition-fast),
-    border-color var(--transition-fast),
-    color var(--transition-fast),
-    background-color var(--transition-fast);
+    background-color 130ms ease,
+    color 130ms ease;
 }
 
-.logout:hover {
-  background: var(--danger-soft);
-  border-color: var(--danger);
+.menuItem:hover {
+  background: var(--bg-secondary);
+  color: var(--foreground);
+}
+
+.menuItem svg {
+  color: var(--text-muted);
+}
+
+.menuDanger {
+  color: var(--danger-ink);
+}
+
+.menuDanger svg {
   color: var(--danger);
-  box-shadow: var(--shadow-pink);
 }
 
-.logout:active {
-  transform: translateY(1px);
+.menuDanger:hover {
+  background: var(--danger-soft);
+  color: var(--danger-ink);
 }
 
-/* 7. focus accessibility */
+/* ---------- focus + motion ---------- */
+
 .navItem:focus-visible,
-.logout:focus-visible,
+.userBtn:focus-visible,
+.menuItem:focus-visible,
 .closeBtn:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
+  outline: 2px solid var(--primary);
+  outline-offset: 1px;
+  border-radius: 7px;
 }
 
-/* 8. reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .sidebar,
   .navItem,
-  .logout,
-  .closeBtn {
+  .userBtn,
+  .userChevron,
+  .menuItem,
+  .closeBtn,
+  .overlay,
+  .userMenu {
     transition: none !important;
+    animation: none !important;
   }
 }

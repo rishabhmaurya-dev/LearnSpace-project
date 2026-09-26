@@ -59,9 +59,15 @@ const StatisticsChart = () => {
     };
   }, []);
 
-  const studentsSeries = growth?.students || [];
-  const coursesSeries = growth?.courses || [];
-  const certificatesSeries = growth?.certificates || [];
+  const { studentsSeries, coursesSeries, certificatesSeries } = useMemo(() => {
+    const source = growth || {};
+
+    return {
+      studentsSeries: source.students || [],
+      coursesSeries: source.courses || [],
+      certificatesSeries: source.certificates || [],
+    };
+  }, [growth]);
 
   const labels = studentsSeries.map((point) => point.label);
 

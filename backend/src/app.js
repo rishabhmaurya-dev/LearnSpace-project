@@ -2,6 +2,7 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import authRoutes from "./routes/auth.routes.js";
 import studentRoutes from "./routes/student.routes.js";
+import publicRoutes from "./routes/public.routes.js";
 
 import fs from "fs";
 
@@ -73,6 +74,9 @@ app.get("/api/files/download", (req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
+
+// public / unauthenticated (landing page course catalogue)
+app.use("/api/public", publicRoutes);
 
 app.use("/api/ai", aiRoutes);
 

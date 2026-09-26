@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="LearnSpace">
+  <rect width="64" height="64" rx="14" fill="#237a4b" />
+  <path
+    d="M18 20.5c0-1.4 1.1-2.5 2.5-2.5H32v28H20.5A2.5 2.5 0 0 1 18 43.5v-23Z"
+    fill="#ffffff"
+    opacity="0.95"
+  />
+  <path
+    d="M46 20.5c0-1.4-1.1-2.5-2.5-2.5H32v28h11.5a2.5 2.5 0 0 0 2.5-2.5v-23Z"
+    fill="#bbebce"
+  />
+</svg>

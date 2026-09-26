@@ -1,19 +1,8 @@
 .layout {
   display: flex;
   height: 100vh;
-  width: 100vw;
-  background:
-    radial-gradient(
-      circle at top left,
-      rgba(35, 122, 75, 0.12),
-      transparent 22%
-    ),
-    radial-gradient(
-      circle at top right,
-      rgba(92, 184, 130, 0.1),
-      transparent 18%
-    ),
-    linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+  width: 100%;
+  background: var(--bg-primary);
   color: var(--foreground);
   overflow: hidden;
   position: relative;
@@ -44,52 +33,40 @@
 }
 
 .content::-webkit-scrollbar-track {
-  background: var(--background);
+  background: transparent;
 }
 
 .content::-webkit-scrollbar-thumb {
-  background: var(--border);
+  background: var(--border-strong);
+  border-radius: 999px;
 }
 
 .content::-webkit-scrollbar-thumb:hover {
-  background: var(--accent);
+  background: var(--text-disabled);
 }
 
 .main::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: radial-gradient(
-    circle at top,
-    rgba(255, 255, 255, 0.28),
-    transparent 35%
-  );
-  opacity: 0.65;
+  display: none;
 }
 
 @keyframes layoutFadeIn {
   from {
     opacity: 0;
-    transform: translateY(4px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
   }
 }
 
 .pageTransition {
-  animation: pageSlideUp 0.5s cubic-bezier(0.25, 0, 0, 1);
+  animation: pageFadeIn 220ms cubic-bezier(0.25, 0, 0, 1);
 }
 
-@keyframes pageSlideUp {
+@keyframes pageFadeIn {
   from {
     opacity: 0;
-    transform: translateY(20px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
   }
 }

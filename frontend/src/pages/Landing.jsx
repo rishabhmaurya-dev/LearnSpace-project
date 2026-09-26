@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import "./Landing.css";
 import ScrollReveal from "../animation/Scroll";
 
 import { useNavigate } from "react-router-dom";
+
+import { fetchPublicCourses } from "../features/public/publicThunks";
 
 // platform modules
 const MODULES = [
@@ -47,6 +50,48 @@ const MODULES = [
     desc: "Complete a course and earn a QR-verified PDF certificate you can share and verify anywhere.",
   },
 ];
+
+// course card visual tones (cycled across real API results)
+const COURSE_TONES = [
+  "green",
+  "teal",
+  "cyan",
+  "violet",
+  "rose",
+  "amber",
+];
+
+const COURSE_GLYPHS = ["📘", "🟩", "🍃", "🧩", "🚀", "🐙"];
+
+const NEW_COURSE_WINDOW_DAYS = 21;
+
+const isNewCourse = (publishedAt) => {
+  if (!publishedAt) return false;
+
+  const ageDays =
+    (Date.now() - new Date(publishedAt).getTime()) / (1000 * 60 * 60 * 24);
+
+  return ageDays <= NEW_COURSE_WINDOW_DAYS;
+};
+
+const formatCount = (value) => {
+  const num = Number(value) || 0;
+
+  if (num >= 1000000) return `${(num / 1000000).toFixed(1).replace(/\.0$/, "")}M`;
+  if (num >= 1000) return `${(num / 1000).toFixed(1).replace(/\.0$/, "")}k`;
+
+  return String(num);
+};
+
+const formatPublishedOn = (publishedAt) => {
+  if (!publishedAt) return null;
+
+  return new Date(publishedAt).toLocaleDateString("en-IN", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+};
 
 // learner journey
 const FLOW = [
@@ -131,7 +176,7 @@ const MockLearner = () => (
   <div className="lm-shell">
     <aside className="lm-side">
       <div className="lm-side-logo">
-        <img src="/logo.jpg" alt="LearnSpace" />
+        <img src="/logo-128.jpg" alt="LearnSpace" />
         LearnSpace
       </div>
       {[
@@ -367,8 +412,31 @@ const MockAi = () => (
 const Landing = () => {
   const [openFaq, setOpenFaq] = useState(0);
   const [tourTab, setTourTab] = useState("learner");
+  const [courseCategory, setCourseCategory] = useState("ALL");
 
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const {
+    courses = [],
+    categories = [],
+    total = 0,
+    loading: coursesLoading,
+    error: coursesError,
+  } = useSelector((state) => state.public);
+
+  useEffect(() => {
+    dispatch(
+      fetchPublicCourses(
+        courseCategory === "ALL" ? {} : { category: courseCategory },
+      ),
+    );
+  }, [dispatch, courseCategory]);
+
+  const courseCategoryPills = useMemo(
+    () => [{ name: "All", count: total }, ...categories],
+    [categories, total],
+  );
 
   return (
     <div className="ls-landing">
@@ -377,8 +445,10 @@ const Landing = () => {
         <div className="ls-container ls-nav-wrapper">
           <a href="#home" className="ls-logo">
             <img
-              src="/logo.jpg"
+              src="/logo-128.jpg"
               alt="LearnSpace"
+              width="36"
+              height="36"
               className="ls-logo-img"
             />
             <span>
@@ -387,6 +457,9 @@ const Landing = () => {
           </a>
 
           <ul className="ls-nav-links">
+            <li>
+              <a href="#courses">Courses</a>
+            </li>
             <li>
               <a href="#modules">Modules</a>
             </li>
@@ -423,6 +496,7 @@ const Landing = () => {
       </nav>
 
       <div className="ls-main">
+        <main>
         {/* hero */}
         <ScrollReveal>
           <section className="ls-hero ls-container" id="home">
@@ -493,6 +567,217 @@ const Landing = () => {
               ))}
             </div>
           </div>
+        </ScrollReveal>
+
+        {/* featured courses */}
+        <ScrollReveal>
+          <section className="ls-section ls-container" id="courses">
+            <div className="ls-section-head">
+              <span className="ls-section-eyebrow">Featured Courses</span>
+              <h2 className="ls-section-title">
+                Pick a Course. Finish With Proof.
+              </h2>
+              <p className="ls-section-subtitle">
+                Every course ships with structured lessons, quizzes, a capstone
+                project and a QR-verified certificate — free, with lifetime access.
+              </p>
+            </div>
+
+            {courseCategoryPills.length > 1 && (
+              <div className="ls-course-filters">
+                {courseCategoryPills.map((cat) => (
+                  <button
+                    key={cat.name}
+                    type="button"
+                    className={`ls-course-pill ${
+                      courseCategory === cat.name ||
+                      (cat.name === "All" && courseCategory === "ALL")
+                        ? "active"
+                        : ""
+                    }`}
+                    onClick={() => setCourseCategory(cat.name)}
+                  >
+                    {cat.name}
+                    <span>{cat.count}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {coursesLoading && (
+              <div className="ls-courses-grid">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div className="ls-course-card ls-course-skeleton" key={i}>
+                    <div className="ls-course-media" />
+                    <div className="ls-course-body">
+                      <span className="ls-skel-line ls-skel-short" />
+                      <span className="ls-skel-line ls-skel-title" />
+                      <span className="ls-skel-line" />
+                      <span className="ls-skel-line ls-skel-mid" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {!coursesLoading && coursesError && (
+              <div className="ls-courses-empty">
+                <div className="ls-courses-empty-icon">⚠️</div>
+                <h3>Could not load courses</h3>
+                <p>{coursesError}</p>
+                <button
+                  className="ls-btn ls-btn-outline"
+                  onClick={() =>
+                    dispatch(
+                      fetchPublicCourses(
+                        courseCategory === "ALL"
+                          ? {}
+                          : { category: courseCategory },
+                      ),
+                    )
+                  }
+                >
+                  Try Again
+                </button>
+              </div>
+            )}
+
+            {!coursesLoading && !coursesError && courses.length === 0 && (
+              <div className="ls-courses-empty">
+                <div className="ls-courses-empty-icon">📂</div>
+                <h3>No published courses yet</h3>
+                <p>
+                  Courses appear here as soon as an admin publishes them. Create
+                  an account to get notified when the catalog goes live.
+                </p>
+                <button
+                  className="ls-btn ls-btn-primary"
+                  onClick={() => navigate("/register")}
+                >
+                  Create Free Account →
+                </button>
+              </div>
+            )}
+
+            {!coursesLoading && !coursesError && courses.length > 0 && (
+              <>
+                <div className="ls-courses-count">
+                  Showing <strong>{courses.length}</strong> of{" "}
+                  <strong>{total}</strong> published courses
+                </div>
+
+                <div className="ls-courses-grid">
+                  {courses.map((course, index) => {
+                    const tone =
+                      COURSE_TONES[index % COURSE_TONES.length];
+                    const glyph =
+                      COURSE_GLYPHS[index % COURSE_GLYPHS.length];
+                    const plural = (n, word) =>
+                      `${n} ${word}${n === 1 ? "" : "s"}`;
+                    const publishedOn = formatPublishedOn(course.publishedAt);
+
+                    const includes = [
+                      course.lessonCount > 0
+                        ? plural(course.lessonCount, "structured lesson")
+                        : null,
+                      course.quizCount > 0
+                        ? plural(course.quizCount, "final quiz question")
+                        : null,
+                      course.hasCapstone
+                        ? "Capstone project reviewed by admins"
+                        : null,
+                      "QR-verified certificate on completion",
+                    ].filter(Boolean);
+
+                    return (
+                      <article className="ls-course-card" key={course._id}>
+                        <div className={`ls-course-media ls-tone-${tone}`}>
+                          {course.thumbnailUrl ? (
+                            <img
+                              className="ls-course-thumb"
+                              src={course.thumbnailUrl}
+                              alt={course.title}
+                              loading="lazy"
+                            />
+                          ) : (
+                            <span className="ls-course-glyph">{glyph}</span>
+                          )}
+
+                          {isNewCourse(course.publishedAt) && (
+                            <span className="ls-course-ribbon">New</span>
+                          )}
+
+                          <span className="ls-course-media-level">
+                            {formatCount(course.enrolledCount)} learners
+                          </span>
+                        </div>
+
+                        <div className="ls-course-body">
+                          <span className="ls-course-category">
+                            {course.category}
+                          </span>
+
+                          <h3 className="ls-course-title">{course.title}</h3>
+
+                          <p className="ls-course-subtitle">
+                            {course.description}
+                          </p>
+
+                          <div className="ls-course-meta">
+                            <span>▤ {plural(course.lessonCount, "Lesson")}</span>
+                            <span>🧠 {plural(course.quizCount, "Question")}</span>
+                            {course.hasCapstone && (
+                              <span>🚀 Capstone</span>
+                            )}
+                          </div>
+
+                          <ul className="ls-course-points">
+                            {includes.map((point) => (
+                              <li key={point}>
+                                <span className="ls-check">✓</span>
+                                {point}
+                              </li>
+                            ))}
+                          </ul>
+
+                          {publishedOn && (
+                            <span className="ls-course-updated">
+                              Published {publishedOn}
+                            </span>
+                          )}
+                        </div>
+
+                        <div className="ls-course-footer">
+                          <div className="ls-course-price">
+                            <strong>Free</strong>
+                            <span className="ls-course-note">
+                              Lifetime access · No card needed
+                            </span>
+                          </div>
+
+                          <button
+                            className="ls-btn ls-btn-primary ls-course-cta"
+                            onClick={() => navigate("/register")}
+                          >
+                            Enroll Now <span>→</span>
+                          </button>
+                        </div>
+                      </article>
+                    );
+                  })}
+                </div>
+
+                <div className="ls-courses-cta">
+                  <button
+                    className="ls-btn ls-btn-outline ls-btn-hero"
+                    onClick={() => navigate("/register")}
+                  >
+                    Browse the Full Catalog →
+                  </button>
+                </div>
+              </>
+            )}
+          </section>
         </ScrollReveal>
 
         {/* modules */}
@@ -732,6 +1017,7 @@ const Landing = () => {
             </div>
           </section>
         </ScrollReveal>
+        </main>
       </div>
 
       {/* footer */}
@@ -742,10 +1028,12 @@ const Landing = () => {
               <div className="ls-footer-col">
                 <a href="#home" className="ls-logo ls-footer-logo">
                   <img
-                    src="/logo.jpg"
-                    alt="LearnSpace"
-                    className="ls-logo-img"
-                  />
+              src="/logo-128.jpg"
+              alt="LearnSpace"
+              width="36"
+              height="36"
+              className="ls-logo-img"
+            />
                   <span>
                     Learn<span className="ls-logo-accent">Space</span>
                   </span>
@@ -758,7 +1046,7 @@ const Landing = () => {
               </div>
 
               <div className="ls-footer-col">
-                <h4>Learn</h4>
+                <h2 className="ls-footer-title">Learn</h2>
                 <ul>
                   <li>
                     <a href="#modules">Course Catalog</a>
@@ -776,7 +1064,7 @@ const Landing = () => {
               </div>
 
               <div className="ls-footer-col">
-                <h4>Platform</h4>
+                <h2 className="ls-footer-title">Platform</h2>
                 <ul>
                   <li>
                     <a href="#flow">How It Works</a>
@@ -794,7 +1082,7 @@ const Landing = () => {
               </div>
 
               <div className="ls-footer-col">
-                <h4>Support</h4>
+                <h2 className="ls-footer-title">Support</h2>
                 <ul>
                   <li>
                     <a href="#faq">FAQ</a>

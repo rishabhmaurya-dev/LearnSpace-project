@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+Disallow: /admin/
+Disallow: /student/
+Disallow: /ai
+Disallow: /reset-password/
+Disallow: /forgot-password
+Disallow: /unauthorized
+
+Sitemap: https://learnspace-kappa.vercel.app/sitemap.xml

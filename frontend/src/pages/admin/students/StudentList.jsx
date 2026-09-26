@@ -1,6 +1,20 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import {
+  BookOpen,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  CircleAlert,
+  CircleCheck,
+  Search,
+  SlidersHorizontal,
+  Star,
+  UserCheck,
+  Users,
+  X,
+} from "lucide-react";
 
 import { formatDate } from "../capstones/CapstoneReview";
 
@@ -15,12 +29,18 @@ import {
 } from "../../../features/admin/student/adminStudentSlice";
 
 import styles from "./StudentList.module.css";
-import { GradualSpacing } from "../../../animation/Text";
-import { CardGridSkeleton } from "../../../components/AppSkeletons";
+
+const SKILL_OPTIONS = [
+  "React",
+  "Node.js",
+  "JavaScript",
+  "Python",
+  "UI/UX",
+  "MongoDB",
+];
 
 const StudentList = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const {
     students = [],
@@ -104,10 +124,6 @@ const StudentList = () => {
     );
   };
 
-  const handleView = (studentId) => {
-    navigate(`/admin/students/${studentId}`);
-  };
-
   const handlePageChange = (newPage) => {
     if (newPage < 1 || newPage > (pagination.totalPages || 1)) return;
     setPage(newPage);
@@ -121,40 +137,46 @@ const StudentList = () => {
   };
 
   const totalPages = pagination.totalPages || 1;
+  const totalStudents = pagination.total || students.length || 0;
   const activeStudents = students.filter((student) => student.isActive).length;
+  const hasFilters = Boolean(search || skill || status);
 
   return (
     <div className={styles.container}>
-      {/* header */}
-      <header className={styles.pageHeader}>
-        <div className={styles.headerContent}>
-          <span className={styles.eyebrow}>ADMINISTRATION</span>
-          <h1 className={styles.title}>
-            <GradualSpacing text="Students" />
-          </h1>
-          <p className={styles.subtitle}>
-            Manage student accounts, skills, reputation, and capstone activity.
+      {/* page header */}
+      <header className={styles.pageHead}>
+        <div className={styles.pageHeadText}>
+          <nav className={styles.breadcrumb}>
+            <span>Admin</span>
+            <ChevronRight size={13} strokeWidth={2.2} />
+            <strong>Students</strong>
+          </nav>
+
+          <h1>Students</h1>
+          <p>
+            Manage student accounts, verified skills, reputation and capstone
+            activity across the platform.
           </p>
         </div>
 
-        <div className={styles.headerStats}>
-          <div className={styles.headerStat}>
-            <span className={styles.headerStatIcon}>👨‍🎓</span>
-            <div className={styles.statMeta}>
-              <strong>{pagination.total || students.length || 0}</strong>
+        <div className={styles.headStats}>
+          <div className={styles.headStat}>
+            <span className={`${styles.headStatIcon} ${styles.toneGreen}`}>
+              <Users size={17} strokeWidth={2} />
+            </span>
+            <div className={styles.headStatBody}>
+              <strong>{totalStudents}</strong>
               <span>Total Students</span>
             </div>
           </div>
 
-          <div className={styles.headerStat}>
-            <span
-              className={`${styles.headerStatIcon} ${styles.activeIndicator}`}
-            >
-              ●
+          <div className={styles.headStat}>
+            <span className={`${styles.headStatIcon} ${styles.toneTeal}`}>
+              <UserCheck size={17} strokeWidth={2} />
             </span>
-            <div className={styles.statMeta}>
+            <div className={styles.headStatBody}>
               <strong>{activeStudents}</strong>
-              <span>Active</span>
+              <span>Active on this page</span>
             </div>
           </div>
         </div>
@@ -163,116 +185,120 @@ const StudentList = () => {
       {/* alerts */}
       {success && (
         <div className={`${styles.alert} ${styles.successAlert}`} role="alert">
-          <span className={styles.alertIcon}>✓</span>
-          <span className={styles.alertMessage}>{message}</span>
+          <CircleCheck size={16} strokeWidth={2} />
+          <span>{message}</span>
         </div>
       )}
 
       {error && (
         <div className={`${styles.alert} ${styles.errorAlert}`} role="alert">
-          <span className={styles.alertIcon}>!</span>
-          <span className={styles.alertMessage}>{error}</span>
+          <CircleAlert size={16} strokeWidth={2} />
+          <span>{error}</span>
         </div>
       )}
 
       {/* filters */}
-      <section className={styles.filterCard}>
-        <div className={styles.filterHeader}>
-          <div>
-            <h3 className={styles.filterTitle}>Student Directory</h3>
-            <p className={styles.filterSubtitle}>
-              Search and filter registered students
-            </p>
-          </div>
-
-          {(search || skill || status) && (
+      <section className={styles.toolbar}>
+        <div className={styles.searchBox}>
+          <Search size={15} strokeWidth={2} className={styles.searchIcon} />
+          <input
+            type="text"
+            className={styles.searchInput}
+            placeholder="Search by name or email..."
+            value={search}
+            onChange={handleSearchChange}
+            aria-label="Search students"
+          />
+          {search && (
             <button
               type="button"
-              className={styles.clearBtn}
-              onClick={handleClearFilters}
+              className={styles.searchClear}
+              onClick={() => {
+                setSearch("");
+                setPage(1);
+              }}
+              aria-label="Clear search"
             >
-              Clear Filters
+              <X size={13} strokeWidth={2.2} />
             </button>
           )}
         </div>
 
-        <div className={styles.filters}>
-          <div className={styles.searchBox}>
-            <span className={styles.searchIcon}>⌕</span>
-            <input
-              type="text"
-              placeholder="Search by name or email..."
-              value={search}
-              onChange={handleSearchChange}
-              className={styles.searchInput}
-            />
-            {search && (
-              <button
-                type="button"
-                className={styles.searchClear}
-                onClick={() => {
-                  setSearch("");
-                  setPage(1);
-                }}
-              >
-                ×
-              </button>
-            )}
-          </div>
+        <div className={styles.selectGroup}>
+          <SlidersHorizontal
+            size={15}
+            strokeWidth={2}
+            className={styles.filterIcon}
+          />
 
-          <div className={styles.selectGroup}>
+          <div className={styles.selectWrap}>
             <select
               className={styles.select}
               value={skill}
               onChange={handleSkillChange}
+              aria-label="Filter by skill"
             >
               <option value="">All Skills</option>
-              <option value="React">React</option>
-              <option value="Node.js">Node.js</option>
-              <option value="JavaScript">JavaScript</option>
-              <option value="Python">Python</option>
-              <option value="UI/UX">UI/UX</option>
-              <option value="MongoDB">MongoDB</option>
+              {SKILL_OPTIONS.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
             </select>
+            <ChevronDown size={14} strokeWidth={2} className={styles.chevron} />
+          </div>
 
+          <div className={styles.selectWrap}>
             <select
               className={styles.select}
               value={status}
               onChange={handleStatusChange}
+              aria-label="Filter by status"
             >
               <option value="">All Status</option>
               <option value="ACTIVE">Active</option>
               <option value="BLOCKED">Blocked</option>
             </select>
+            <ChevronDown size={14} strokeWidth={2} className={styles.chevron} />
           </div>
+
+          {hasFilters && (
+            <button
+              type="button"
+              className={styles.btnGhost}
+              onClick={handleClearFilters}
+            >
+              <X size={14} strokeWidth={2.2} />
+              Clear
+            </button>
+          )}
         </div>
       </section>
 
-      {/* results count / bar */}
+      {/* results bar */}
       {!loading && students.length > 0 && (
-        <div className={styles.resultsHeader}>
-          <div className={styles.resultsCount}>
-            <strong>{pagination.total || students.length}</strong> students
-            found
-          </div>
-          <span className={styles.resultsPage}>
+        <div className={styles.resultsBar}>
+          <span>
+            <strong>{totalStudents}</strong> students found
+          </span>
+          <span>
             Page {pagination.page || page} of {totalPages}
           </span>
         </div>
       )}
 
-      {/* student cards grid */}
+      {/* directory */}
       {loading ? (
-        <CardGridSkeleton count={6} />
+        <ListSkeleton rows={limit} />
       ) : students.length === 0 ? (
         <div className={styles.emptyState}>
-          <div className={styles.emptyIcon}>👨‍🎓</div>
-          <h3>No Students Found</h3>
+          <Users size={28} strokeWidth={1.5} />
+          <strong>No students found</strong>
           <p>No students match your current search or filters.</p>
-          {(search || skill || status) && (
+          {hasFilters && (
             <button
               type="button"
-              className={styles.emptyClearBtn}
+              className={styles.btnGhost}
               onClick={handleClearFilters}
             >
               Clear Filters
@@ -280,154 +306,118 @@ const StudentList = () => {
           )}
         </div>
       ) : (
-        <div className={styles.cardGrid}>
-          {students.map((student, index) => (
-            <article
-              key={student._id}
-              className={styles.studentCard}
-              style={{ "--card-index": index }}
-            >
-              {/* ACCENT GRADIENT BAND */}
-              <div className={styles.cardCover}>
-                <div className={styles.cardCoverGlow} />
-              </div>
+        <div className={styles.directory}>
+          <div className={styles.directoryHead}>
+            <span>Student</span>
+            <span>Verified Skills</span>
+            <span>Reputation</span>
+            <span>Courses</span>
+            <span>Joined</span>
+            <span>Status</span>
+            <span className={styles.headActionsLabel}>Actions</span>
+          </div>
 
-              {/* CARD BODY */}
-              <div className={styles.cardBody}>
-                {/* TOP ROW: AVATAR + DETAILS + STATUS BADGE */}
-                <div className={styles.cardTop}>
-                  <div className={styles.studentIdentity}>
-                    <div className={styles.avatarWrapper}>
-                      <div className={styles.avatar}>
-                        {student.profile?.avatar ? (
-                          <img
-                            src={student.profile.avatar}
-                            alt={student.name || "Student Avatar"}
-                            className={styles.avatarImg}
-                          />
-                        ) : (
-                          <span>
-                            {student.name?.charAt(0)?.toUpperCase() || "?"}
-                          </span>
-                        )}
-                      </div>
-                      <span
-                        className={`${styles.onlineDot} ${
-                          student.isActive ? styles.online : styles.offline
-                        }`}
-                        title={
-                          student.isActive
-                            ? "Active Account"
-                            : "Inactive/Blocked"
-                        }
+          {students.map((student) => {
+            const skills = student.profile?.verifiedSkills || [];
+            const isActive = Boolean(student.isActive);
+
+            return (
+              <div className={styles.directoryRow} key={student._id}>
+                <div className={styles.identity}>
+                  <span className={styles.avatar}>
+                    {student.profile?.avatar ? (
+                      <img
+                        src={student.profile.avatar}
+                        alt={student.name || "Student avatar"}
                       />
-                    </div>
+                    ) : (
+                      student.name?.charAt(0)?.toUpperCase() || "?"
+                    )}
+                  </span>
 
-                    <div className={styles.studentName}>
-                      <h3 title={student.name}>
-                        {student.name || "Unknown Student"}
-                      </h3>
-                      <p title={student.email}>{student.email || "No email"}</p>
-                    </div>
+                  <div className={styles.identityText}>
+                    <strong title={student.name}>
+                      {student.name || "Unknown Student"}
+                    </strong>
+                    <small title={student.email}>
+                      {student.email || "No email"}
+                    </small>
                   </div>
+                </div>
 
+                <div className={styles.skillTags}>
+                  {skills.length ? (
+                    <>
+                      {skills.slice(0, 2).map((skillItem) => (
+                        <span className={styles.skillTag} key={skillItem}>
+                          {skillItem}
+                        </span>
+                      ))}
+                      {skills.length > 2 && (
+                        <span className={styles.skillTag}>
+                          +{skills.length - 2}
+                        </span>
+                      )}
+                    </>
+                  ) : (
+                    <span className={styles.muted}>No verified skills</span>
+                  )}
+                </div>
+
+                <div className={styles.cellNum}>
+                  <span className={styles.cellLabel}>Reputation</span>
+                  <Star size={13} strokeWidth={2} />
+                  {student.profile?.reputationPoints || 0}
+                </div>
+
+                <div className={styles.cellNum}>
+                  <span className={styles.cellLabel}>Courses</span>
+                  <BookOpen size={13} strokeWidth={2} />
+                  {student.profile?.completedCoursesCount || 0}
+                </div>
+
+                <div className={styles.cellDate}>
+                  <span className={styles.cellLabel}>Joined</span>
+                  {formatDate(student.createdAt)}
+                </div>
+
+                <div className={styles.statusCell}>
                   <span
                     className={`${styles.statusBadge} ${
-                      student.isActive
-                        ? styles.statusActive
-                        : styles.statusBlocked
+                      isActive ? styles.statusActive : styles.statusBlocked
                     }`}
                   >
                     <span className={styles.statusDot} />
-                    {student.isActive ? "Active" : "Blocked"}
+                    {isActive ? "Active" : "Blocked"}
                   </span>
                 </div>
 
-                {/* SKILLS SECTION */}
-                <div className={styles.skillsSection}>
-                  <div className={styles.sectionLabel}>VERIFIED SKILLS</div>
-                  <div className={styles.skillTags}>
-                    {student.profile?.verifiedSkills?.length ? (
-                      <>
-                        {student.profile.verifiedSkills
-                          .slice(0, 3)
-                          .map((skillItem) => (
-                            <span key={skillItem} className={styles.skillTag}>
-                              {skillItem}
-                            </span>
-                          ))}
-                        {student.profile.verifiedSkills.length > 3 && (
-                          <span
-                            className={`${styles.skillTag} ${styles.moreSkills}`}
-                          >
-                            +{student.profile.verifiedSkills.length - 3}
-                          </span>
-                        )}
-                      </>
-                    ) : (
-                      <span className={styles.muted}>No verified skills</span>
-                    )}
-                  </div>
-                </div>
+                <div className={styles.rowActions}>
+                  <Link
+                    to={`/admin/students/${student._id}`}
+                    className={styles.btnMini}
+                  >
+                    View
+                  </Link>
 
-                {/* KPI STATS SECTION */}
-                <div className={styles.studentStats}>
-                  <div className={styles.studentStat}>
-                    <span className={styles.statIcon}>⭐</span>
-                    <div className={styles.statDetails}>
-                      <strong>{student.profile?.reputationPoints || 0}</strong>
-                      <small>Reputation</small>
-                    </div>
-                  </div>
-
-                  <div className={styles.studentStat}>
-                    <span className={styles.statIcon}>📚</span>
-                    <div className={styles.statDetails}>
-                      <strong>
-                        {student.profile?.completedCoursesCount || 0}
-                      </strong>
-                      <small>Courses</small>
-                    </div>
-                  </div>
-
-                  </div>
-
-                {/* FOOTER: JOINED DATE & ACTIONS */}
-                <div className={styles.cardFooter}>
-                  <div className={styles.joinedDate}>
-                    <span>Joined</span>
-                    <strong>{formatDate(student.createdAt)}</strong>
-                  </div>
-
-                  <div className={styles.actions}>
-                    <button
-                      type="button"
-                      className={styles.viewBtn}
-                      onClick={() => handleView(student._id)}
-                    >
-                      <span>View</span>
-                      <span className={styles.arrow}>→</span>
-                    </button>
-
-                    <button
-                      type="button"
-                      className={
-                        student.isActive ? styles.blockBtn : styles.activateBtn
-                      }
-                      disabled={operationLoading}
-                      onClick={() => handleToggleStatus(student)}
-                    >
-                      {operationLoading
-                        ? "..."
-                        : student.isActive
-                          ? "Block"
-                          : "Activate"}
-                    </button>
-                  </div>
+                  <button
+                    type="button"
+                    className={
+                      isActive ? styles.btnDanger : styles.btnSuccess
+                    }
+                    disabled={operationLoading}
+                    onClick={() => handleToggleStatus(student)}
+                  >
+                    {operationLoading
+                      ? "..."
+                      : isActive
+                        ? "Block"
+                        : "Activate"}
+                  </button>
                 </div>
               </div>
-            </article>
-          ))}
+            );
+          })}
         </div>
       )}
 
@@ -440,7 +430,8 @@ const StudentList = () => {
             disabled={page <= 1}
             onClick={() => handlePageChange(page - 1)}
           >
-            <span>←</span> Prev
+            <ChevronLeft size={15} strokeWidth={2} />
+            Prev
           </button>
 
           <div className={styles.pageInfo}>
@@ -456,12 +447,36 @@ const StudentList = () => {
             disabled={page >= totalPages}
             onClick={() => handlePageChange(page + 1)}
           >
-            Next <span>→</span>
+            Next
+            <ChevronRight size={15} strokeWidth={2} />
           </button>
         </div>
       )}
     </div>
   );
 };
+
+/* loading placeholder */
+const ListSkeleton = ({ rows = 6 }) => (
+  <div className={styles.directory}>
+    <div className={styles.skeletonHead}>
+      {[...Array(7)].map((_, index) => (
+        <span key={index} className={styles.skeletonBar} />
+      ))}
+    </div>
+
+    {[...Array(rows)].map((_, rowIndex) => (
+      <div className={styles.skeletonRow} key={rowIndex}>
+        <span className={styles.skeletonBar} />
+        <span className={styles.skeletonBar} />
+        <span className={styles.skeletonBar} />
+        <span className={styles.skeletonBar} />
+        <span className={styles.skeletonBar} />
+        <span className={styles.skeletonBar} />
+        <span className={styles.skeletonBar} />
+      </div>
+    ))}
+  </div>
+);
 
 export default StudentList;

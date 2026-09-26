@@ -13,6 +13,9 @@ import studentProfileReducer from "../features/student/studentProfileSlice";
 import studentCourseReducer from "../features/student/studentCourseSlice";
 import studentCertificateReducer from "../features/student/studentCertificateSlice";
 
+/* Public (unauthenticated) feature reducers */
+import publicReducer from "../features/public/publicSlice";
+
 export const store = configureStore({
   reducer: {
     auth: authReducer,
@@ -27,5 +30,8 @@ export const store = configureStore({
     studentProfile: studentProfileReducer,
     studentCourse: studentCourseReducer,
     studentCertificate: studentCertificateReducer,
+
+    /* Public landing page */
+    public: publicReducer,
   },
 });

@@ -1,76 +1,106 @@
 import { NavLink } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useState, useRef, useEffect } from "react";
 
 import {
   LayoutDashboard,
   BookOpen,
-  Search,
+  Compass,
   Award,
   User,
   Bot,
   LogOut,
+  X,
+  ChevronUp,
 } from "lucide-react";
 
 import { logoutUser } from "../../features/auth/authThunks";
 
 import styles from "./StudentSidebar.module.css";
 
+const NAV_GROUPS = [
+  {
+    label: "Overview",
+    items: [{ label: "Dashboard", path: "/student/dashboard", icon: LayoutDashboard }],
+  },
+  {
+    label: "Learning",
+    items: [
+      { label: "My Courses", path: "/student/courses", icon: BookOpen },
+      { label: "Course Catalog", path: "/student/catalog", icon: Compass },
+    ],
+  },
+  {
+    label: "Achievements",
+    items: [{ label: "Certificates", path: "/student/certificates", icon: Award }],
+  },
+  {
+    label: "Tools",
+    items: [{ label: "AI Mentor", path: "/ai", icon: Bot }],
+  },
+  {
+    label: "Account",
+    items: [{ label: "My Profile", path: "/student/profile", icon: User }],
+  },
+];
+
 const StudentSidebar = ({ isOpen, onClose }) => {
   const dispatch = useDispatch();
+  const menuRef = useRef(null);
+  const [menuOpen, setMenuOpen] = useState(false);
 
-  const menuItems = [
-    {
-      label: "Dashboard",
-      path: "/student/dashboard",
-      icon: LayoutDashboard,
-    },
-    {
-      label: "My Courses",
-      path: "/student/courses",
-      icon: BookOpen,
-    },
-    {
-      label: "Course Catalog",
-      path: "/student/catalog",
-      icon: Search,
-    },
-    {
-      label: "Certificates",
-      path: "/student/certificates",
-      icon: Award,
-    },
-    {
-      label: "My Profile",
-      path: "/student/profile",
-      icon: User,
-    },
-    {
-      label: "AI Assistant",
-      path: "/ai",
-      icon: Bot,
-    },
-  ];
+  const user = useSelector((state) => state.auth.user);
+  const avatarUrl = user?.avatar || null;
+  const firstLetter = user?.name?.charAt(0)?.toUpperCase() || "S";
+
+  useEffect(() => {
+    if (!menuOpen) return undefined;
+
+    const onPointerDown = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setMenuOpen(false);
+      }
+    };
+
+    const onEscape = (event) => {
+      if (event.key === "Escape") setMenuOpen(false);
+    };
+
+    document.addEventListener("mousedown", onPointerDown);
+    document.addEventListener("keydown", onEscape);
+
+    return () => {
+      document.removeEventListener("mousedown", onPointerDown);
+      document.removeEventListener("keydown", onEscape);
+    };
+  }, [menuOpen]);
 
   const handleLogout = () => {
+    setMenuOpen(false);
     dispatch(logoutUser());
   };
 
   return (
     <>
-      {/* Mobile Backdrop Overlay */}
       {isOpen && <div className={styles.overlay} onClick={onClose} />}
 
-      {/* Sidebar Drawer */}
       <aside className={`${styles.sidebar} ${isOpen ? styles.open : ""}`}>
-        <div className={styles.logo}>
+        {/* brand */}
+        <div className={styles.brand}>
           <NavLink
             to="/student/dashboard"
-            className={styles.logoBrand}
+            className={styles.brandLink}
             onClick={onClose}
           >
-            <img src="/logo.jpg" alt="LearnSpace" className={styles.logoMark} />
-            <span className={styles.logoText}>
-              LEARN<strong>SPACE</strong>
+            <img
+              src="/logo-128.jpg"
+              alt=""
+              width="30"
+              height="30"
+              className={styles.brandMark}
+            />
+            <span className={styles.brandText}>
+              Learn<span>Space</span>
             </span>
           </NavLink>
 
@@ -78,44 +108,81 @@ const StudentSidebar = ({ isOpen, onClose }) => {
             type="button"
             className={styles.closeBtn}
             onClick={onClose}
-            aria-label="Close sidebar"
+            aria-label="Close navigation"
           >
-            ✕
+            <X size={17} strokeWidth={2.1} />
           </button>
         </div>
 
-        <div className={styles.sectionTitle}>STUDENT PORTAL</div>
-
+        {/* navigation */}
         <nav className={styles.nav} aria-label="Student navigation">
-          {menuItems.map((item) => {
-            const Icon = item.icon;
+          {NAV_GROUPS.map((group) => (
+            <div className={styles.group} key={group.label}>
+              <span className={styles.groupLabel}>{group.label}</span>
 
-            return (
-              <NavLink
-                key={item.path}
-                to={item.path}
-                end
-                onClick={onClose}
-                className={({ isActive }) =>
-                  `${styles.navItem} ${isActive ? styles.active : ""}`
-                }
-              >
-                <Icon className={styles.icon} size={20} strokeWidth={1.5} />
-                <span>{item.label}</span>
-              </NavLink>
-            );
-          })}
+              <div className={styles.groupItems}>
+                {group.items.map((item) => {
+                  const Icon = item.icon;
+
+                  return (
+                    <NavLink
+                      key={item.path}
+                      to={item.path}
+                      onClick={onClose}
+                      className={({ isActive }) =>
+                        `${styles.navItem} ${isActive ? styles.active : ""}`
+                      }
+                    >
+                      <Icon className={styles.navIcon} size={17} strokeWidth={1.9} />
+                      <span>{item.label}</span>
+                    </NavLink>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </nav>
 
-        <div className={styles.bottom}>
+        {/* account footer */}
+        <div className={styles.footer} ref={menuRef}>
           <button
             type="button"
-            className={styles.logout}
-            onClick={handleLogout}
+            className={styles.userBtn}
+            onClick={() => setMenuOpen((prev) => !prev)}
+            aria-expanded={menuOpen}
+            aria-haspopup="menu"
           >
-            <LogOut size={18} strokeWidth={1.5} />
-            <span>LOG OUT</span>
+            {avatarUrl ? (
+              <img src={avatarUrl} alt="" className={styles.userAvatarImg} />
+            ) : (
+              <span className={styles.userAvatar}>{firstLetter}</span>
+            )}
+
+            <span className={styles.userMeta}>
+              <strong>{user?.name || "Student"}</strong>
+              <small>{user?.email || "Student account"}</small>
+            </span>
+
+            <ChevronUp
+              size={15}
+              strokeWidth={2.1}
+              className={`${styles.userChevron} ${menuOpen ? styles.flip : ""}`}
+            />
           </button>
+
+          {menuOpen && (
+            <div className={styles.userMenu} role="menu">
+              <button
+                type="button"
+                className={`${styles.menuItem} ${styles.menuDanger}`}
+                role="menuitem"
+                onClick={handleLogout}
+              >
+                <LogOut size={15} strokeWidth={1.9} />
+                Sign Out
+              </button>
+            </div>
+          )}
         </div>
       </aside>
     </>

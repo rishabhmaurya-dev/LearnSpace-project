@@ -59,11 +59,12 @@
     linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
 
   --muted: #e8f5ed;
-  --muted-foreground: #718076;
+  --muted-foreground: #66786e;
 
   --text-primary: #17221c;
   --text-secondary: #405047;
-  --text-muted: #718076;
+  /* darkened from #718076 to pass WCAG AA (4.69:1) on white surfaces */
+  --text-muted: #66786e;
   --text-disabled: #a6b3ab;
   --text-inverse: #ffffff;
 
@@ -305,7 +306,7 @@
   --input-padding-x: 16px;
   --input-bg: #ffffff;
   --input-border: #dfe8e2;
-  --input-placeholder: #7b8b82;
+  --input-placeholder: #66786e;
 
   --button-height: 48px;
   --opacity-disabled: 0.5;

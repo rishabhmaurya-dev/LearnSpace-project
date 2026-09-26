@@ -22,11 +22,10 @@
       transparent 70%
     ),
     linear-gradient(rgba(35, 122, 75, 0.18), rgba(5, 46, 22, 0.5)),
-    url("/learnspace-wallpaper-1080p.png");
+    url("/learnspace-wallpaper-1080p.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  filter: blur(4px);
   z-index: 0;
 }
 

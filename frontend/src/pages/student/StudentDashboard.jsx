@@ -1,11 +1,27 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import {
+  BookOpen,
+  CircleCheckBig,
+  Award,
+  TrendingUp,
+  GraduationCap,
+  Target,
+  Star,
+  Sparkles,
+  FileText,
+  PlayCircle,
+  ChevronRight,
+  LayoutGrid,
+  Flame,
+  Layers,
+} from "lucide-react";
+
 import StudentActivityChart from "../../layouts/StudentLayout/StudentActivityChart";
 
 import { fetchStudentDashboard } from "../../features/student/studentProfileThunks";
 import styles from "./student.module.css";
-import ScrollReveal from "../../animation/Scroll";
 
 const StudentDashboard = () => {
   const dispatch = useDispatch();
@@ -42,53 +58,55 @@ const StudentDashboard = () => {
 
   const stats = dashboard?.stats || {};
 
+  const enrolled = Number(stats.enrolledCourses || 0);
+
   const primaryStats = [
     {
       label: "Enrolled Courses",
-      value: stats.enrolledCourses || 0,
-      icon: "📚",
-      color: "primary",
+      value: enrolled,
+      icon: BookOpen,
+      tone: "green",
     },
     {
       label: "Completed Courses",
-      value: stats.completedCourses || 0,
-      icon: "✅",
-      color: "success",
+      value: Number(stats.completedCourses || 0),
+      icon: CircleCheckBig,
+      tone: "green",
     },
     {
       label: "Certificates Earned",
-      value: stats.certificatesCount || 0,
-      icon: "🏅",
-      color: "secondary",
+      value: Number(stats.certificatesCount || 0),
+      icon: Award,
+      tone: "amber",
     },
     {
       label: "Overall Progress",
-      value: `${stats.overallProgress || 0}%`,
-      icon: "📈",
-      color: "info",
+      value: `${Number(stats.overallProgress || 0)}%`,
+      icon: TrendingUp,
+      tone: "teal",
     },
   ];
 
   const secondaryStats = [
     {
-      label: "Lessons Done",
-      value: stats.totalLessonsCompleted || 0,
-      icon: "📖",
+      label: "Lessons Completed",
+      value: Number(stats.totalLessonsCompleted || 0),
+      icon: GraduationCap,
     },
     {
-      label: "Avg Quiz Score",
-      value: `${stats.avgQuizScore || 0}%`,
-      icon: "🎯",
+      label: "Average Quiz Score",
+      value: `${Number(stats.avgQuizScore || 0)}%`,
+      icon: Target,
     },
     {
       label: "Reputation Points",
-      value: stats.reputationPoints || 0,
-      icon: "⭐",
+      value: Number(stats.reputationPoints || 0),
+      icon: Star,
     },
     {
       label: "Verified Skills",
-      value: stats.verifiedSkillsCount || 0,
-      icon: "✨",
+      value: Number(stats.verifiedSkillsCount || 0),
+      icon: Sparkles,
     },
   ];
 
@@ -98,77 +116,95 @@ const StudentDashboard = () => {
   const recentCertificates = dashboard?.recentCertificates || [];
   const capstoneSummary = stats?.capstoneSummary || {};
 
+  const maxDistribution = Math.max(
+    enrolled,
+    ...progressDistribution.map((item) => Number(item.count || 0)),
+    1,
+  );
+
   return (
     <div className={styles.container}>
-      {/* header */}
-      <div className={styles.pageHeader}>
-        <div>
-          <span className={styles.headerBadge}>STUDENT DASHBOARD</span>
-          <h1>Welcome Back!</h1>
-          <p>Track your modules, capstones, and earned credentials.</p>
+      {/* page header */}
+      <header className={styles.pageHead}>
+        <div className={styles.pageHeadText}>
+          <nav className={styles.breadcrumb}>
+            <span>Student</span>
+            <ChevronRight size={13} strokeWidth={2.2} />
+            <strong>Dashboard</strong>
+          </nav>
+          <h1>Dashboard</h1>
+          <p>
+            Pick up where you left off, track progress across your courses, and
+            review the credentials you have earned.
+          </p>
         </div>
+
         <Link
           to="/student/catalog"
           className={`${styles.btn} ${styles.btnPrimary}`}
         >
-          Browse Catalog →
+          <LayoutGrid size={15} strokeWidth={2.2} />
+          Browse Catalog
         </Link>
-      </div>
-      {/* primary stats */}
-      <div className={styles.primaryStatGrid}>
-        {primaryStats.map((card, idx) => (
-          <div
-            className={`${styles.statCard} ${styles[`statCard_${card.color}`]}`}
-            key={card.label}
-            style={{ "--card-index": idx }}
-          >
-            <div className={styles.statIconWrap}>
-              <span>{card.icon}</span>
-            </div>
-            <div className={styles.statDetails}>
-              <strong>{card.value}</strong>
-              <p>{card.label}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-      {/* secondary stats strip */}
-      <div className={styles.microStatsStrip}>
-        {secondaryStats.map((item) => (
-          <div className={styles.microStatItem} key={item.label}>
-            <span className={styles.microIcon}>{item.icon}</span>
-            <div className={styles.microInfo}>
-              <strong>{item.value}</strong>
-              <span>{item.label}</span>
-            </div>
-          </div>
-        ))}
-      </div>
-      <StudentActivityChart />
-      {/* lower sections: bento grid */}
-      {/* recent courses (full width) */}
+      </header>
 
-      <ScrollReveal>
-        <section className={styles.panelCard}>
-          <div className={styles.panelHeader}>
-            <div>
-              <h3 className={styles.panelTitle}>Recent Courses</h3>
-              <span className={styles.panelSubtitle}>
-                Pick up right where you left off
+      {/* key metrics */}
+      <section className={styles.statGrid}>
+        {primaryStats.map((card) => {
+          const Icon = card.icon;
+
+          return (
+            <div className={styles.statCard} key={card.label}>
+              <span
+                className={`${styles.statIcon} ${styles[`tone_${card.tone}`]}`}
+              >
+                <Icon size={18} strokeWidth={2} />
               </span>
+              <div className={styles.statBody}>
+                <strong>{card.value}</strong>
+                <span>{card.label}</span>
+              </div>
             </div>
-            <Link
-              to="/student/courses"
-              className={`${styles.btn} ${styles.btnSecondary}`}
-            >
-              View All Courses
+          );
+        })}
+      </section>
+
+      {/* summary bar */}
+      <section className={styles.summaryBar}>
+        {secondaryStats.map((item) => {
+          const Icon = item.icon;
+
+          return (
+            <div className={styles.summaryCell} key={item.label}>
+              <Icon size={15} strokeWidth={2} className={styles.summaryIcon} />
+              <div>
+                <strong>{item.value}</strong>
+                <span>{item.label}</span>
+              </div>
+            </div>
+          );
+        })}
+      </section>
+
+      {/* continue learning + progress breakdown */}
+      <div className={styles.splitGrid}>
+        <section className={styles.panel}>
+          <div className={styles.panelHead}>
+            <div>
+              <h2>Continue Learning</h2>
+              <p>Your most recently accessed courses</p>
+            </div>
+            <Link to="/student/courses" className={styles.panelLink}>
+              My Courses
+              <ChevronRight size={15} strokeWidth={2.2} />
             </Link>
           </div>
 
           {recentCourses.length === 0 ? (
             <div className={styles.emptyState}>
-              <span>📚</span>
-              <p>No active courses found.</p>
+              <BookOpen size={26} strokeWidth={1.6} />
+              <strong>You have not enrolled in any course yet</strong>
+              <p>Browse the catalog and start your first course today.</p>
               <Link
                 to="/student/catalog"
                 className={`${styles.btn} ${styles.btnPrimary}`}
@@ -177,149 +213,232 @@ const StudentDashboard = () => {
               </Link>
             </div>
           ) : (
-            <div className={styles.courseGrid}>
-              {recentCourses.slice(0, 3).map((course) => {
+            <div className={styles.resumeGrid}>
+              {recentCourses.slice(0, 4).map((course) => {
                 const progress = Math.min(
                   100,
                   Math.round(Number(course.progressPercentage || 0)),
                 );
+                const courseId = course.courseId || course.title;
+
                 return (
-                  <div className={styles.courseCardItem} key={course.courseId}>
-                    <div className={styles.courseCardTop}>
-                      <span className={styles.courseIconBox}>📘</span>
-                      <span className={styles.categoryChip}>
+                  <article className={styles.resumeCard} key={courseId}>
+                    <div className={styles.resumeThumb}>
+                      {course.thumbnailUrl ? (
+                        <img
+                          src={course.thumbnailUrl}
+                          alt={course.title}
+                          loading="lazy"
+                        />
+                      ) : (
+                        <BookOpen size={22} strokeWidth={1.7} />
+                      )}
+
+                      {course.isCompleted && (
+                        <span className={styles.resumeDone}>
+                          <CircleCheckBig size={12} strokeWidth={2.4} />
+                          Completed
+                        </span>
+                      )}
+                    </div>
+
+                    <div className={styles.resumeBody}>
+                      <span className={styles.resumeCategory}>
                         {course.category || "General"}
                       </span>
-                    </div>
 
-                    <h4 className={styles.courseCardTitle} title={course.title}>
-                      {course.title}
-                    </h4>
+                      <h3 title={course.title}>{course.title}</h3>
 
-                    <div className={styles.courseCardBottom}>
-                      <div className={styles.progressTrack}>
-                        <div
-                          className={styles.progressFill}
-                          style={{ width: `${progress}%` }}
-                        />
+                      <div className={styles.resumeProgress}>
+                        <div className={styles.progressTrack}>
+                          <div
+                            className={styles.progressFill}
+                            style={{ width: `${progress}%` }}
+                          />
+                        </div>
+                        <span>{progress}% complete</span>
                       </div>
-                      <div className={styles.progressMeta}>
-                        <span>Progress</span>
-                        <strong>{progress}%</strong>
-                      </div>
+
+                      <Link
+                        to={`/student/courses/${courseId}/learn`}
+                        className={styles.resumeCta}
+                      >
+                        <PlayCircle size={15} strokeWidth={2.1} />
+                        {progress > 0 ? "Resume" : "Start Learning"}
+                      </Link>
                     </div>
-                  </div>
+                  </article>
                 );
               })}
             </div>
           )}
         </section>
-      </ScrollReveal>
 
-      {/* footer 3-column row */}
-      <ScrollReveal>
-        <div className={styles.footerThreeCol}>
-          {/* col 1: progress distribution */}
-          <div className={styles.panelCard}>
-            <div className={styles.panelHeader}>
-              <div>
-                <h3 className={styles.panelTitle}>Progress Stages</h3>
-                <span className={styles.panelSubtitle}>Milestone metrics</span>
-              </div>
-            </div>
-
-            <div className={styles.compactList}>
-              {progressDistribution.length > 0 ? (
-                progressDistribution.map((item) => (
-                  <div className={styles.compactRow} key={item.label}>
-                    <span className={styles.compactLabel}>{item.label}</span>
-                    <span className={styles.badgePrimary}>
-                      {item.count} courses
-                    </span>
-                  </div>
-                ))
-              ) : (
-                <p className={styles.emptyText}>No progress data available</p>
-              )}
+        <section className={styles.panel}>
+          <div className={styles.panelHead}>
+            <div>
+              <h2>Progress Breakdown</h2>
+              <p>How your courses are distributed</p>
             </div>
           </div>
 
-          {/* col 2: activity & capstone summary */}
-          <div className={styles.panelCard}>
-            <div className={styles.panelHeader}>
-              <div>
-                <h3 className={styles.panelTitle}>Activity & Capstone</h3>
-                <span className={styles.panelSubtitle}>
-                  Review status & lessons
-                </span>
-              </div>
-            </div>
+          {progressDistribution.some((item) => Number(item.count) > 0) ? (
+            <div className={styles.barList}>
+              {progressDistribution.map((item) => {
+                const count = Number(item.count || 0);
+                const width = Math.round((count / maxDistribution) * 100);
 
-            <div className={styles.compactList}>
-              <div className={styles.compactRow}>
-                <span className={styles.compactLabel}>⏳ Capstone Pending</span>
-                <span className={styles.badgeWarning}>
-                  {capstoneSummary.PENDING || 0}
-                </span>
-              </div>
-              <div className={styles.compactRow}>
-                <span className={styles.compactLabel}>✓ Capstone Approved</span>
-                <span className={styles.badgeSuccess}>
-                  {capstoneSummary.APPROVED || 0}
-                </span>
-              </div>
-              {learningActivity.length > 0 && (
-                <div className={styles.compactRow}>
-                  <span className={styles.compactLabel}>
-                    📅 Latest Activity
-                  </span>
-                  <span className={styles.badgeNeutral}>
-                    {learningActivity[learningActivity.length - 1]?.lessons ||
-                      0}{" "}
-                    lessons (
-                    {learningActivity[learningActivity.length - 1]?.month})
-                  </span>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* col 3: earned certificates */}
-          <div className={styles.panelCard}>
-            <div className={styles.panelHeader}>
-              <div>
-                <h3 className={styles.panelTitle}>Certificates</h3>
-                <span className={styles.panelSubtitle}>
-                  Verified credentials
-                </span>
-              </div>
-            </div>
-
-            <div className={styles.certList}>
-              {recentCertificates.length > 0 ? (
-                recentCertificates.slice(0, 2).map((cert, index) => (
-                  <div className={styles.certItem} key={index}>
-                    <div className={styles.certTop}>
-                      <span className={styles.certIcon}>📜</span>
-                      <div className={styles.certDetails}>
-                        <strong className={styles.certTitle}>
-                          {cert.title}
-                        </strong>
-                        <code>{cert.code}</code>
-                      </div>
+                return (
+                  <div className={styles.barRow} key={item.label}>
+                    <div className={styles.barMeta}>
+                      <span>{item.label}</span>
+                      <strong>{count}</strong>
                     </div>
-                    <span className={styles.certDate}>
-                      Issued: {new Date(cert.issuedAt).toLocaleDateString()}
-                    </span>
+                    <div className={styles.barTrack}>
+                      <div
+                        className={styles.barFill}
+                        style={{ width: `${width}%` }}
+                      />
+                    </div>
                   </div>
-                ))
-              ) : (
-                <p className={styles.emptyText}>No certificates earned yet</p>
-              )}
+                );
+              })}
+            </div>
+          ) : (
+            <p className={styles.emptyText}>
+              No progress data yet. Enroll in a course to start tracking.
+            </p>
+          )}
+
+          <div className={styles.panelDivider} />
+
+          <div className={styles.panelSubhead}>
+            <h3>Capstone Submissions</h3>
+          </div>
+
+          <div className={styles.kvList}>
+            <div className={styles.kvRow}>
+              <span>
+                <Flame size={14} strokeWidth={2} />
+                Awaiting review
+              </span>
+              <em className={styles.badgeWarning}>
+                {capstoneSummary.PENDING || 0}
+              </em>
+            </div>
+            <div className={styles.kvRow}>
+              <span>
+                <CircleCheckBig size={14} strokeWidth={2} />
+                Approved
+              </span>
+              <em className={styles.badgeSuccess}>
+                {capstoneSummary.APPROVED || 0}
+              </em>
+            </div>
+            <div className={styles.kvRow}>
+              <span>
+                <FileText size={14} strokeWidth={2} />
+                Needs changes
+              </span>
+              <em className={styles.badgeDanger}>
+                {capstoneSummary.REJECTED || 0}
+              </em>
             </div>
           </div>
-        </div>
-      </ScrollReveal>
+        </section>
+      </div>
+
+      <StudentActivityChart />
+
+      {/* certificates + monthly activity */}
+      <div className={styles.splitGrid}>
+        <section className={styles.panel}>
+          <div className={styles.panelHead}>
+            <div>
+              <h2>My Certificates</h2>
+              <p>QR-verified credentials you have earned</p>
+            </div>
+            <Link to="/student/certificates" className={styles.panelLink}>
+              View All
+              <ChevronRight size={15} strokeWidth={2.2} />
+            </Link>
+          </div>
+
+          {recentCertificates.length === 0 ? (
+            <p className={styles.emptyText}>
+              No certificates earned yet. Complete a course capstone to unlock
+              your first one.
+            </p>
+          ) : (
+            <ul className={styles.certList}>
+              {recentCertificates.slice(0, 3).map((cert, index) => {
+                const code = cert.certificateCode || cert.code;
+                const issuedAt = cert.issueDate || cert.issuedAt;
+
+                return (
+                  <li className={styles.certRow} key={code || index}>
+                    <span className={styles.certIcon}>
+                      <Award size={17} strokeWidth={1.9} />
+                    </span>
+
+                    <div className={styles.certBody}>
+                      <strong>{cert.title}</strong>
+                      {code && <code>{code}</code>}
+                    </div>
+
+                    {issuedAt && (
+                      <time className={styles.certDate}>
+                        {new Date(issuedAt).toLocaleDateString("en-IN", {
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric",
+                        })}
+                      </time>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </section>
+
+        <section className={styles.panel}>
+          <div className={styles.panelHead}>
+            <div>
+              <h2>Monthly Activity</h2>
+              <p>Lessons completed over the last 6 months</p>
+            </div>
+          </div>
+
+          {learningActivity.length > 0 ? (
+            <div className={styles.tableWrap}>
+              <table className={styles.table}>
+                <thead>
+                  <tr>
+                    <th>Month</th>
+                    <th>Lessons</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {learningActivity.map((row) => (
+                    <tr key={row.key || row.month}>
+                      <td>
+                        <Layers size={14} strokeWidth={2} />
+                        {row.month}
+                      </td>
+                      <td>
+                        <strong>{Number(row.lessons || 0)}</strong>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p className={styles.emptyText}>No activity recorded yet.</p>
+          )}
+        </section>
+      </div>
     </div>
   );
 };

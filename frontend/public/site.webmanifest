@@ -1,0 +1,18 @@
+{
+  "name": "LearnSpace",
+  "short_name": "LearnSpace",
+  "description": "Online learning platform with courses, quizzes, capstones and QR-verified certificates.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f7faf8",
+  "theme_color": "#237a4b",
+  "icons": [
+    {
+      "src": "/learnspace-logo-1024x1024.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

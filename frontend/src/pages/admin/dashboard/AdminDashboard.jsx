@@ -1,8 +1,30 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import {
+  Activity,
+  Award,
+  BookOpen,
+  CalendarDays,
+  ChevronRight,
+  CircleAlert,
+  CircleCheck,
+  CircleDashed,
+  CircleX,
+  Flag,
+  GraduationCap,
+  Layers,
+  LoaderCircle,
+  Plus,
+  RefreshCw,
+  Rocket,
+  Star,
+  Target,
+  Trophy,
+  UserCog,
+  Users,
+} from "lucide-react";
 
-import { GradualSpacing } from "../../../animation/Text";
 import {
   fetchAdminDashboardStats,
   fetchAdminPendingItems,
@@ -21,10 +43,7 @@ const useCountUp = (target, duration = 900) => {
   const [value, setValue] = useState(0);
 
   useEffect(() => {
-    if (!target) {
-      setValue(0);
-      return undefined;
-    }
+    if (!target) return undefined;
 
     let frame;
     const start = performance.now();
@@ -39,7 +58,7 @@ const useCountUp = (target, duration = 900) => {
     return () => cancelAnimationFrame(frame);
   }, [target, duration]);
 
-  return value;
+  return target ? value : 0;
 };
 
 const getGreeting = () => {
@@ -66,30 +85,40 @@ const timeAgo = (date) => {
 };
 
 const ACTIVITY_META = {
-  COURSE_CREATED: { icon: "📚", tone: "primary", label: "Course created" },
+  COURSE_CREATED: { icon: BookOpen, tone: "green", label: "Course created" },
   CERTIFICATE_ISSUED: {
-    icon: "🏅",
-    tone: "success",
+    icon: Award,
+    tone: "green",
     label: "Certificate issued",
   },
   CAPSTONE_SUBMITTED: {
-    icon: "🎯",
-    tone: "warning",
+    icon: Flag,
+    tone: "amber",
     label: "Capstone submitted",
   },
   CAPSTONE_APPROVED: {
-    icon: "✅",
-    tone: "success",
+    icon: CircleCheck,
+    tone: "green",
     label: "Capstone approved",
   },
-  CAPSTONE_REJECTED: { icon: "⛔", tone: "danger", label: "Capstone rejected" },
+  CAPSTONE_REJECTED: {
+    icon: CircleX,
+    tone: "red",
+    label: "Capstone rejected",
+  },
+};
+
+const ROW_ICONS = {
+  published: CircleCheck,
+  approved: CircleCheck,
+  draft: CircleDashed,
+  pending: CircleDashed,
+  rejected: CircleX,
 };
 
 /* main component */
 const AdminDashboard = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const dashboardRef = useRef(null);
 
   const {
     statistics,
@@ -113,50 +142,60 @@ const AdminDashboard = () => {
     return () => clearInterval(timer);
   }, []);
 
+  const fetchAll = useCallback(
+    () =>
+      Promise.all([
+        dispatch(fetchAdminDashboardStats()),
+        dispatch(fetchAdminPendingItems()),
+        dispatch(fetchAdminActivity()),
+        dispatch(fetchAdminLeaderboard(10)),
+      ]),
+    [dispatch],
+  );
+
   const refreshAll = useCallback(() => {
     setRefreshing(true);
-    Promise.all([
-      dispatch(fetchAdminDashboardStats()),
-      dispatch(fetchAdminPendingItems()),
-      dispatch(fetchAdminActivity()),
-      dispatch(fetchAdminLeaderboard(10)),
-    ]).finally(() => {
+
+    return fetchAll().finally(() => {
       setRefreshing(false);
       setLastUpdated(new Date());
     });
-  }, [dispatch]);
+  }, [fetchAll]);
 
   useEffect(() => {
     if (!rehydrating && isAuthenticated) {
-      refreshAll();
+      fetchAll().then(() => setLastUpdated(new Date()));
     }
-  }, [rehydrating, isAuthenticated, refreshAll]);
+  }, [rehydrating, isAuthenticated, fetchAll]);
 
   if (loading && !statistics) {
     return (
-      <div className={styles.loader}>
-        <span className={styles.loaderSpinner} />
-        Loading dashboard...
+      <div className={styles.container}>
+        <div className={styles.stateBox}>
+          <LoaderCircle size={26} strokeWidth={2} className={styles.spin} />
+          <p>Loading dashboard...</p>
+        </div>
       </div>
     );
   }
 
   if (error && !statistics) {
     return (
-      <div className={styles.errorState}>
-        <div className={styles.emptyIcon}>⚠️</div>
-        <p>{error}</p>
-        <button type="button" onClick={() => window.location.reload()}>
-          Retry
-        </button>
+      <div className={styles.container}>
+        <div className={styles.stateBoxError}>
+          <CircleAlert size={16} strokeWidth={2} />
+          <p>{error}</p>
+          <button
+            type="button"
+            className={styles.btnGhost}
+            onClick={() => window.location.reload()}
+          >
+            Retry
+          </button>
+        </div>
       </div>
     );
   }
-
-  const handleViewStudent = (studentId) => {
-    if (!studentId) return;
-    navigate(`/admin/students/${studentId}`);
-  };
 
   const adminFirstName = user?.name?.split(" ")[0] || "Admin";
 
@@ -188,124 +227,142 @@ const AdminDashboard = () => {
         )
       : 0;
 
+  const statCards = [
+    {
+      label: "Total Students",
+      value: statistics?.students?.total || 0,
+      icon: Users,
+      tone: "green",
+    },
+    {
+      label: "Courses",
+      value: statistics?.courses?.total || 0,
+      icon: BookOpen,
+      tone: "teal",
+    },
+    {
+      label: "Lessons",
+      value: statistics?.lessons?.total || 0,
+      icon: Layers,
+      tone: "green",
+    },
+    {
+      label: "Certificates",
+      value: statistics?.certificates?.total || 0,
+      icon: Award,
+      tone: "amber",
+    },
+  ];
+
+  const quickActions = [
+    {
+      to: "/admin/courses/new",
+      title: "Create Course",
+      hint: "Add new content",
+      icon: Plus,
+    },
+    {
+      to: "/admin/capstones?status=PENDING",
+      title: "Review Capstones",
+      hint: `${statistics?.capstones?.pending || 0} pending`,
+      icon: Target,
+    },
+    {
+      to: "/admin/students",
+      title: "Manage Students",
+      hint: "Profiles & progress",
+      icon: UserCog,
+    },
+    {
+      to: "/admin/certificates",
+      title: "Certificates",
+      hint: "Issued & revoked",
+      icon: Award,
+    },
+  ];
+
   return (
-    <div className={styles.dashboard} ref={dashboardRef}>
-      {/* PAGE HEADER */}
-      <header className={styles.pageHeader}>
-        <div className={styles.headerText}>
+    <div className={styles.container}>
+      {/* page header */}
+      <header className={styles.pageHead}>
+        <div className={styles.pageHeadText}>
+          <nav className={styles.breadcrumb}>
+            <span>Admin</span>
+            <ChevronRight size={13} strokeWidth={2.2} />
+            <strong>Dashboard</strong>
+          </nav>
+
           <h1>
-            <GradualSpacing
-              text={`${getGreeting()}, ${adminFirstName}`}
-              className="rgbText"
-            />
+            {getGreeting()}, {adminFirstName}
           </h1>
-          <p>Here's what's happening on your SkillForge platform today</p>
+          <p>
+            Monitor learner growth, course health and pending reviews across
+            your SkillForge platform.
+          </p>
         </div>
 
-        <div className={styles.headerMeta}>
-          <div className={styles.dateTimeBlock}>
-            <span className={styles.dateLabel}>{dateLabel}</span>
-            <span className={styles.timeLabel}>🕒 {timeLabel}</span>
+        <div className={styles.headActions}>
+          <div className={styles.dateChip}>
+            <CalendarDays size={15} strokeWidth={2} />
+            <div>
+              <strong>{dateLabel}</strong>
+              <small>{timeLabel}</small>
+            </div>
           </div>
 
           <button
             type="button"
-            className={styles.refreshButton}
+            className={styles.btnGhost}
             onClick={refreshAll}
             disabled={refreshing}
           >
-            <span
-              className={`${styles.refreshGlyph} ${
-                refreshing ? styles.refreshing : ""
-              }`}
-            >
-              ⟳
-            </span>{" "}
-            Refresh
+            <RefreshCw
+              size={15}
+              strokeWidth={2.2}
+              className={refreshing ? styles.spin : undefined}
+            />
+            {refreshing ? "Refreshing" : "Refresh"}
           </button>
         </div>
       </header>
 
       {lastUpdated && (
-        <p className={styles.lastUpdated}>
-          Last updated {timeAgo(lastUpdated)} · auto-refreshes every minute
-        </p>
+        <p className={styles.lastUpdated}>Last synced {timeAgo(lastUpdated)}</p>
       )}
 
-      {/* TOP STATS */}
-      <section className={styles.statsGrid}>
-        <StatCard
-          title="Total Students"
-          value={statistics?.students?.total || 0}
-          icon="🎓"
-          type="students"
-        />
-        <StatCard
-          title="Courses"
-          value={statistics?.courses?.total || 0}
-          icon="📖"
-          type="courses"
-        />
-        <StatCard
-          title="Lessons"
-          value={statistics?.lessons?.total || 0}
-          icon="📄"
-          type="lessons"
-        />
-        <StatCard
-          title="Certificates"
-          value={statistics?.certificates?.total || 0}
-          icon="🏅"
-          type="certificates"
-        />
+      {/* key metrics */}
+      <section className={styles.statGrid}>
+        {statCards.map((card) => (
+          <StatCard
+            key={card.label}
+            label={card.label}
+            value={card.value}
+            icon={card.icon}
+            tone={card.tone}
+          />
+        ))}
       </section>
 
-      {/* QUICK ACTIONS */}
-      <section className={styles.quickActions}>
-        <ActionTile
-          icon="➕"
-          title="Create Course"
-          hint="Add new content"
-          onClick={() => navigate("/admin/courses/new")}
-          tone="primary"
-        />
-        <ActionTile
-          icon="🎯"
-          title="Review Capstones"
-          hint={`${statistics?.capstones?.pending || 0} pending`}
-          onClick={() => navigate("/admin/capstones?status=PENDING")}
-          tone="warning"
-        />
-        <ActionTile
-          icon="👥"
-          title="Manage Students"
-          hint="Profiles & progress"
-          onClick={() => navigate("/admin/students")}
-          tone="secondary"
-        />
-        <ActionTile
-          icon="🏅"
-          title="Certificates"
-          hint="Issued & revoked"
-          onClick={() => navigate("/admin/certificates")}
-          tone="success"
-        />
+      {/* quick actions */}
+      <section className={styles.actionGrid}>
+        {quickActions.map((action) => (
+          <QuickAction key={action.title} {...action} />
+        ))}
       </section>
 
-      {/* scroll reveal sections */}
-
-      {/* CHARTS */}
+      {/* charts */}
       <section className={styles.chartsGrid}>
         <StatisticsChart />
         <CategoryDonut />
       </section>
 
-      {/* STATUS CARDS */}
-      <section className={styles.middleGrid}>
-        <StatusCard
+      {/* course health + capstone reviews */}
+      <section className={styles.splitGrid}>
+        <StatusPanel
           title="Course Health"
-          icon="📖"
-          route="courses"
+          subtitle="Publishing status of your catalog"
+          icon={BookOpen}
+          to="/admin/courses"
           rows={[
             {
               label: "Published",
@@ -323,10 +380,12 @@ const AdminDashboard = () => {
             label: `${coursePublishProgress}% of catalog published`,
           }}
         />
-        <StatusCard
+
+        <StatusPanel
           title="Capstone Reviews"
-          icon="🎯"
-          route="capstones"
+          subtitle="Submission decisions so far"
+          icon={Target}
+          to="/admin/capstones"
           rows={[
             {
               label: "Pending",
@@ -351,96 +410,98 @@ const AdminDashboard = () => {
         />
       </section>
 
-      {/* PENDING ITEMS & ACTIVITY */}
-      <section className={styles.bottomGrid}>
+      {/* pending capstones + recent activity */}
+      <section className={styles.splitGrid}>
         <div className={styles.panel}>
-          <div className={styles.panelHeader}>
-            <div className={styles.panelTitle}>
-              <div className={styles.panelIcon}>🎯</div>
-              <h3>Pending Capstones</h3>
+          <div className={styles.panelHead}>
+            <div>
+              <h2>Pending Capstones</h2>
+              <p>Submissions waiting for your decision</p>
             </div>
             <span className={styles.countBadge}>{pendingCapstones.length}</span>
           </div>
 
           {pendingCapstones.length === 0 ? (
             <div className={styles.emptyState}>
-              <div className={styles.emptyIcon}>🎉</div>
-              <p>No pending capstones</p>
-              <small>You're all caught up!</small>
+              <CircleCheck size={26} strokeWidth={1.6} />
+              <strong>Nothing to review</strong>
+              <p>All capstone submissions have been handled.</p>
             </div>
           ) : (
-            <div className={styles.pendingList}>
+            <ul className={styles.itemList}>
               {pendingCapstones.slice(0, 3).map((submission) => (
-                <div className={styles.pendingItem} key={submission._id}>
-                  <div className={styles.pendingAvatar}>
+                <li className={styles.itemRow} key={submission._id}>
+                  <span className={styles.rowAvatar}>
                     {submission.studentId?.name?.charAt(0)?.toUpperCase() ||
                       "S"}
-                  </div>
-                  <div className={styles.pendingInfo}>
+                  </span>
+
+                  <div className={styles.rowBody}>
                     <strong>
                       {submission.studentId?.name || "Unknown Student"}
                     </strong>
-                    <small>{submission.courseId?.title || ""}</small>
+                    <small>
+                      {submission.courseId?.title || "Course unavailable"}
+                    </small>
                   </div>
-                  <button
-                    type="button"
-                    className={styles.reviewButton}
-                    onClick={() => navigate(`/admin/capstones?status=PENDING`)}
+
+                  <Link
+                    to="/admin/capstones?status=PENDING"
+                    className={styles.btnMini}
                   >
                     Review
-                  </button>
-                </div>
+                  </Link>
+                </li>
               ))}
-            </div>
+            </ul>
           )}
 
           <div className={styles.panelFooter}>
-            <button
-              type="button"
-              onClick={() => navigate("/admin/capstones?status=pending")}
-            >
+            <Link to="/admin/capstones?status=PENDING" className={styles.panelLink}>
               View All
-            </button>
-            <span>→</span>
+              <ChevronRight size={15} strokeWidth={2.2} />
+            </Link>
           </div>
         </div>
 
         <div className={styles.panel}>
-          <div className={styles.panelHeader}>
-            <div className={styles.panelTitle}>
-              <div className={styles.activityFeedIcon}>⚡</div>
-              <h3>Recent Activity</h3>
+          <div className={styles.panelHead}>
+            <div>
+              <h2>Recent Activity</h2>
+              <p>Latest events across the platform</p>
             </div>
           </div>
 
           {activity.length === 0 ? (
             <div className={styles.emptyState}>
-              <div className={styles.emptyIcon}>🛰️</div>
-              <p>No recent activity</p>
-              <small>Platform events will appear here</small>
+              <Activity size={26} strokeWidth={1.6} />
+              <strong>No recent activity</strong>
+              <p>Platform events will appear here as they happen.</p>
             </div>
           ) : (
-            <ul className={styles.activityList}>
+            <ul className={styles.itemList}>
               {activity.slice(0, 6).map((item) => {
                 const meta =
                   ACTIVITY_META[item.type] || ACTIVITY_META.COURSE_CREATED;
+                const Icon = meta.icon;
+
                 return (
-                  <li className={styles.activityItem} key={item._id}>
+                  <li className={styles.itemRow} key={item._id}>
                     <span
-                      className={`${styles.activityIcon} ${styles[meta.tone]}`}
+                      className={`${styles.rowIcon} ${styles[`tone_${meta.tone}`]}`}
                     >
-                      {meta.icon}
+                      <Icon size={15} strokeWidth={2} />
                     </span>
-                    <div className={styles.activityInfo}>
+
+                    <div className={styles.rowBody}>
                       <strong title={item.title}>{item.title}</strong>
                       <small title={item.subtitle}>
                         {meta.label}
                         {item.subtitle ? ` · ${item.subtitle}` : ""}
                       </small>
                     </div>
-                    <span className={styles.activityTime}>
-                      {timeAgo(item.date)}
-                    </span>
+
+                    <span className={styles.rowTime}>{timeAgo(item.date)}</span>
                   </li>
                 );
               })}
@@ -449,172 +510,176 @@ const AdminDashboard = () => {
         </div>
       </section>
 
-      {/* TOP STUDENTS */}
-      <section className={styles.topStudents}>
-        <div className={styles.studentsHeader}>
-          <div className={styles.studentsTitle}>
-            <div className={styles.trophyIcon}>🏆</div>
-            <h3>Top Students</h3>
+      {/* top students */}
+      <section className={styles.panel}>
+        <div className={styles.panelHead}>
+          <div>
+            <h2>Top Students</h2>
+            <p>Highest reputation on the leaderboard</p>
           </div>
-          <button
-            className={styles.viewAll}
-            onClick={() => navigate("/admin/students/leaderboard")}
-          >
-            View All →
-          </button>
+          <Link to="/admin/students/leaderboard" className={styles.panelLink}>
+            View All
+            <ChevronRight size={15} strokeWidth={2.2} />
+          </Link>
         </div>
 
-        <div className={styles.studentsGrid}>
-          {leaderboard.length === 0 ? (
-            <div className={styles.emptyState}>
-              <p>No students available</p>
-            </div>
-          ) : (
-            leaderboard.map((student) => (
-              <StudentCard
+        {leaderboard.length === 0 ? (
+          <div className={styles.emptyState}>
+            <Trophy size={26} strokeWidth={1.6} />
+            <strong>No students yet</strong>
+            <p>The leaderboard will fill up once learners start enrolling.</p>
+          </div>
+        ) : (
+          <div className={styles.rankGrid}>
+            {leaderboard.map((student) => (
+              <StudentRow
                 key={student._id}
                 student={student}
-                onView={handleViewStudent}
+                profilePath={`/admin/students/${student.studentId || student._id}`}
               />
-            ))
-          )}
-        </div>
+            ))}
+          </div>
+        )}
       </section>
     </div>
   );
 };
 
 /* sub-components */
-const StatCard = ({ title, value, icon, type }) => {
+const StatCard = ({ label, value, icon: Icon, tone }) => {
   const animatedValue = useCountUp(value || 0);
 
   return (
-    <div className={`${styles.statCard} ${styles[type]}`}>
-      <div className={styles.statIcon}>{icon}</div>
+    <div className={styles.statCard}>
+      <span className={`${styles.statIcon} ${styles[`tone_${tone}`]}`}>
+        <Icon size={18} strokeWidth={2} />
+      </span>
 
-      <div className={styles.statInfo}>
+      <div className={styles.statBody}>
         <strong>{animatedValue}</strong>
-        <span>{title}</span>
+        <span>{label}</span>
       </div>
     </div>
   );
 };
-const ActionTile = ({ icon, title, hint, onClick, tone }) => (
-  <button
-    type="button"
-    className={`${styles.actionTile} ${styles[tone]}`}
-    onClick={onClick}
-  >
-    <span className={styles.actionIcon}>{icon}</span>
+
+const QuickAction = ({ to, title, hint, icon: Icon }) => (
+  <Link to={to} className={styles.actionCard}>
+    <span className={styles.actionIcon}>
+      <Icon size={17} strokeWidth={2} />
+    </span>
+
     <span className={styles.actionText}>
       <strong>{title}</strong>
       <small>{hint}</small>
     </span>
-    <span className={styles.actionArrow}>›</span>
-  </button>
+
+    <ChevronRight size={16} strokeWidth={2} className={styles.actionArrow} />
+  </Link>
 );
 
-const StatusCard = ({ title, icon, route, rows, progress }) => {
-  const navigate = useNavigate();
-
-  return (
-    <div className={styles.statusCard}>
-      <div className={styles.statusHeader}>
-        <div className={styles.statusTitle}>
-          <div className={styles.statusIcon}>{icon}</div>
-          <h3>{title}</h3>
-        </div>
-        <button
-          className={styles.arrow}
-          onClick={() => navigate(`/admin/${route || ""}`)}
-          aria-label={`Open ${title}`}
-        >
-          ›
-        </button>
+const StatusPanel = ({ title, subtitle, icon: Icon, to, rows, progress }) => (
+  <div className={styles.panel}>
+    <div className={styles.panelHead}>
+      <div>
+        <h2>{title}</h2>
+        <p>{subtitle}</p>
       </div>
-
-      <div className={styles.statusBody}>
-        {rows.map((row) => (
-          <div className={styles.statusRow} key={row.label}>
-            <div className={styles.statusLabel}>
-              <span className={`${styles.statusDot} ${styles[row.type]}`}>
-                {row.type === "approved" || row.type === "published"
-                  ? "✓"
-                  : row.type === "rejected"
-                    ? "×"
-                    : row.type === "pending"
-                      ? "◷"
-                      : "○"}
-              </span>
-              <span>{row.label}</span>
-            </div>
-            <strong>{row.value || 0}</strong>
-          </div>
-        ))}
-
-        {progress && (
-          <div className={styles.progressBlock}>
-            <div className={styles.progressMeta}>
-              <span>{progress.label}</span>
-              <strong>{progress.percent}%</strong>
-            </div>
-            <div className={styles.progressTrack}>
-              <div
-                className={styles.progressFill}
-                style={{ width: `${Math.min(progress.percent, 100)}%` }}
-              />
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
-
-const StudentCard = ({ student, onView }) => {
-  return (
-    <div className={styles.studentCard}>
-      <div className={styles.rankBadge}>{student.rank}</div>
-      <div className={styles.studentAvatar}>
-        {student.avatar ? (
-          <img src={student.avatar} alt={student.name || "Student"} />
-        ) : (
-          student.name?.charAt(0)?.toUpperCase() || "?"
-        )}
-      </div>
-      <div className={styles.studentInfo}>
-        <h4>{student.name || "No Name"}</h4>
-        <p>{student.email || "noemail@mail.com"}</p>
-      </div>
-      <div className={styles.reputation}>
-        <span>★</span>
-        {student.reputationPoints || 0}
-      </div>
-      <div className={styles.studentStats}>
-        <div className={styles.studentStat}>
-          <span>📖</span>
-          <div>
-            <strong>{student.completedCoursesCount || 0}</strong>
-            <small>Courses</small>
-          </div>
-        </div>
-        <div className={styles.studentStat}>
-          <span>🚀</span>
-          <div>
-            <strong>{student.completedProjectsCount || 0}</strong>
-            <small>Projects</small>
-          </div>
-        </div>
-      </div>
-      <button
-        type="button"
-        className={styles.profileButton}
-        onClick={() => onView(student.studentId || student._id)}
+      <Link
+        to={to}
+        className={styles.iconLink}
+        aria-label={`Open ${title}`}
       >
-        View Profile
-      </button>
+        <Icon size={16} strokeWidth={2} />
+      </Link>
     </div>
-  );
-};
+
+    <div className={styles.kvList}>
+      {rows.map((row) => {
+        const RowIcon = ROW_ICONS[row.type] || CircleDashed;
+
+        return (
+          <div className={styles.kvRow} key={row.label}>
+            <span>
+              <RowIcon size={14} strokeWidth={2} />
+              {row.label}
+            </span>
+            <em
+              className={`${styles.badge} ${
+                row.type === "rejected"
+                  ? styles.badgeDanger
+                  : row.type === "draft" || row.type === "pending"
+                    ? styles.badgeWarning
+                    : styles.badgeSuccess
+              }`}
+            >
+              {row.value || 0}
+            </em>
+          </div>
+        );
+      })}
+    </div>
+
+    {progress && (
+      <div className={styles.progressBlock}>
+        <div className={styles.progressMeta}>
+          <span>{progress.label}</span>
+        </div>
+        <div className={styles.progressTrack}>
+          <div
+            className={styles.progressFill}
+            style={{ width: `${Math.min(progress.percent, 100)}%` }}
+          />
+        </div>
+      </div>
+    )}
+  </div>
+);
+
+const StudentRow = ({ student, profilePath }) => (
+  <article className={styles.rankCard}>
+    <span className={styles.rankIndex}>{student.rank}</span>
+
+    <span className={styles.rankAvatar}>
+      {student.avatar ? (
+        <img src={student.avatar} alt={student.name || "Student"} />
+      ) : (
+        student.name?.charAt(0)?.toUpperCase() || "?"
+      )}
+    </span>
+
+    <div className={styles.rankBody}>
+      <strong title={student.name || "No Name"}>
+        {student.name || "No Name"}
+      </strong>
+      <small>{student.email || "noemail@mail.com"}</small>
+    </div>
+
+    <div className={styles.rankMeta}>
+      <span className={styles.reputation}>
+        <Star size={12} strokeWidth={2} />
+        {student.reputationPoints || 0}
+      </span>
+
+      <span className={styles.rankStat}>
+        <GraduationCap size={13} strokeWidth={2} />
+        {student.completedCoursesCount || 0}
+      </span>
+
+      <span className={styles.rankStat}>
+        <Rocket size={13} strokeWidth={2} />
+        {student.completedProjectsCount || 0}
+      </span>
+    </div>
+
+    <Link
+      to={profilePath}
+      className={styles.iconLink}
+      aria-label={`View ${student.name || "student"} profile`}
+    >
+      <ChevronRight size={16} strokeWidth={2} />
+    </Link>
+  </article>
+);
 
 export default AdminDashboard;
