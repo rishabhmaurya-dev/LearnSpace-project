@@ -364,7 +364,7 @@
 /* course card grid */
 .courseList {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(232px, 100%), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(232px, 1fr));
   gap: 0.85rem;
   align-items: stretch;
 }
@@ -1083,7 +1083,7 @@
 
 @media (max-width: 900px) {
   .courseList {
-    grid-template-columns: repeat(auto-fill, minmax(min(210px, 100%), 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
   }
 }
 
@@ -1096,12 +1096,6 @@
 @media (max-width: 620px) {
   .statsGrid {
     grid-template-columns: minmax(0, 1fr);
-  }
-
-  /* keep cards off the screen edge so nothing is clipped */
-  .courseList {
-    padding-left: 12px;
-    padding-right: 12px;
   }
 
   .headerRight {

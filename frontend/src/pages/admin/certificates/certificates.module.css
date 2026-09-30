@@ -302,18 +302,12 @@
   .searchBox {
     min-width: 0;
   }
-
-  /* keep cards off the screen edge so nothing is clipped */
-  .certGrid {
-    padding-left: 12px;
-    padding-right: 12px;
-  }
 }
 
 /* 4. certificates responsive grid */
 .certGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 18px;
 }
 
