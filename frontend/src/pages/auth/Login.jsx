@@ -74,21 +74,28 @@ const Login = () => {
   return (
     <ScrollReveal>
       <main className={styles.page}>
-        <div className={styles.content}>
-          <div className={styles.brand}>
+        <div className={styles.backdrop} aria-hidden="true">
+          <span className={styles.orbTop} />
+          <span className={styles.orbBottom} />
+          <span className={styles.gridLines} />
+          <span className={styles.ring} />
+        </div>
+
+        <div className={styles.shell}>
+          <Link to="/" className={styles.brand}>
             <img
               src="/logo-128.jpg"
               alt="LearnSpace"
-              width="40"
-              height="40"
+              width="38"
+              height="38"
               className={styles.brandIcon}
             />
 
-            <div>
+            <span className={styles.brandText}>
               <span className={styles.brandName}>Learn</span>
               <span className={styles.brandAccent}>Space</span>
-            </div>
-          </div>
+            </span>
+          </Link>
 
           <div className={styles.card}>
             <div className={styles.header}>
@@ -97,42 +104,48 @@ const Login = () => {
               <p>Continue your learning journey</p>
             </div>
 
-            {error && <div className={styles.error}>{error}</div>}
+            {error && <div className={styles.alert}>{error}</div>}
 
             <form onSubmit={handleSubmit} className={styles.form}>
               <div className={styles.field}>
                 <label htmlFor="email">Email Address</label>
 
-                <div className={styles.inputWrapper}>
-                  <input
-                    id="email"
-                    type="email"
-                    name="email"
-                    placeholder="Enter your email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
+                <input
+                  className={styles.input}
+                  id="email"
+                  type="email"
+                  name="email"
+                  placeholder="Enter your email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  autoComplete="email"
+                  required
+                />
               </div>
 
               <div className={styles.field}>
                 <label htmlFor="password">Password</label>
 
-                <div className={styles.inputWrapper}>
+                <div className={styles.passwordWrap}>
                   <input
+                    className={styles.input}
                     id="password"
                     type={showPassword ? "text" : "password"}
                     name="password"
                     placeholder="Enter your password"
                     value={formData.password}
                     onChange={handleChange}
+                    autoComplete="current-password"
                     required
                   />
+
                   <button
                     type="button"
                     className={styles.passwordToggle}
                     onClick={() => setShowPassword(!showPassword)}
+                    aria-label={
+                      showPassword ? "Hide password" : "Show password"
+                    }
                   >
                     {showPassword ? <FaEyeSlash /> : <FaEye />}
                   </button>
@@ -156,23 +169,15 @@ const Login = () => {
                 ) : (
                   <>
                     Login
-                    <span>→</span>
+                    <span aria-hidden="true">&rarr;</span>
                   </>
                 )}
               </button>
             </form>
 
-            <div className={styles.divider}>
-              <span />
-              <small>New to LearnSpace?</small>
-              <span />
-            </div>
-
-            <div className={styles.footer}>
-              <span>Don't have an account?</span>
-
-              <Link to="/register">Create Account</Link>
-            </div>
+            <p className={styles.footer}>
+              New to LearnSpace? <Link to="/register">Create Account</Link>
+            </p>
           </div>
 
           <p className={styles.bottomText}>

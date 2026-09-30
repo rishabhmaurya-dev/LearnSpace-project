@@ -82,24 +82,29 @@ const Register = () => {
   return (
     <ScrollReveal>
       <main className={styles.page}>
-        <div className={styles.content}>
-          {/* BRAND */}
-          <div className={styles.brand}>
+        <div className={styles.backdrop} aria-hidden="true">
+          <span className={styles.orbTop} />
+          <span className={styles.orbBottom} />
+          <span className={styles.gridLines} />
+          <span className={styles.ring} />
+        </div>
+
+        <div className={styles.shell}>
+          <Link to="/" className={styles.brand}>
             <img
               src="/logo-128.jpg"
               alt="LearnSpace"
-              width="40"
-              height="40"
+              width="38"
+              height="38"
               className={styles.brandIcon}
             />
 
-            <div>
+            <span className={styles.brandText}>
               <span className={styles.brandName}>Learn</span>
               <span className={styles.brandAccent}>Space</span>
-            </div>
-          </div>
+            </span>
+          </Link>
 
-          {/* REGISTER CARD */}
           <div className={styles.card}>
             <div className={styles.header}>
               <h1>Create Account</h1>
@@ -107,77 +112,73 @@ const Register = () => {
               <p>Start learning, building and growing today.</p>
             </div>
 
-            {error && (
-              <div className={styles.error}>
-                <span>{error}</span>
-              </div>
-            )}
+            {error && <div className={styles.error}>{error}</div>}
 
-            {success && (
-              <div className={styles.success}>
-                <span>{message}</span>
-              </div>
-            )}
+            {success && <div className={styles.success}>{message}</div>}
 
             <form onSubmit={handleSubmit} className={styles.form}>
-              {/* NAME */}
               <div className={styles.field}>
                 <label htmlFor="name">Full Name</label>
 
-                <div className={styles.inputWrapper}>
-                  <input
-                    id="name"
-                    type="text"
-                    name="name"
-                    placeholder="Enter your name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
+                <input
+                  className={styles.input}
+                  id="name"
+                  type="text"
+                  name="name"
+                  placeholder="Enter your name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  autoComplete="name"
+                  required
+                />
               </div>
 
-              {/* EMAIL */}
               <div className={styles.field}>
                 <label htmlFor="email">Email Address</label>
 
-                <div className={styles.inputWrapper}>
-                  <input
-                    id="email"
-                    type="email"
-                    name="email"
-                    placeholder="Enter your email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
+                <input
+                  className={styles.input}
+                  id="email"
+                  type="email"
+                  name="email"
+                  placeholder="Enter your email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  autoComplete="email"
+                  required
+                />
               </div>
 
-              {/* PASSWORD */}
               <div className={styles.field}>
                 <label htmlFor="password">Password</label>
 
-                <div className={styles.inputWrapper}>
+                <div className={styles.passwordWrap}>
                   <input
+                    className={styles.input}
                     id="password"
                     type={showPassword ? "text" : "password"}
                     name="password"
                     placeholder="Create a password"
                     value={formData.password}
                     onChange={handleChange}
+                    autoComplete="new-password"
                     minLength={6}
                     required
                   />
+
                   <button
                     type="button"
                     className={styles.passwordToggle}
                     onClick={() => setShowPassword(!showPassword)}
+                    aria-label={
+                      showPassword ? "Hide password" : "Show password"
+                    }
                   >
                     {showPassword ? <FaEyeSlash /> : <FaEye />}
                   </button>
                 </div>
               </div>
+
               <button
                 type="submit"
                 disabled={loading}
@@ -191,23 +192,15 @@ const Register = () => {
                 ) : (
                   <>
                     Create Account
-                    <span>→</span>
+                    <span aria-hidden="true">&rarr;</span>
                   </>
                 )}
               </button>
             </form>
 
-            <div className={styles.divider}>
-              <span />
-              <small>Already a member?</small>
-              <span />
-            </div>
-
-            <div className={styles.footer}>
-              <span>Already have an account?</span>
-
-              <Link to="/login">Login</Link>
-            </div>
+            <p className={styles.footer}>
+              Already have an account? <Link to="/login">Login</Link>
+            </p>
           </div>
 
           <p className={styles.bottomText}>
