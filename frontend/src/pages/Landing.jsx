@@ -610,7 +610,9 @@ const Landing = () => {
                   <div className="ls-course-card ls-course-skeleton" key={i}>
                     <div className="ls-course-media" />
                     <div className="ls-course-body">
-                      <span className="ls-skel-line ls-skel-short" />
+                      <div className="ls-course-topline">
+                        <span className="ls-skel-line ls-skel-short" />
+                      </div>
                       <span className="ls-skel-line ls-skel-title" />
                       <span className="ls-skel-line" />
                       <span className="ls-skel-line ls-skel-mid" />
@@ -713,23 +715,22 @@ const Landing = () => {
                         </div>
 
                         <div className="ls-course-body">
-                          <span className="ls-course-category">
-                            {course.category}
-                          </span>
+                          <div className="ls-course-topline">
+                            <span className="ls-course-category">
+                              {course.category}
+                            </span>
+                            {publishedOn && (
+                              <span className="ls-course-updated">
+                                {publishedOn}
+                              </span>
+                            )}
+                          </div>
 
                           <h3 className="ls-course-title">{course.title}</h3>
 
                           <p className="ls-course-subtitle">
                             {course.description}
                           </p>
-
-                          <div className="ls-course-meta">
-                            <span>▤ {plural(course.lessonCount, "Lesson")}</span>
-                            <span>🧠 {plural(course.quizCount, "Question")}</span>
-                            {course.hasCapstone && (
-                              <span>🚀 Capstone</span>
-                            )}
-                          </div>
 
                           <ul className="ls-course-points">
                             {includes.map((point) => (
@@ -739,12 +740,6 @@ const Landing = () => {
                               </li>
                             ))}
                           </ul>
-
-                          {publishedOn && (
-                            <span className="ls-course-updated">
-                              Published {publishedOn}
-                            </span>
-                          )}
                         </div>
 
                         <div className="ls-course-footer">
