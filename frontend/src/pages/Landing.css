@@ -361,7 +361,7 @@
 /* modules grid */
 .ls-modules-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
   gap: 1rem;
 }
 
@@ -433,7 +433,7 @@
 /* featured courses */
 .ls-courses-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr));
   gap: 1.1rem;
 }
 
@@ -842,7 +842,7 @@
 /* how it works */
 .ls-flow-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
   gap: 1rem;
 }
 
@@ -899,7 +899,7 @@
 /* roles / workspaces */
 .ls-roles {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
   gap: 1.25rem;
 }
 
@@ -1960,7 +1960,7 @@
   }
 
   .ls-roles {
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
   }
 
   .ls-section {
@@ -2027,8 +2027,17 @@
     grid-template-columns: 1fr;
   }
 
+  /* keep cards off the screen edge so nothing is clipped */
+  .ls-courses-grid,
+  .ls-modules-grid,
+  .ls-roles,
+  .ls-flow-grid {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
   .ls-courses-grid {
-    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(230px, 100%), 1fr));
     gap: 0.9rem;
   }
 
